@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Fun Forecast</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚴🏿‍♀️</text></svg>"
+    />
+    <meta name="description" content="Find the forecast for your fun" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <!--
+        This example fetches latest Vue.js commits data from GitHub’s API and displays them as a list.
+        You can switch between the two branches.
+    -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script> -->
+    <div id="app">
+      <h1>Latest Vue Core Commits example</h1>
+      <a href="https://vuejs.org/examples/#fetching-data">source</a>
+      <template v-for="branch in branches">
+        <input
+          type="radio"
+          :id="branch"
+          :value="branch"
+          name="branch"
+          v-model="currentBranch"
+        />
+        <label :for="branch">{{ branch }}</label>
+      </template>
+      <p>vuejs/vue@{{ currentBranch }}</p>
+      <ul>
+        <li v-for="{ html_url, sha, author, commit } in commits">
+          <a :href="html_url" target="_blank" class="commit">
+            {{ sha.slice(0, 7) }}
+          </a>
+          -
+          <span class="message">{{ truncate(commit.message) }}</span>
+          <br />
+          by
+          <span class="author">
+            <a :href="author.html_url" target="_blank">
+              {{ commit.author.name }}
+            </a>
+          </span>
+          at
+          <span class="date">{{ formatDate(commit.author.date) }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <script>
+      const API_URL = `https://api.github.com/repos/vuejs/core/commits?per_page=3&sha=`
+      Vue.createApp({
+        data: () => ({
+          branches: ['main', 'v2-compat'],
+          currentBranch: 'main',
+          commits: null,
+        }),
+
+        created() {
+          console.log('fetching data')
+          // fetch on init
+          this.fetchData()
+        },
+
+        watch: {
+          // re-fetch whenever currentBranch changes
+          currentBranch: 'fetchData',
+        },
+
+        methods: {
+          async fetchData() {
+            const url = `${API_URL}${this.currentBranch}`
+            this.commits = await (await fetch(url)).json()
+          },
+          truncate(v) {
+            const newline = v.indexOf('\n')
+            return newline > 0 ? v.slice(0, newline) : v
+          },
+          formatDate(v) {
+            return v.replace(/T|Z/g, ' ')
+          },
+        },
+      }).mount('#app')
+    </script>
+    <!-- <script type="module">
+      const API_URL = `https://api.github.com/repos/vuejs/core/commits?per_page=3&sha=`
+      console.log('this is module')
+      export default {
+        data: () => ({
+          branches: ['main', 'v2-compat'],
+          currentBranch: 'main',
+          commits: null,
+        }),
+
+        created() {
+          console.log('fetching data')
+          // fetch on init
+          this.fetchData()
+        },
+
+        watch: {
+          // re-fetch whenever currentBranch changes
+          currentBranch: 'fetchData',
+        },
+
+        methods: {
+          async fetchData() {
+            const url = `${API_URL}${this.currentBranch}`
+            this.commits = await (await fetch(url)).json()
+          },
+          truncate(v) {
+            const newline = v.indexOf('\n')
+            return newline > 0 ? v.slice(0, newline) : v
+          },
+          formatDate(v) {
+            return v.replace(/T|Z/g, ' ')
+          },
+        },
+      }
+    </script>
+
+     -->
+  </body>
+</html>
