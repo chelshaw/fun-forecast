@@ -1,0 +1,7 @@
+{
+  "files.eol": "\n",
+  "go.formatTool": "gofmt",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "terminal.integrated.tabs.enabled": true
+}
