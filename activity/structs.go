@@ -1,13 +1,14 @@
 package activity
 
 type Range struct {
-	Low         int      `json:"low"`
-	High        int      `json:"high"`
-	WithWeather []string `json:"with_weather"`
+	Low         int   `json:"low"`
+	High        int   `json:"high"`
+	WithWeather []int `json:"with_weather"`
 }
 
 type ActivitySchema struct {
 	Type           string   `json:"type"`
+	Verb           string   `json:"verb"`
 	TempUnit       string   `json:"temp_unit"`
 	Duration       int      `json:"duration"`
 	TempNeverBelow int      `json:"temp_never_below"`

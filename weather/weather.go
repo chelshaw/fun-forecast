@@ -58,31 +58,28 @@ func ForecastForCoords(lat string, lng string) (hours []*HourData, err error) {
 	if err != nil {
 		return hours, err
 	}
-	// hours := []*HourData{}
 	for i := 0; i < len(weather.Properties.Periods); i++ {
-		fmt.Println("-----")
 		hour, err := PeriodToHourData(weather.Properties.Periods[i])
 		if err != nil {
 			panic(err)
 		}
 
 		hours = append(hours, &hour)
-		// fmt.Printf("Result for %v - %v: %s (Daytime %v)", hour.Start.Format("15"), hour.End.Format("15"), hour.Weather, hour.Daytime)
 	}
 	return
 }
 
 type HourData struct {
-	Units      string
-	Timezone   string
-	Location   string
-	Start      time.Time
-	End        time.Time
-	Daytime    bool
-	Temp       int
-	Wind       int
-	Weather    string
-	CloudCover int
+	Units       string
+	Timezone    string
+	Location    string
+	Start       time.Time
+	End         time.Time
+	Daytime     bool
+	Temp        int
+	Wind        int
+	Weather     string
+	WeatherCode int
 }
 
 func PeriodToHourData(d WeatherPeriod) (h HourData, err error) {
@@ -95,7 +92,7 @@ func PeriodToHourData(d WeatherPeriod) (h HourData, err error) {
 	}
 
 	zone, _ := start.Zone()
-	// fmt.Println("ZONE", zone, start)
+	fmt.Println("ZONE", zone, start)
 
 	wind, err := strconv.Atoi(strings.Split(d.WindSpeed, " ")[0])
 	if err != nil {
@@ -105,14 +102,14 @@ func PeriodToHourData(d WeatherPeriod) (h HourData, err error) {
 
 	// TODO: Does the timezone come back based on location or requester?
 	h = HourData{
-		Timezone:   zone,
-		Start:      start,
-		End:        end,
-		Daytime:    d.IsDaytime,
-		Temp:       d.Temperature,
-		Wind:       wind,
-		Weather:    strings.ToLower(d.WeatherStr),
-		CloudCover: cloudCover(strings.ToLower(d.WeatherStr)),
+		Timezone:    zone,
+		Start:       start,
+		End:         end,
+		Daytime:     d.IsDaytime,
+		Temp:        d.Temperature,
+		Wind:        wind,
+		Weather:     strings.ToLower(d.WeatherStr),
+		WeatherCode: cloudCover(strings.ToLower(d.WeatherStr)),
 	}
 	return
 }
@@ -156,6 +153,5 @@ func cloudCover(fromApi string) (cloudcover int) {
 	default:
 		fmt.Printf("\nUnrecognized weather string value |%s|\n", fromApi)
 		return -1
-
 	}
 }

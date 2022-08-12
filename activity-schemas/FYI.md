@@ -22,10 +22,14 @@ Some temperatures you don't want to do something, no matter the type of weather.
 }
 ```
 
+Think of these as the moment you *don't* want to go outside. 
+
 ## Desired ranges
 Once you know there isn't weather you never want to be in, you want to know whether the temperature and weather combinations are ideal for your activity. That's where ranges come in. This is an array of scenarios in which you would be ok with being outside.
 
 You'll notice in the "never" blocks the integer values are exclusive. That means the evaluation will use `<` and `>`, and will not match if equal. The ranges, in contrast, are inclusive (`>=` or `<=`). So you must make sure the lowest temp of the ranges matches the "never below" value, and the highest temp of the ranges matches the "never above" value. Additionally, there should never be overlap between the highest and lowest ranges. 
+
+With weather is also inclusive, so the values represented are the desired limits of weather for the activity. 
 
 ### Invalid ranges
 ```json

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"chelshaw/funforecast/activity"
 	"chelshaw/funforecast/forecast"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -20,20 +20,33 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 }
 
 func Hello(c echo.Context) error {
-	return c.Render(http.StatusOK, "hello", "World")
+	return c.Render(http.StatusOK, "hello", "Chelsea")
+}
+
+func Wow(c echo.Context) error {
+	a, err := forecast.GetActivityForecast("78133", "MOTORCYCLE")
+	if err != nil {
+		fmt.Println("There was an error")
+		panic(err.Error())
+	}
+	forecast, err := json.Marshal(a)
+	if err != nil {
+		fmt.Println(err)
+		return c.Render(http.StatusBadRequest, "bad", "request")
+	}
+	return c.Render(http.StatusOK, "forecast", forecast)
 }
 
 func startServer() {
 	e := echo.New()
-	activity.GetExampleActivity()
 	t := &Template{
 		templates: template.Must(template.ParseGlob("public/templates/*.html")),
 	}
 	e.Renderer = t
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+		return c.String(http.StatusOK, "This is your fun forecast")
 	})
-	e.GET("/activity", func(c echo.Context) error {
+	e.GET("/example", func(c echo.Context) error {
 		fmt.Println("Activity!")
 		a, err := forecast.GetActivityForecast("78133", "MOTORCYCLE")
 		if err != nil {
@@ -44,15 +57,11 @@ func startServer() {
 		return c.JSON(http.StatusOK, &a)
 	})
 	e.GET("/hello", Hello)
+	e.GET("/wow", Wow)
 	e.File("/world", "public/index.html")
 	e.Logger.Fatal(e.Start("localhost:1323"))
 }
 
-func getLatLngFromZipcode(zipcode string) (lat string, lng string, err error) {
-	lat = "29.8507"
-	lng = "-98.212"
-	return
-}
 func runExampleForecast(zipcode string) {
 	output, err := forecast.GetActivityForecast(zipcode, "MOTORCYCLE")
 	if err != nil {
