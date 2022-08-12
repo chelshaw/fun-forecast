@@ -2,7 +2,6 @@ package main
 
 import (
 	"chelshaw/funforecast/forecast"
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -21,20 +20,6 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 
 func Hello(c echo.Context) error {
 	return c.Render(http.StatusOK, "hello", "Chelsea")
-}
-
-func Wow(c echo.Context) error {
-	a, err := forecast.GetActivityForecast("78133", "MOTORCYCLE")
-	if err != nil {
-		fmt.Println("There was an error")
-		panic(err.Error())
-	}
-	forecast, err := json.Marshal(a)
-	if err != nil {
-		fmt.Println(err)
-		return c.Render(http.StatusBadRequest, "bad", "request")
-	}
-	return c.Render(http.StatusOK, "forecast", forecast)
 }
 
 func startServer() {
@@ -57,7 +42,6 @@ func startServer() {
 		return c.JSON(http.StatusOK, &a)
 	})
 	e.GET("/hello", Hello)
-	e.GET("/wow", Wow)
 	e.File("/world", "public/index.html")
 	e.Logger.Fatal(e.Start("localhost:1323"))
 }
