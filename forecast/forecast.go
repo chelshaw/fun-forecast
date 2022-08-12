@@ -8,61 +8,83 @@ import (
 )
 
 type ForecastOutput struct {
-	Type string
+	Type     string
 	Forecast []*ForecastHour
 }
 type ForecastHour struct {
-	Start time.Time
-	End time.Time
-	Day int // groups results into days
-	Good bool
+	Start  time.Time
+	End    time.Time
+	Day    int // groups results into days
+	Good   bool
 	Reason string
 }
 
-// Evaluate Hour takes an activity schema and 
+/** Helper func */
+func contains(elems []string, v string) bool {
+	for _, s := range elems {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+func HasNeverWeather(a *activity.ActivitySchema, h *weather.HourData) (r string) {
+	if h.Temp > a.TempNeverAbove {
+		return "too hot"
+	} else if h.Temp < a.TempNeverBelow {
+		return "too cold"
+	} else if h.Wind > a.WindNeverAbove {
+		return "too windy"
+	} else if h.Wind < a.WindNeverBelow {
+		return "not windy enough"
+	} else if a.DaytimeOnly && !h.Daytime {
+		return "too dark"
+	}
+	return ""
+}
+
+func GetMatchingRangeIndex(rs []activity.Range, currentTemp int) (idx int) {
+	for id, activityRange := range rs {
+		if currentTemp >= activityRange.Low && currentTemp <= activityRange.High {
+			return id
+		}
+	}
+	return -1
+}
+
+// Evaluate Hour takes an activity schema and
 // evaluates it against a given hour's data
 func EvaluateHour(a *activity.ActivitySchema, h *weather.HourData) (r *ForecastHour) {
 	r = &ForecastHour{
-		Start: h.Start,
-		End: h.End,
-		Day: h.Start.Year() + h.Start.YearDay(),
+		Start:  h.Start,
+		End:    h.End,
+		Day:    h.Start.Year() + h.Start.YearDay(),
+		Good:   false,
+		Reason: "Unknown",
 	}
-	if h.Temp > a.TempNeverAbove {
-		r.Good = false
-		r.Reason = "too hot"
-	} else if h.Temp < a.TempNeverBelow {
-		r.Good = false
-		r.Reason = "too cold"
-	} else if h.Wind > a.WindNeverAbove {
-		r.Good = false
-		r.Reason = "too windy"
-	} else if h.Wind < a.WindNeverBelow {
-		r.Good = false
-		r.Reason = "not windy enough"
-	} else if a.DaytimeOnly && !h.Daytime {
-		r.Good = false
-		r.Reason = "too dark"
+
+	neverReason := HasNeverWeather(a, h)
+	if neverReason != "" {
+		r.Reason = neverReason
+		return
 	}
-	for i := 0; i < len(a.WeatherNever); i++ {
-		if h.Weather == a.WeatherNever[i] {
-			r.Good = false
-			r.Reason = fmt.Sprintf("weather is %s", h.Weather)
-		}
+
+	matchingRangeIdx := GetMatchingRangeIndex(a.Ranges, h.Temp)
+	if matchingRangeIdx < 0 {
+		// Shouldn't ever get here because if there isn't a temp
+		// range that matches it should be caught above
+		fmt.Printf("\n %v DEBUG: ranges %v || temp %v  \n", r.Day, a.Ranges, h.Temp)
+		r.Reason = fmt.Sprintf("Not great, it's %s", h.Weather)
+		return
 	}
-	// var yesWeather []string;
-	for i := 0; i < len(a.Ranges); i++ {
-		if h.Temp > a.Ranges[i].Low && h.Temp < a.Ranges[i].High {
-			// fmt.Println("Found matching range for", a.Type)
-			// fmt.Printf("\nLow %v°F, High %v°F", a.Ranges[i].Low, a.Ranges[i].High)
-			// fmt.Println("Requires ", a.Ranges[i].WithWeather, " Has", h.Weather)
-			
-			for j := 0; j < len(a.Ranges[i].WithWeather); j++ {
-				if h.Weather == a.Ranges[i].WithWeather[j] {
-					r.Good = true
-					r.Reason = "A great day to be outside"
-				}
-			}
-		}
+	matchingRange := a.Ranges[matchingRangeIdx]
+	if contains(matchingRange.WithWeather, h.Weather) {
+		r.Good = true
+		r.Reason = fmt.Sprintf("%s and %v°F", h.Weather, h.Temp)
+	} else {
+		fmt.Printf("\n Reason not to: %s and %v°F", h.Weather, h.Temp)
+		r.Reason = fmt.Sprintf("%s and %v°F", h.Weather, h.Temp)
 	}
 
 	return r
@@ -90,10 +112,7 @@ func determineGoodHour(a *activity.ActivitySchema, h *weather.HourData) bool {
 	// var yesWeather []string;
 	for i := 0; i < len(a.Ranges); i++ {
 		if h.Temp > a.Ranges[i].Low && h.Temp < a.Ranges[i].High {
-			// fmt.Println("Found matching range for", a.Type)
-			// fmt.Printf("\nLow %v°F, High %v°F", a.Ranges[i].Low, a.Ranges[i].High)
-			// fmt.Println("Requires ", a.Ranges[i].WithWeather, " Has", h.Weather)
-			
+
 			for j := 0; j < len(a.Ranges[i].WithWeather); j++ {
 				if h.Weather == a.Ranges[i].WithWeather[j] {
 					result = true
@@ -107,23 +126,24 @@ func determineGoodHour(a *activity.ActivitySchema, h *weather.HourData) bool {
 	return result
 }
 
-
 // GetActivityForecast takes a zipcode and an activity key, and
-// returns 
-func GetActivityForecast(zipcode string, activityKey string) (forecast *ForecastOutput, err error) {	
+// returns
+func GetActivityForecast(zipcode string, activityKey string) (forecast *ForecastOutput, err error) {
 	activity, err := activity.GetActivityByKey(activityKey)
 	if err != nil {
 		return
 	}
 	// lat, lng, err := getLatLngForZipcode
 	weather, err := weather.ForecastForCoords("36.86366872201312", "-78.53235258773725")
-	
+	if err != nil {
+		return
+	}
 	finalHours := []*ForecastHour{}
 	forecast = &ForecastOutput{
-		Type: activity.Type,
+		Type:     activity.Type,
 		Forecast: finalHours,
 	}
-	
+
 	// for each hour, check if good weather for activity
 	// if good, check duration == 1 and add to final output
 	// otherwise hold in run (temp array)
@@ -139,19 +159,19 @@ func GetActivityForecast(zipcode string, activityKey string) (forecast *Forecast
 	return
 }
 
-func GetExampleActivityForecast() (forecast *ForecastOutput, err error) {	
+func GetExampleActivityForecast() (forecast *ForecastOutput, err error) {
 	activity, err := activity.GetExampleActivity()
 	hours, err := weather.ForecastForCoords("36.86366872201312", "-78.53235258773725")
 	if err != nil {
 		panic(err)
 	}
-	
+
 	finalHours := []*ForecastHour{}
 	forecast = &ForecastOutput{
-		Type: activity.Type,
+		Type:     activity.Type,
 		Forecast: finalHours,
 	}
-	
+
 	// for each hour, check if good weather for activity
 	// if good, check duration == 1 and add to final output
 	// otherwise hold in run (temp array)
@@ -166,4 +186,3 @@ func GetExampleActivityForecast() (forecast *ForecastOutput, err error) {
 	forecast.Forecast = finalHours
 	return
 }
-

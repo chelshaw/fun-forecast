@@ -12,7 +12,7 @@ import (
 )
 
 type Template struct {
-    templates *template.Template
+	templates *template.Template
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -37,9 +37,10 @@ func startServer() {
 		fmt.Println("Activity!")
 		a, err := forecast.GetActivityForecast("78133", "MOTORCYCLE")
 		if err != nil {
+			fmt.Println("There was an error")
 			panic(err.Error())
 		}
-		
+
 		return c.JSON(http.StatusOK, &a)
 	})
 	e.GET("/hello", Hello)
@@ -62,6 +63,6 @@ func runExampleForecast(zipcode string) {
 
 func main() {
 	fmt.Println("Hi")
-	// runExampleForecast("78133")
+	runExampleForecast("78133")
 	startServer()
 }

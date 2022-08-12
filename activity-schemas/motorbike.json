@@ -4,12 +4,50 @@
   "temp_unit": "F",
   "temp_never_below": 60,
   "temp_never_above": 97,
-  "weather_never": ["sleet", "rain", "lightning"],
+  "weather_never": [
+    "sleet",
+    "rain",
+    "lightning"
+  ],
   "wind_never_above": 18,
   "wind_never_below": 0,
   "daytime_only": true,
   "ranges": [
-    { "high": 78, "low": 60, "with_weather": ["sunny", "partly sunny"] },
-    { "high": 97, "low": 78, "with_weather": ["partly cloudy", "cloudy"] }
+    {
+      "low": 60,
+      "high": 78,
+      "with_weather": [
+        "sunny",
+        "partly sunny"
+      ],
+      "weather_range": [
+        0,
+        3
+      ]
+    },
+    {
+      "low": 79,
+      "high": 86,
+      "with_weather": [
+        "partly cloudy",
+        "cloudy"
+      ],
+      "weather_range": [
+        0,
+        5
+      ]
+    },
+    {
+      "low": 87,
+      "high": 97,
+      "with_weather": [
+        "partly cloudy",
+        "cloudy"
+      ],
+      "weather_range": [
+        2,
+        5
+      ]
+    }
   ]
 }
