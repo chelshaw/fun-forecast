@@ -17,7 +17,7 @@ func PointFromCoords(lat string, lng string) (w Point, e error) {
 	fmt.Printf(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("ERROR getPointFromCoords!")
+		fmt.Println("\n\nERROR getPointFromCoords!")
 		return w, err
 	}
 	defer resp.Body.Close()
@@ -36,7 +36,7 @@ func WeatherFromPoint(p Point) (w WeatherData, err error) {
 	fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("ERROR getWeatherFromPoint!")
+		fmt.Println("\n\nERROR getWeatherFromPoint!")
 		panic(err)
 	}
 	defer resp.Body.Close()
@@ -50,108 +50,108 @@ func WeatherFromPoint(p Point) (w WeatherData, err error) {
 }
 
 func ForecastForCoords(lat string, lng string) (hours []*HourData, err error) {
-	point, err := PointFromCoords(lat,lng)
+	point, err := PointFromCoords(lat, lng)
 	if err != nil {
-		return hours,err
+		return hours, err
 	}
 	weather, err := WeatherFromPoint(point)
 	if err != nil {
 		return hours, err
 	}
-	// hours := []*HourData{}
 	for i := 0; i < len(weather.Properties.Periods); i++ {
-		fmt.Println("-----")
 		hour, err := PeriodToHourData(weather.Properties.Periods[i])
 		if err != nil {
 			panic(err)
 		}
-		
+
 		hours = append(hours, &hour)
-		// fmt.Printf("Result for %v - %v: %s (Daytime %v)", hour.Start.Format("15"), hour.End.Format("15"), hour.Weather, hour.Daytime)
 	}
 	return
 }
 
 type HourData struct {
-	Units 	string
-	Timezone string
-	Location string
-	Start 	time.Time
-	End 	time.Time
-	Daytime bool
-	Temp	int
-	Wind	int
-	Weather string
-	CloudCover int
+	Units       string
+	Timezone    string
+	Location    string
+	Start       time.Time
+	End         time.Time
+	Daytime     bool
+	Temp        int
+	Wind        int
+	Weather     string
+	WeatherCode int
 }
 
-func PeriodToHourData (d WeatherPeriod) (h HourData, err error) {
+func PeriodToHourData(d WeatherPeriod) (h HourData, err error) {
 	// HELPFUL: https://dzhg.dev/posts/2020/08/how-to-parse-string-as-time-in-go/
 	layout := "2006-01-02T15:04:05-07:00"
 	start, errS := time.Parse(layout, d.StartTime)
 	end, errE := time.Parse(layout, d.EndTime)
 	if errS != nil || errE != nil {
-		return h, errors.New("Date parsing failed")
+		return h, errors.New("date parsing failed")
 	}
 
 	zone, _ := start.Zone()
 	fmt.Println("ZONE", zone, start)
-	
-	wind, err  := strconv.Atoi(strings.Split(d.WindSpeed, " ")[0])
+
+	wind, err := strconv.Atoi(strings.Split(d.WindSpeed, " ")[0])
 	if err != nil {
 		// Couldn't get wind
 		fmt.Println("Error parsing wind", d.WindSpeed, err)
 	}
-	
+
 	// TODO: Does the timezone come back based on location or requester?
 	h = HourData{
-		Timezone: zone,
-		Start: start,
-		End: end,
-		Daytime: d.IsDaytime,
-		Temp: d.Temperature,
-		Wind: wind,
-		Weather: strings.ToLower(d.WeatherStr),
-		CloudCover: cloudCover(strings.ToLower(d.WeatherStr)),
+		Timezone:    zone,
+		Start:       start,
+		End:         end,
+		Daytime:     d.IsDaytime,
+		Temp:        d.Temperature,
+		Wind:        wind,
+		Weather:     strings.ToLower(d.WeatherStr),
+		WeatherCode: cloudCover(strings.ToLower(d.WeatherStr)),
 	}
 	return
 }
 
-var WeatherMap = map[int]string {
+var WeatherMap = map[int]string{
 	0: "clear",
 	1: "mostly clear",
 	2: "partly clear",
 	3: "partly cloudy",
 	4: "mostly cloudy",
 	5: "cloudy",
-	6: "rain",
-	7: "storm",
+	6: "fog",
+	7: "rain",
+	8: "storm",
 }
 
 // TODO: Change return value to int (map)
 func cloudCover(fromApi string) (cloudcover int) {
 	if strings.Contains(fromApi, "thunderstorm") {
-		return 7
+		return 8
 	}
 	if strings.Contains(fromApi, "showers") || strings.Contains(fromApi, "rain") { // chance showers and thunderstorms
+		return 7
+	}
+	if strings.Contains(fromApi, "fog") {
 		return 6
 	}
 	switch fromApi {
-		case "sunny", "clear":
-			return 0
-		case "mostly sunny","mostly clear":
-			return 1
-		case "partly sunny", "partly clear":
-			return 2
-		case "partly cloudy":
-			return 3
-		case "mostly cloudy":
-			return 4
-		case "cloudy":
-			return 5
-		default:
-			fmt.Printf("\nUnrecognized weather string value |%s|\n", fromApi)
-			return -1
-
+	case "sunny", "clear":
+		return 0
+	case "mostly sunny", "mostly clear":
+		return 1
+	case "partly sunny", "partly clear":
+		return 2
+	case "partly cloudy":
+		return 3
+	case "mostly cloudy":
+		return 4
+	case "cloudy":
+		return 5
+	default:
+		fmt.Printf("\nUnrecognized weather string value |%s|\n", fromApi)
+		return -1
 	}
 }
