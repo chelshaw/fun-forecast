@@ -6,8 +6,10 @@ import (
 	"html/template"
 	"io"
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type Template struct {
@@ -22,18 +24,46 @@ func Hello(c echo.Context) error {
 	return c.Render(http.StatusOK, "hello", "Chelsea")
 }
 
+func splitActivityRef(param string)(verb string, locationRef string, err error) {
+	keys := strings.Split(param, "_")
+	verb = keys[0]
+	locationRef = keys[1]
+	return
+}
+
 func startServer() {
 	e := echo.New()
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 	t := &Template{
 		templates: template.Must(template.ParseGlob("public/templates/*.html")),
 	}
 	e.Renderer = t
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:4200"},
+		AllowMethods: []string{http.MethodGet, http.MethodPut},
+	}))
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "This is your fun forecast")
+		return c.String(http.StatusOK, "This is your fun forecast. Hint: go to /example")
+	})
+	e.GET("/api/v0/me/:activity_ref", func(ctx echo.Context) error {
+		key := ctx.Param("activity_ref")
+		verb, locationRef, err := splitActivityRef(key)
+		if err != nil {
+			panic(err)
+		}
+		activityKey := strings.ToUpper(verb)
+		output, err := forecast.GetActivityForecast(locationRef, activityKey)
+		if err != nil {
+			fmt.Println(err)
+			return ctx.String(http.StatusBadRequest, fmt.Sprintf("Could not get activity forecast: %e", err))
+		}
+		// fmt.Print(output)
+		return ctx.JSON(http.StatusOK, &output)
 	})
 	e.GET("/example", func(c echo.Context) error {
 		fmt.Println("Activity!")
-		a, err := forecast.GetActivityForecast("78133", "MOTORCYCLE")
+		a, err := forecast.GetActivityForecast("78666", "MOTORCYCLE")
 		if err != nil {
 			fmt.Println("There was an error")
 			panic(err.Error())
@@ -46,16 +76,9 @@ func startServer() {
 	e.Logger.Fatal(e.Start("localhost:1323"))
 }
 
-func runExampleForecast(zipcode string) {
-	output, err := forecast.GetActivityForecast(zipcode, "MOTORCYCLE")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Print(output)
-}
 
 func main() {
-	fmt.Println("Hi")
-	runExampleForecast("78133")
+	fmt.Println("Hey cutie ;)")
+	// runExampleForecast("78666")
 	startServer()
 }

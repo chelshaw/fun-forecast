@@ -14,7 +14,7 @@ import (
 
 func PointFromCoords(lat string, lng string) (w Point, e error) {
 	url := fmt.Sprintf("https://api.weather.gov/points/%s,%s", lat, lng)
-	fmt.Printf(url)
+	fmt.Println("DEBUG Fetching point from url w/ coords", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("\n\nERROR getPointFromCoords!")
@@ -27,13 +27,13 @@ func PointFromCoords(lat string, lng string) (w Point, e error) {
 	if err != nil {
 		return w, err // TODO: Test if this fails ok without the pointer
 	}
-	fmt.Printf("%v", j)
+	fmt.Printf("DEBUG Point from coords: %v", j)
 	return j, nil
 }
 
 func WeatherFromPoint(p Point) (w WeatherData, err error) {
 	url := fmt.Sprintf("https://api.weather.gov/gridpoints/%s/%v,%v/forecast/hourly?units=us", p.Properties.Id, p.Properties.X, p.Properties.Y)
-	fmt.Println(url)
+	fmt.Println("FETCHING DATA FROM:", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("\n\nERROR getWeatherFromPoint!")
@@ -92,7 +92,7 @@ func PeriodToHourData(d WeatherPeriod) (h HourData, err error) {
 	}
 
 	zone, _ := start.Zone()
-	fmt.Println("ZONE", zone, start)
+	// fmt.Println("ZONE", zone, start)
 
 	wind, err := strconv.Atoi(strings.Split(d.WindSpeed, " ")[0])
 	if err != nil {

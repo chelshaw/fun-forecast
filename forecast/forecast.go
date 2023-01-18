@@ -21,14 +21,14 @@ type ForecastHour struct {
 }
 
 /** Helper func */
-func contains(elems []string, v string) bool {
-	for _, s := range elems {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
+// func contains(elems []string, v string) bool {
+// 	for _, s := range elems {
+// 		if v == s {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
 
 func hasNeverWeather(a *activity.ActivitySchema, h *weather.HourData) (r string) {
 	if h.Temp > a.TempNeverAbove {
@@ -112,9 +112,9 @@ func EvaluateHour(a *activity.ActivitySchema, h *weather.HourData) (r *ForecastH
 	inRange, reason := weatherCodeInRange(h.WeatherCode, matchingRange.WithWeather)
 	if inRange {
 		r.Good = true
-		r.Reason = fmt.Sprintf("Great time to %s", a.Verb)
+		r.Reason = "😎"
 	} else {
-		fmt.Printf("\n NOT GOOD: Weathercode: %v Reason: %s", h.WeatherCode, reason)
+		// fmt.Printf("\n NOT GOOD: Weathercode: %v Reason: %s", h.WeatherCode, reason)
 		r.Reason = reason
 	}
 

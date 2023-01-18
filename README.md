@@ -1,18 +1,22 @@
-# Fun Forecast
+# ~ * ~ Fun Forecast ~ * ~
 
-This application tells you when is the best time to do the things you love to do outside.
+This webapp tells you when is the best time to do the things you love to do outside.
+
+# Backend
 
 `go run main.go`
 
-## Notes
+To see an example output, go to `localhost:1323/example`
+## Commands
 
+- `go run main.go`
 - `gofmt -w .` to format all files
 
 ## Resources
 
 - [Go concurrency patterns](https://youtu.be/f6kdp27TYZs)
 
-## How to get started with Golang in 2022
+## Things to know about Golang in 2022
 
 when you just want to keep your code well-organized, but don't want to manage multiple modules
 
