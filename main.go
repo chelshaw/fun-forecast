@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/coocood/freecache"
 	cache "github.com/gitsight/go-echo-cache"
@@ -34,10 +35,14 @@ func splitActivityRef(param string)(verb string, locationRef string, err error) 
 }
 
 func startServer() {
-	c := freecache.NewCache(1024 * 1024) // Pre-allocated cache of 1Mb)
+	c := freecache.NewCache(1024 * 1024 * 1000) // Pre-allocated cache of 100Mb)
 
 	e := echo.New()
-	e.Use(cache.New(&cache.Config{}, c))
+	ttl, err := time.ParseDuration("1h")
+	if err != nil {
+		panic(err)
+	}
+	e.Use(cache.New(&cache.Config{ TTL: ttl }, c))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	t := &Template{

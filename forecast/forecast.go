@@ -126,7 +126,7 @@ func EvaluateHour(a *activity.ActivitySchema, h *weather.HourData) (r *ForecastH
 // GetActivityForecast takes a zipcode and an activity key, and
 // returns
 func GetActivityForecast(zipcode string, activityKey string) (forecast *ForecastOutput, err error) {
-	activity, err := activity.GetActivityByKey(activityKey)
+	activitySchema, err := activity.GetActivityByKey(activityKey)
 	if err != nil {
 		return
 	}
@@ -137,7 +137,7 @@ func GetActivityForecast(zipcode string, activityKey string) (forecast *Forecast
 	}
 	finalHours := []*ForecastHour{}
 	forecast = &ForecastOutput{
-		Verb:     activity.Type,
+		Verb:     activitySchema.Verb,
 		LocationKey: "78666",
 		LocationName: "San Marcos, TX",
 		Forecast: finalHours,
@@ -148,7 +148,7 @@ func GetActivityForecast(zipcode string, activityKey string) (forecast *Forecast
 	// otherwise hold in run (temp array)
 	// if bad, check length of run and apply if >= duration
 	for i := 0; i < len(weather); i++ {
-		good := EvaluateHour(activity, weather[i])
+		good := EvaluateHour(activitySchema, weather[i])
 		finalHours = append(finalHours, good)
 	}
 	forecast.Forecast = finalHours

@@ -7,7 +7,6 @@ type Range struct {
 }
 
 type ActivitySchema struct {
-	Type           string   `json:"type"`
 	Verb           string   `json:"verb"`
 	TempUnit       string   `json:"temp_unit"`
 	Duration       int      `json:"duration"`
