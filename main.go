@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/coocood/freecache"
+	cache "github.com/gitsight/go-echo-cache"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -32,7 +34,10 @@ func splitActivityRef(param string)(verb string, locationRef string, err error) 
 }
 
 func startServer() {
+	c := freecache.NewCache(1024 * 1024) // Pre-allocated cache of 1Mb)
+
 	e := echo.New()
+	e.Use(cache.New(&cache.Config{}, c))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	t := &Template{

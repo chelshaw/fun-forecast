@@ -8,16 +8,18 @@ import (
 )
 
 type ForecastOutput struct {
-	Type     string
-	Forecast []*ForecastHour
+	Verb     string				`json:"verb"`
+	LocationKey string			`json:"location_key"`
+	LocationName string			`json:"location_name"`
+	Forecast []*ForecastHour	`json:"forecast"`
 }
 type ForecastHour struct {
-	Start    time.Time
-	End      time.Time
-	Day      int // groups results into days
-	Good     bool
-	Reason   string
-	Overview string
+	Start    time.Time	`json:"start"`
+	End      time.Time	`json:"end"`
+	Day      int 	`json:"day"`
+	Good     bool	`json:"good"`
+	Reason   string	`json:"reason"`
+	Overview string	`json:"overview"`
 }
 
 /** Helper func */
@@ -135,7 +137,9 @@ func GetActivityForecast(zipcode string, activityKey string) (forecast *Forecast
 	}
 	finalHours := []*ForecastHour{}
 	forecast = &ForecastOutput{
-		Type:     activity.Type,
+		Verb:     activity.Type,
+		LocationKey: "78666",
+		LocationName: "San Marcos, TX",
 		Forecast: finalHours,
 	}
 

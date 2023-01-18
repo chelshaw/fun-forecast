@@ -10,6 +10,26 @@ import (
 	"time"
 )
 
+type Location struct {
+	LocationKey     string				`json:"location_key"`
+	LocationName string			`json:"location_name"`
+	Lat float64
+	Long float64
+}
+
+// TODO: Move this to new location section
+// func getLocFromAddress(zipcode string) (Location) {
+// 	// DOCS: https://geocoding.geo.census.gov/geocoder/Geocoding_Services_API.html
+	
+// 	url := fmt.Sprintf("https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=%sformat=json&benchmark=4")
+// 	resp, err := http.Get(url)
+// 	if err != nil {
+// 		fmt.Println("\n\nERROR getPointFromCoords!")
+// 		return w, err
+// 	}
+// 	defer resp.Body.Close()
+// }
+
 // TODO: Fix pointers in this file
 
 func PointFromCoords(lat string, lng string) (w Point, e error) {
