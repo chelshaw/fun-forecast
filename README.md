@@ -2,11 +2,9 @@
 
 This webapp tells you when is the best time to do the things you love to do outside.
 
-# Backend
+- Run the backend with `go run main.go`
+- Run the frontend with `cd frontend; yarn start`
 
-`go run main.go`
-
-To see an example output, go to `localhost:1323/example`
 ## Commands
 
 - `go run main.go`
