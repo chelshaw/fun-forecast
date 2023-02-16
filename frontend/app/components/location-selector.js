@@ -29,6 +29,13 @@ export default class LocationSelectorComponent extends Component {
       lng: -72.4983,
     };
     this.local.setItem(`loc`, location);
+    if (this.args.verb) {
+      return this.router.transitionTo(
+        'where.activity.details',
+        this.zipcode,
+        this.args.verb
+      );
+    }
     this.router.transitionTo('where.activity.choose', this.zipcode);
     if (this.args.onSave) {
       this.args.onSave(location);

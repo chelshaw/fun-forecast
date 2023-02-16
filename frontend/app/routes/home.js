@@ -6,14 +6,11 @@ export default class HomeRoute extends Route {
   @service api;
 
   async model() {
-    const mocked = this.api.generateForecast();
-    console.log({ mocked });
     return {
       activities: this.auth.currentUser?.activities?.map((raw) => ({
         ...raw,
         verb: raw.ref.split('_')[0],
       })),
-      mocked,
     };
   }
 

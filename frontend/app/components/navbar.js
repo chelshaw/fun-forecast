@@ -17,6 +17,6 @@ export default class NavbarComponent extends Component {
   }
 
   @action clearStorage() {
-    this.local.removeItem('loc');
+    this.local.remove('loc');
   }
 }

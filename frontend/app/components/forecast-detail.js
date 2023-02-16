@@ -27,7 +27,6 @@ export default class ForecastDetailComponent extends Component {
         time: DateTime.fromISO(sunset, { setZone: true }).toJSDate(),
       });
     }
-    console.log({ ticks });
     return ticks;
   }
 

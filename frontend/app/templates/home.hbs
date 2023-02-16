@@ -12,13 +12,13 @@
       </LinkTo>
     {{/each}}
   {{else}}
-    <section class='p-8 bg-amber-50'>
+    <section class='p-8'>
       <Typography @level='h2'>Oooh this is about to be fun!</Typography>
       <LinkTo @route='me.add'>Add an activity</LinkTo>
     </section>
   {{/if}}
 {{else}}
-  <section class='p-8 bg-amber-50 dark:bg-orange-800'>
+  <section class='p-8 bg-amber-50 dark:bg-slate-600'>
     <Typography @level='h2'>Oooh this is about to be fun!</Typography>
     <Typography>
       Welcome to Fun Forecast, the place for outdoor enthusiasts to figure out
@@ -28,5 +28,3 @@
 
   <LocationSelector @title='Enter your zipcode to start' class='py-4' />
 {{/if}}
-
-<ForecastDetail @verb='hike' @forecast={{this.model.mocked.forecast}} />

@@ -1,6 +1,10 @@
 {{page-title 'Detail'}}
+
 <Portal @target='onboard-title'>
-  <WhereToTitle @zipcode={{this.model.zipcode}} @verb={{this.model.verb}} />
+  <WhereToTitle
+    @zipcode={{this.model.location.ref}}
+    @verb={{this.model.verb}}
+  />
 </Portal>
 
 <div class='flex items-center justify-around'>
@@ -11,8 +15,7 @@
 
 <ForecastDetail
   @verb={{this.model.verb}}
-  @forecast={{this.model.mocked.forecast}}
-  @sunrise={{this.model.mocked.location.sunrise}}
-  @sunset={{this.model.mocked.location.sunset}}
+  @forecast={{this.model.forecast}}
+  @sunrise={{this.model.location.sunrise}}
+  @sunset={{this.model.location.sunset}}
 />
-<ForecastActivityDetail @hours={{this.model.hours}} @verb={{this.model.verb}} />
