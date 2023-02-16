@@ -18,6 +18,15 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+    metricsAdapters: [
+      {
+        name: 'SimpleAnalytics',
+        environments: ['production'],
+        config: {
+          hostname: 'fun-forecast.vercel.app',
+        },
+      },
+    ],
   };
 
   if (environment === 'development') {
