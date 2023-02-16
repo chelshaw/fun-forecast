@@ -74,10 +74,7 @@ export default class ForecastActivityDetailComponent extends Component {
     console.log('yes!', data);
   }
   get ticks() {
-    const ticks = this.hours.map((h) => ({ label: h.time, value: h.hour }));
-
-    console.log({ ticks });
-    return ticks;
+    return this.hours.map((h) => ({ label: h.time, value: h.hour }));
   }
   tickFormat(tick) {
     return tick.time;

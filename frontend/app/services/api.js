@@ -35,7 +35,7 @@ export default class ApiService extends Service {
 
   singleActivity(verb, zipcode) {
     if (!ENV.APP.USE_MOCK) {
-      console.warning('API not yet implemented. Using generated data');
+      console.info('API not yet implemented. Using generated data');
     }
     return this.generateForecast(verb, zipcode);
   }
