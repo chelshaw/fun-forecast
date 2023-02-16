@@ -2,15 +2,12 @@
   <LinkTo @route='home' class='underline text-lime-700'>
     <Typography @level='h1'>Fun Forecast</Typography>
   </LinkTo>
-  {{#if this.auth.currentUser}}
-    <LinkTo
-      @route='logout'
-      class='text-amber-700 border-2 p-2 border-amber-700'
-    >Sign Out</LinkTo>
-  {{else}}
-    <button
-      class='text-amber-700 border-2 p-2 border-amber-700' type="button" {{on 'click' this.clearStorage}}
-    >Clear</button>
-  {{/if}}
+
+  <LinkTo
+    @route='where.activity.detail'
+    @models={{array 78701 'run'}}
+    class='border-2 p-2 border-gray-700 text-gray-700 hover:underline'
+  >Example</LinkTo>
+
 </div>
 {{yield}}

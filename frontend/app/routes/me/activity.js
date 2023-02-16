@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 export default class MeActivityRoute extends Route {
-  @service auth;
   @service api;
 
   groupBy(arr, key) {

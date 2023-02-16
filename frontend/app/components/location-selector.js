@@ -8,27 +8,10 @@ export default class LocationSelectorComponent extends Component {
   @service router;
   @tracked zipcode = '';
 
-  constructor() {
-    super(...arguments);
-    const location = this.local.getItem(`loc`);
-    if (location) {
-      this.zipcode = location.zipcode;
-    }
-  }
-
   @action saveLocation(evt) {
     evt.preventDefault();
-    if (!this.zipcode) return;
     // TODO: check if location is valid
-    console.log('Saving mock location');
-    const location = {
-      city: 'San Marcos',
-      state: 'TX',
-      zipcode: this.zipcode,
-      lat: 32.83,
-      lng: -72.4983,
-    };
-    this.local.setItem(`loc`, location);
+    if (!this.zipcode) return;
     if (this.args.verb) {
       return this.router.transitionTo(
         'where.activity.details',

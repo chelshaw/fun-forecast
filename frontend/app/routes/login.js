@@ -3,12 +3,11 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class LoginRoute extends Route {
-  @service auth;
   @service router;
 
   @action
   mockLogin() {
-    this.auth.signIn();
+    // this.auth.signIn();
     this.router.transitionTo('home');
   }
 }

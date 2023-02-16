@@ -3,12 +3,11 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class FormLoginComponent extends Component {
-  @service auth;
   @service router;
 
   @action
   mockLogin() {
-    this.auth.signIn();
+    // this.auth.signIn();
     this.router.transitionTo('home');
   }
 }
