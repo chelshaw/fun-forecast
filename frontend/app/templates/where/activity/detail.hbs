@@ -1,0 +1,18 @@
+{{page-title 'Detail'}}
+<Portal @target='onboard-title'>
+  <WhereToTitle @zipcode={{this.model.zipcode}} @verb={{this.model.verb}} />
+</Portal>
+
+<div class='flex items-center justify-around'>
+  ⬅️
+  <h2 class='text-2xl font-bold text-center'>Today</h2>
+  ➡️
+</div>
+
+<ForecastDetail
+  @verb={{this.model.verb}}
+  @forecast={{this.model.mocked.forecast}}
+  @sunrise={{this.model.mocked.location.sunrise}}
+  @sunset={{this.model.mocked.location.sunset}}
+/>
+<ForecastActivityDetail @hours={{this.model.hours}} @verb={{this.model.verb}} />

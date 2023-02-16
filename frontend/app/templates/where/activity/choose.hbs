@@ -1,0 +1,13 @@
+{{page-title 'Choose Activity'}}
+<Portal @target='onboard-title'>
+  <WhereToTitle @zipcode={{this.model}} />
+</Portal>
+
+<Field::ChooseActivity @zipcode={{this.model}} />
+<LinkTo
+  class='text-2xl px-4 py-2 bg-gray-500'
+  @route='where.activity.detail'
+  @models={{array this.model 'hike'}}
+>Verb</LinkTo>
+
+{{outlet}}

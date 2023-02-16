@@ -1,0 +1,13 @@
+<div class='flex items-center'>
+  <div class='shrink'>
+    <div
+      class='h-12 w-12 flex justify-center items-center rounded border-4 border-blue-900 text-3xl'
+    >
+      {{this.icon}}
+    </div>
+  </div>
+  <div class='grow p-4'>
+    <ForecastBar @hours={{@hours}} @verb={{@verb}} />
+  </div>
+</div>
+{{yield}}

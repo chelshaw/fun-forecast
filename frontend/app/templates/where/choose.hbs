@@ -1,0 +1,11 @@
+{{page-title 'Choose where'}}
+
+<Portal @target='onboard-title'>
+  <WhereToTitle @zipcode={{this.model}} />
+</Portal>
+
+<div class='py-4 px-8'>
+  <LocationSelector />
+</div>
+
+{{outlet}}

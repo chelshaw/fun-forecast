@@ -1,0 +1,63 @@
+{{#if this.selectedActivity.active}}
+  <form {{on 'submit' this.saveActivity}} class='grid gap-y-4'>
+    <fieldset>
+      <Typography @level='h3'>Where do you like to
+        {{this.selectedActivity.verb}}?
+      </Typography>
+      <div class='grid grid-cols-2'>
+        <OptionButton
+          @onClick={{fn (mut this.locType) 'local'}}
+          @active={{eq this.locType 'local'}}
+        >My location -
+          {{this.auth.currentUser.locationName}}<br /><span
+            class='text-sm italic'
+          >(manage in settings)</span></OptionButton>
+        <OptionButton
+          @onClick={{fn (mut this.locType) 'custom'}}
+          @active={{eq this.locType 'custom'}}
+        >Somewhere else</OptionButton>
+      </div>
+    </fieldset>
+    {{#if (eq this.locType 'custom')}}
+      <fieldset>
+        <Typography @level='h3'>Choose the spot</Typography>
+        <Typography @class='text-sm italic'>Put the pin in the general vicinity
+          of where you like to
+          {{this.selectedVerb}}. We just need it nearby to calculate the
+          weather.</Typography>
+        <div class='bg-slate-500 text-slate-800 text-center p-24'>
+          Map goes here
+        </div>
+      </fieldset>
+    {{/if}}
+    <fieldset class='flex justify-between'>
+      <button
+        class='font-bold'
+        type='button'
+        {{on 'click' this.resetForm}}
+      >Back</button>
+      <button class='font-bold' type='submit'>Save</button>
+    </fieldset>
+  </form>
+{{else}}
+  <Typography @level='h3'>What do you like to do?</Typography>
+  {{#if (eq this.selectedActivity.active false)}}
+    <Portal @target='add-message'>
+      <div class='bg-blue-100 text-blue-800 border-blue-800 p-4'>
+        <Typography>{{capitalize this.selectedActivity.verb}}
+          will be available soon!</Typography>
+      </div>
+    </Portal>
+  {{/if}}
+  <div class='grid grid-cols-2 gap-2'>
+    {{#each @options as |activity|}}
+      <OptionButton
+        @onClick={{fn (mut this.selectedActivity) activity}}
+        @active={{eq this.selectedActivity.verb activity.verb}}
+      >
+        <p class='text-3xl'>{{activity.icon}}</p>
+        <Typography>{{activity.verb}}</Typography>
+      </OptionButton>
+    {{/each}}
+  </div>
+{{/if}}

@@ -1,0 +1,16 @@
+<div class='w-full bg-slate-200 dark:bg-slate-800 flex justify-between'>
+  <LinkTo @route='home' class='underline text-lime-700'>
+    <Typography @level='h1'>Fun Forecast</Typography>
+  </LinkTo>
+  {{#if this.auth.currentUser}}
+    <LinkTo
+      @route='logout'
+      class='text-amber-700 border-2 p-2 border-amber-700'
+    >Sign Out</LinkTo>
+  {{else}}
+    <button
+      class='text-amber-700 border-2 p-2 border-amber-700' type="button" {{on 'click' this.clearStorage}}
+    >Clear</button>
+  {{/if}}
+</div>
+{{yield}}

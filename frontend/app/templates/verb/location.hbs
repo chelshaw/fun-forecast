@@ -1,0 +1,10 @@
+{{page-title 'Location'}}
+{{outlet}}
+
+<h1 class='text-xl text-center'>When to {{this.model.verb}}</h1>
+<div class='flex items-center'>
+  ⬅️
+  <h2 class='grow text-2xl font-bold text-center'>{{this.model.dayKey}}</h2>
+  ➡️
+</div>
+<ForecastBar @hours={{this.model.hours}} @verb={{this.model.verb}} />

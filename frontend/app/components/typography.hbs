@@ -1,0 +1,9 @@
+{{#if (eq this.level "h1")}}
+    <h1 class={{this.classes}} data-test-typography>{{yield}}</h1>
+{{else if (eq this.level "h2")}}
+    <h2 class={{this.classes}} data-test-typography>{{yield}}</h2>
+{{else if (eq this.level "h3")}}
+    <h3 class={{this.classes}} data-test-typography>{{yield}}</h3>
+{{else}}
+    <p class={{this.classes}} data-test-typography>{{yield}}</p>
+{{/if}}

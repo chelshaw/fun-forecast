@@ -1,0 +1,25 @@
+<h1 class='text-3xl'>When to
+  <LinkTo
+    class='font-bold hover:underline'
+    @route='where.activity.choose'
+    @model={{@zipcode}}
+  >
+    {{or @verb '__________'}}
+  </LinkTo><br />
+  in
+  <button
+    class='font-bold hover:underline'
+    type='button'
+    disabled={{not @zipcode}}
+    {{on 'click' this.toggleLocationSelect}}
+  >
+    {{or @zipcode '__________'}}
+  </button>
+</h1>
+{{#if this.showLocationSelect}}
+  <Portal @target='location-selector'>
+    <div class='absolute top-50 left-0 right-0 bg-black'>
+      <LocationSelector />
+    </div>
+  </Portal>
+{{/if}}

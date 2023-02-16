@@ -1,0 +1,8 @@
+<button
+  {{on 'click' @onClick}}
+  class='p-3 bg-white hover:bg-lime-50 text-center min-h-24 border-4
+    {{if @active "border-lime-400" "border-transparent"}}'
+  type='button'
+>
+  {{yield}}
+</button>

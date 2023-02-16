@@ -1,0 +1,127 @@
+<Lineal::Fluid class='w-full' as |width|>
+  <svg height={{this.frameHeight}} width={{width}}>
+    <defs>
+      <clipPath id='outline'>
+        <rect
+          x='0'
+          y={{this.pointOffset}}
+          width={{width}}
+          height={{this.chartHeight}}
+          rx='10'
+        />
+      </clipPath>
+      {{#if this.sky}}
+        <linearGradient id='skyGradient'>
+          {{#each this.sky as |skyStop|}}
+            <stop offset={{skyStop.offset}} stop-color={{skyStop.color}} />
+          {{/each}}
+        </linearGradient>
+      {{/if}}
+    </defs>
+    <rect
+      id='background'
+      x='0'
+      y={{this.pointOffset}}
+      width={{width}}
+      height={{this.chartHeight}}
+      rx='10'
+      class='fill-gray-200'
+    />
+    {{#if @showSky}}
+      <rect
+        x='0'
+        y='0'
+        width={{width}}
+        height={{this.frameHeight}}
+        fill="url('#skyGradient')"
+        class='opacity-75'
+      ></rect>
+    {{/if}}
+    {{#let
+      (scale-linear range=(array 0 width) domain='0..24')
+      (scale-time range=(array 0 width) domain=this.timeDomain)
+      (scale-ordinal
+        range=(array
+          'fill-gray-400 hover:fill-gray-500'
+          'fill-gray-200 hover:fill-gray-300'
+        )
+        domain=(array true false)
+      )
+      as |hourScale timeScale colors|
+    }}
+      {{#if (and timeScale.isValid hourScale.isValid)}}
+        <g id='hours'>
+          {{#each @hours as |hour|}}
+            <rect
+              width={{round (add (scale-fn-compute hourScale 1) 1)}}
+              height={{this.chartHeight}}
+              x={{scale-fn-compute timeScale hour.jsDate}}
+              y={{this.pointOffset}}
+              clip-path='url(#outline)'
+              class='stroke-2 {{scale-fn-compute colors hour.good}}'
+              {{on 'click' (fn this.highlightHour hour)}}
+            />
+          {{/each}}
+
+        </g>
+        <Lineal::Axis
+          @orientation='bottom'
+          @scale={{timeScale}}
+          @tickValues={{this.ticks}}
+          @includeDomain={{false}}
+          @tickPadding={{0}}
+          transform='translate({{scale-fn-compute hourScale -1}}, {{add
+            this.pointOffset
+            this.chartHeight
+          }})'
+          aria-hidden='true'
+          class='text-gray-500'
+          as |tick|
+        >
+          <line stroke='currentColor' y2={{tick.size}}></line>
+          {{#if tick.label}}
+            <text
+              class='text-xs'
+              fill='currentColor'
+              y={{20}}
+              dy={{0}}
+              x={{0}}
+              text-anchor='middle'
+            >{{format-date tick.value hour='numeric'}}</text>
+          {{/if}}
+        </Lineal::Axis>
+
+        {{#if this.highlighted}}
+          <rect
+            width='1'
+            height='20'
+            x={{add
+              (scale-fn-compute timeScale this.highlighted.jsDate)
+              (div (scale-fn-compute hourScale 1) 2)
+            }}
+            y='25'
+            class='stroke-gray-800 stroke-1'
+          />
+        {{/if}}
+      {{/if}}
+      <Lineal::Line
+        @data={{@hours}}
+        class='stroke-transparent'
+        @xScale={{timeScale}}
+        @yScale={{hourScale}}
+        @x='jsDate'
+        @y='hour'
+      />
+    {{/let}}
+  </svg>
+</Lineal::Fluid>
+
+{{#if this.highlighted}}
+  <div class='border-2 border-gray-800 rounded'>
+    <Typography @level='h2'>{{if this.highlighted.good '😎' '⛔️'}}
+      {{this.highlighted.description}}</Typography>
+    <Typography @level='h3'>{{this.highlighted.reason}}</Typography>
+    <Typography>{{this.highlighted.overview}}</Typography>
+    <p>{{this.highlighted.time}}</p>
+  </div>
+{{/if}}

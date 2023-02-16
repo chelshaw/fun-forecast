@@ -1,0 +1,116 @@
+{{#if this.hours}}
+  <Lineal::Fluid class='w-full h-max h-screen relative pb-16' as |width height|>
+    <svg
+      class='w-full border border-pink-800'
+      height={{add (mult 25 this.hourHeight) 100}}
+    >
+      {{#let
+        (scale-linear domain=(array this.pad 105) range=(array 0 width))
+        (scale-time
+          range=(array this.pad (add this.pad (mult 25 this.hourHeight)))
+        )
+        (scale-ordinal
+          range=(array
+            'fill-green-500 dark:fill-green-400'
+            'fill-green-300 dark:fill-green-600'
+            'fill-gray-200 dark:fill-gray-700'
+          )
+          domain=(array 0 1 2)
+        )
+        as |xScale yScale colors|
+      }}
+        {{#if (and xScale.isValid yScale.isValid)}}
+          {{#let (add (scale-fn-compute xScale 50) this.pad) as |baseX|}}
+            <g id='dayInfo' class='text-gray-300 dark:text-amber-600'>
+              {{#each this.dayInfo as |tick|}}
+                <rect
+                  width={{scale-fn-compute xScale 100}}
+                  height='20'
+                  x={{this.pad}}
+                  y={{scale-fn-compute yScale tick.time}}
+                  fill='currentColor'
+                />
+                <line
+                  x1={{baseX}}
+                  y1={{scale-fn-compute yScale tick.time}}
+                  x2={{add baseX this.dayInfoSpace}}
+                  y2={{scale-fn-compute yScale tick.time}}
+                  stroke='currentColor'
+                />
+
+                <text
+                  fill='currentColor'
+                  x={{baseX}}
+                  dx={{this.dayInfoSpace}}
+                  y={{scale-fn-compute yScale tick.time}}
+                  dy={{0}}
+                  {{!-- dy={{0}} --}}
+                  text-anchor='start'
+                >{{tick.label}}</text>
+
+              {{/each}}
+            </g>
+          {{/let}}
+          <g id='hours'>
+            {{#each this.hours as |hour|}}
+              {{!-- <text
+                x={{this.pad}}
+                y={{scale-fn-compute yScale hour.startTime}}
+              >{{hour.start}}</text> --}}
+              <rect
+                width={{scale-fn-compute xScale 50}}
+                height={{this.hourHeight}}
+                x={{this.pad}}
+                y={{scale-fn-compute yScale hour.startTime}}
+                class='stroke-2 {{scale-fn-compute colors hour.score}}'
+              />
+            {{/each}}
+          </g>
+          <Lineal::Axis
+            @scale={{yScale}}
+            @orientation='right'
+            fill='transparent'
+            transform='translate({{add
+              this.pad
+              (scale-fn-compute xScale 50)
+            }}, 0)'
+            class='text-gray-800 dark:text-gray-100 text-xs'
+          />
+          {{!-- <Lineal::Axis
+            @scale={{yScale}}
+            @orientation='right'
+            @tickSize='50'
+            @tickValues={{this.dayInfo}}
+            fill='transparent'
+            transform='translate({{add
+              this.pad
+              (scale-fn-compute xScale 50)
+            }}, 0)'
+            class='text-gray-800 dark:text-gray-100 text-xs'
+            as |tick idx|
+          >
+            <line stroke='currentColor' x2={{tick.size}}></line>
+            <text
+              fill='currentColor'
+              x={{tick.offset}}
+              dy={{tick.textOffset}}
+              text-anchor={{tick.textAnchor}}
+            >{{if (eq idx 0) 'sunrise' 'sunset'}}</text>
+          </Lineal::Axis> --}}
+        {{/if}}
+        {{! This is just here to qualify the scales }}
+        <Lineal::Line
+          @data={{this.hours}}
+          @x='score'
+          @y='startTime'
+          @xScale={{xScale}}
+          @yScale={{yScale}}
+          fill='transparent'
+          stroke='transparent'
+        />
+      {{/let}}
+    </svg>
+  </Lineal::Fluid>
+{{else}}
+  [ empty state ]
+{{/if}}
