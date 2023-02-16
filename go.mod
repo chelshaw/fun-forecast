@@ -10,6 +10,7 @@ require (
 	github.com/coocood/freecache v1.2.3 // indirect
 	github.com/gitsight/go-echo-cache v1.0.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect

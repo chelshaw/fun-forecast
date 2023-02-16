@@ -16,6 +16,5 @@
 # Dependency directories (remove the comment below to include it)
 vendor/
 
-# UI
-
-ui/node_modules/
+.env
+ui/

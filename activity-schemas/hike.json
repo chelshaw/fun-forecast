@@ -11,7 +11,7 @@
   ],
   "wind_never_above": 45,
   "wind_never_below": 0,
-  "daytime_only": false,
+  "daytime_only": true,
   "ranges": [
     {
       "low": 30,

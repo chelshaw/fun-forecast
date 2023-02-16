@@ -1,5 +1,13 @@
 package weather
 
+
+type Location struct {
+	LocationKey     string		`json:"location_key"`
+	LocationName 	string		`json:"location_name"`
+	Lat 			float64
+	Long 			float64
+}
+
 // TODO: How to flatten from nested json to flattened struct?
 
 // eg https://api.weather.gov/points/36.8637,-78.5324

@@ -1,5 +1,6 @@
 package weather
 
+// TODO: Fix pointers in this file
 import (
 	"encoding/json"
 	"errors"
@@ -10,34 +11,12 @@ import (
 	"time"
 )
 
-type Location struct {
-	LocationKey     string				`json:"location_key"`
-	LocationName string			`json:"location_name"`
-	Lat float64
-	Long float64
-}
-
-// TODO: Move this to new location section
-// func getLocFromAddress(zipcode string) (Location) {
-// 	// DOCS: https://geocoding.geo.census.gov/geocoder/Geocoding_Services_API.html
-	
-// 	url := fmt.Sprintf("https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=%sformat=json&benchmark=4")
-// 	resp, err := http.Get(url)
-// 	if err != nil {
-// 		fmt.Println("\n\nERROR getPointFromCoords!")
-// 		return w, err
-// 	}
-// 	defer resp.Body.Close()
-// }
-
-// TODO: Fix pointers in this file
-
-func PointFromCoords(lat string, lng string) (w Point, e error) {
-	url := fmt.Sprintf("https://api.weather.gov/points/%s,%s", lat, lng)
+func pointFromCoords(lat float32, lng float32) (w Point, e error) {
+	url := fmt.Sprintf("https://api.weather.gov/points/%v,%v", lat, lng)
 	fmt.Println("DEBUG Fetching point from url w/ coords", url)
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("\n\nERROR getPointFromCoords!")
+		fmt.Printf("\nERROR in getpointFromCoords: %v", err.Error())
 		return w, err
 	}
 	defer resp.Body.Close()
@@ -51,12 +30,12 @@ func PointFromCoords(lat string, lng string) (w Point, e error) {
 	return j, nil
 }
 
-func WeatherFromPoint(p Point) (w WeatherData, err error) {
+func weatherFromPoint(p Point) (w WeatherData, err error) {
 	url := fmt.Sprintf("https://api.weather.gov/gridpoints/%s/%v,%v/forecast/hourly?units=us", p.Properties.Id, p.Properties.X, p.Properties.Y)
 	fmt.Println("FETCHING DATA FROM:", url)
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("\n\nERROR getWeatherFromPoint!")
+		fmt.Println("\n\nERROR weatherFromPoint!")
 		panic(err)
 	}
 	defer resp.Body.Close()
@@ -69,17 +48,17 @@ func WeatherFromPoint(p Point) (w WeatherData, err error) {
 	return
 }
 
-func ForecastForCoords(lat string, lng string) (hours []*HourData, err error) {
-	point, err := PointFromCoords(lat, lng)
+func ForecastForCoords(lat float32, lng float32) (hours []*HourData, err error) {
+	point, err := pointFromCoords(lat, lng)
 	if err != nil {
 		return hours, err
 	}
-	weather, err := WeatherFromPoint(point)
+	weather, err := weatherFromPoint(point)
 	if err != nil {
 		return hours, err
 	}
 	for i := 0; i < len(weather.Properties.Periods); i++ {
-		hour, err := PeriodToHourData(weather.Properties.Periods[i])
+		hour, err := periodToHourData(weather.Properties.Periods[i])
 		if err != nil {
 			panic(err)
 		}
@@ -102,7 +81,7 @@ type HourData struct {
 	WeatherCode int
 }
 
-func PeriodToHourData(d WeatherPeriod) (h HourData, err error) {
+func periodToHourData(d WeatherPeriod) (h HourData, err error) {
 	// HELPFUL: https://dzhg.dev/posts/2020/08/how-to-parse-string-as-time-in-go/
 	layout := "2006-01-02T15:04:05-07:00"
 	start, errS := time.Parse(layout, d.StartTime)

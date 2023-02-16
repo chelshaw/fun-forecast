@@ -4,23 +4,7 @@ import (
 	"chelshaw/funforecast/activity"
 	"chelshaw/funforecast/weather"
 	"fmt"
-	"time"
 )
-
-type ForecastOutput struct {
-	Verb     string				`json:"verb"`
-	LocationKey string			`json:"location_key"`
-	LocationName string			`json:"location_name"`
-	Forecast []*ForecastHour	`json:"forecast"`
-}
-type ForecastHour struct {
-	Start    time.Time	`json:"start"`
-	End      time.Time	`json:"end"`
-	Day      int 	`json:"day"`
-	Good     bool	`json:"good"`
-	Reason   string	`json:"reason"`
-	Overview string	`json:"overview"`
-}
 
 /** Helper func */
 // func contains(elems []string, v string) bool {
@@ -123,25 +107,19 @@ func EvaluateHour(a *activity.ActivitySchema, h *weather.HourData) (r *ForecastH
 	return r
 }
 
-// GetActivityForecast takes a zipcode and an activity key, and
-// returns
-func GetActivityForecast(zipcode string, activityKey string) (forecast *ForecastOutput, err error) {
+// GetActivityForecast takes an activity key and coordinates, and
+// returns Forecast Output including location details and hours
+func GetActivityForecast(activityKey string, lat float32, lng float32) (forecast *ForecastOutput, err error) {
 	activitySchema, err := activity.GetActivityByKey(activityKey)
 	if err != nil {
-		return
+		return nil, err
 	}
 	// lat, lng, err := getLatLngForZipcode
-	weather, err := weather.ForecastForCoords("36.86366872201312", "-78.53235258773725")
+	weather, err := weather.ForecastForCoords(lat, lng)
 	if err != nil {
-		return
+		return nil, err
 	}
 	finalHours := []*ForecastHour{}
-	forecast = &ForecastOutput{
-		Verb:     activitySchema.Verb,
-		LocationKey: "78666",
-		LocationName: "San Marcos, TX",
-		Forecast: finalHours,
-	}
 
 	// for each hour, check if good weather for activity
 	// if good, check duration == 1 and add to final output
@@ -151,6 +129,11 @@ func GetActivityForecast(zipcode string, activityKey string) (forecast *Forecast
 		good := EvaluateHour(activitySchema, weather[i])
 		finalHours = append(finalHours, good)
 	}
-	forecast.Forecast = finalHours
+	forecast = &ForecastOutput{
+		Verb:     activitySchema.Verb,
+		LocationKey: "78666",
+		LocationName: "San Marcos, TX",
+		Forecast: finalHours,
+	}
 	return
 }

@@ -13,7 +13,7 @@ var ActivityMap = map[string]string{
 	"HIKE": "./activity-schemas/hike.json",
 	// "KAYAK": "./activity-schemas/kayak.json",
 	// "RUN": "./activity-schemas/run.json",
-	// "HORSE": "./activity-schemas/run.json",
+	// "HORSE": "./activity-schemas/horse.json",
 }
 
 func GetActivityByKey(t string) (activitySchema *ActivitySchema, err error) {
@@ -32,7 +32,7 @@ func GetActivityByKey(t string) (activitySchema *ActivitySchema, err error) {
 	if err != nil {
 		fmt.Println("Error during Unmarshal(): ", err.Error())
 		// panic(err.Error())
-		return
+		return nil, err
 	}
 
 	// Let's print the unmarshalled data!

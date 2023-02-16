@@ -1,6 +1,6 @@
 {
   "type": "motorcycle",
-  "verb": "ride",
+  "verb": "motorcycle",
   "duration": 1,
   "temp_unit": "F",
   "temp_never_below": 60,
