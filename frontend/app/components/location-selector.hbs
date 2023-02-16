@@ -1,11 +1,13 @@
 <form {{on 'submit' this.saveLocation}} ...attributes>
-  <label for='user-question'>{{@title}}</label>
-  <Input
-    id='user-question'
-    @type='text'
-    @value={{this.zipcode}}
-    placeholder='zipcode'
-    class='dark:bg-slate-600'
-  />
-  <button class='px-2 bg-orange-600' type='submit'>Go</button>
+  <label for='zipcode'>{{@title}}</label>
+  <div class='mt-2'>
+    <Input
+      id='zipcode'
+      @type='text'
+      @value={{this.zipcode}}
+      placeholder='90210'
+      class='dark:bg-slate-600 dark:text-white p-2'
+    />
+    <button class='py-2 px-4 bg-slate-500 text-white' type='submit'>Go</button>
+  </div>
 </form>

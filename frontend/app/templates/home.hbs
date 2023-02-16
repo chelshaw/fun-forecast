@@ -18,7 +18,7 @@
     </section>
   {{/if}}
 {{else}}
-  <section class='p-8 bg-amber-50 dark:bg-slate-600'>
+  <section class='p-8 bg-slate-300 dark:bg-slate-600'>
     <Typography @level='h2'>Oooh this is about to be fun!</Typography>
     <Typography>
       Welcome to Fun Forecast, the place for outdoor enthusiasts to figure out
@@ -26,5 +26,8 @@
     </Typography>
   </section>
 
-  <LocationSelector @title='Enter your zipcode to start' class='py-4' />
+  <LocationSelector
+    @title='Enter your location to start'
+    class='py-4 mx-auto text-center'
+  />
 {{/if}}

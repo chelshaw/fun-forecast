@@ -1,9 +1,6 @@
 {{#if this.hours}}
-  <Lineal::Fluid class='w-full h-max h-screen relative pb-16' as |width height|>
-    <svg
-      class='w-full border border-pink-800'
-      height={{add (mult 25 this.hourHeight) 100}}
-    >
+  <Lineal::Fluid class='w-full h-content relative pb-16' as |width|>
+    <svg class='w-full' height={{add (mult 25 this.hourHeight) 100}}>
       {{#let
         (scale-linear domain=(array this.pad 105) range=(array 0 width))
         (scale-time
