@@ -4,8 +4,6 @@ import (
 	"chelshaw/funforecast/forecast"
 	"chelshaw/funforecast/location"
 	"fmt"
-	"html/template"
-	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -17,18 +15,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
-
-type Template struct {
-	templates *template.Template
-}
-
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
-
-func Hello(c echo.Context) error {
-	return c.Render(http.StatusOK, "hello", "Chelsea")
-}
 
 func splitActivityRef(param string)(verb string, locationRef string, err error) {
 	keys := strings.Split(param, "_")
@@ -115,10 +101,6 @@ func startServer() {
 	e.Use(cache.New(&cache.Config{ TTL: ttl }, c))
 	// e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	t := &Template{
-		templates: template.Must(template.ParseGlob("public/templates/*.html")),
-	}
-	e.Renderer = t
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:4200"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut},
@@ -129,8 +111,6 @@ func startServer() {
 	e.GET("/api/v0/zipcode/:zipcode", zipcodeInfoHandler)
 	e.GET("/api/v0/me/:activity_ref", myActivityHandler)
 
-	e.GET("/hello", Hello)
-	e.File("/world", "public/index.html")
 	e.Logger.Fatal(e.Start("localhost:1323"))
 }
 
