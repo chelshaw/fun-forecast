@@ -35,12 +35,41 @@ export default class ForecastDetailComponent extends Component {
     return ticks;
   }
 
+  conditionIcon(cond) {
+    switch (cond) {
+      case 'hot':
+        return '🥵';
+      case 'cold':
+        return '🥶';
+      case 'sunny':
+        return '☀️';
+      case 'cloudy':
+        return '☁️';
+      case 'foggy':
+        return '🌫';
+      case 'rainy':
+        return '🌧';
+      case 'stormy':
+        return '⛈';
+      case 'dark':
+        return '🌚';
+      default:
+        return '🤷🏽‍♀️';
+    }
+  }
+
   get hours() {
-    return this.args.forecast.map((f) => ({
-      ...f,
-      startTime: DateTime.fromISO(f.start, { setZone: true }).toJSDate(),
-      endTime: DateTime.fromISO(f.end, { setZone: true }).toJSDate(),
-    }));
+    return this.args.forecast.map((f) => {
+      return {
+        ...f,
+        conditionIcon: f.conditions
+          .map((c) => this.conditionIcon(c))
+          .filter((c) => !!c)
+          .join(''),
+        startTime: DateTime.fromISO(f.start, { setZone: true }).toJSDate(),
+        endTime: DateTime.fromISO(f.end, { setZone: true }).toJSDate(),
+      };
+    });
   }
 
   get timeDomain() {
@@ -69,7 +98,8 @@ export default class ForecastDetailComponent extends Component {
         .plus({ hours: 1 })
         .toLocaleString({ hour: 'numeric' })}`,
       verdict,
-      conditions: hour.conditions.join(', '),
+      conditions: hour.conditions.map((c) => `${this.conditionIcon(c)} ${c}`),
+      temperature: hour.temperature,
     };
   }
 }

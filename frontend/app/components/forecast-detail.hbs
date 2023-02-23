@@ -9,9 +9,9 @@
         (scale-linear domain=(array this.pad 105) range=(array 0 width))
         (scale-ordinal
           range=(array
-            'fill-green-500 dark:fill-green-400'
-            'fill-green-300 dark:fill-green-600'
-            'fill-gray-200 dark:fill-gray-700'
+            'fill-sky-500 dark:fill-sky-500'
+            'fill-sky-200 dark:fill-sky-800'
+            'fill-slate-200 dark:fill-slate-800'
           )
           domain=(array 0 1 2)
         )
@@ -19,40 +19,25 @@
       }}
         {{#if (and xScale.isValid yScale.isValid)}}
           {{#let (add (scale-fn-compute xScale 50) this.pad) as |baseX|}}
-            <g id='dayInfo' class='text-gray-300 dark:text-amber-600'>
+            <g id='dayInfo'>
               {{#each this.dayInfo as |tick|}}
                 <rect
                   width={{scale-fn-compute xScale 100}}
                   height='20'
                   x={{this.pad}}
                   y={{scale-fn-compute yScale tick.time}}
-                  fill='currentColor'
+                  class='fill-slate-300 dark:fill-slate-700'
                 />
-                <line
-                  x1={{baseX}}
-                  y1={{scale-fn-compute yScale tick.time}}
-                  x2={{add baseX this.dayInfoSpace}}
-                  y2={{scale-fn-compute yScale tick.time}}
-                  stroke='currentColor'
-                />
-
                 <text
-                  fill='currentColor'
-                  x={{baseX}}
+                  class='fill-slate-100 dark:fill-slate-900 font-bold'
+                  x={{add baseX 20}}
                   dx={{this.dayInfoSpace}}
                   y={{scale-fn-compute yScale tick.time}}
-                  dy={{0}}
-                  {{!-- dy={{0}} --}}
+                  dy={{15}}
                   text-anchor='start'
                 >{{tick.label}}</text>
 
               {{/each}}
-            </g>
-            <g
-              class='opacity-25 fill-magenta-200'
-              {{interactor-cartesian-horizontal}}
-            >
-
             </g>
           {{/let}}
           <g id='hours' {{on 'mouseleave' (fn this.highlightHour '')}}>
@@ -72,6 +57,14 @@
                 {{on 'mouseenter' (fn this.highlightHour hour)}}
                 {{on 'click' (fn (mut this.sticky) (not this.sticky))}}
               />
+              <text
+                class='fill-slate-100 dark:fill-slate-900 font-bold'
+                x={{scale-fn-compute xScale 20}}
+                dx={{0}}
+                y={{scale-fn-compute yScale hour.startTime}}
+                dy={{20}}
+                text-anchor='start'
+              >{{hour.conditionIcon}}</text>
             {{/each}}
           </g>
           <Lineal::Axis
@@ -101,14 +94,21 @@
       class='absolute top-5 right-0 w-3/5 bg-white text-black drop-shadow p-2'
     >
       {{#if this.highlighted}}
-        <h2 class='font-bold text-center'>{{this.highlighted.title}}</h2>
+        <div class='flex justify-between'>
+          <h2 class='font-bold text-center'>{{this.highlighted.title}}</h2>
+          <p class='font-bold text-xl'>{{this.highlighted.temperature}}°</p>
+        </div>
         <p
           class='italic text-slate-500 text-center text-sm'
         >{{this.highlighted.verdict}}
           {{@verb}}
           in
           {{@loc}}</p>
-        <p>{{this.highlighted.conditions}}</p>
+        <ul>
+          {{#each this.highlighted.conditions as |cond|}}
+            <li>{{cond}}</li>
+          {{/each}}
+        </ul>
         <p>[ gear list ]</p>
         <div
           class='w-full h-32 bg-slate-700 text-center text-slate-500 font-bold'

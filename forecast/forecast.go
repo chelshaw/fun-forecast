@@ -237,8 +237,8 @@ func ScoreForecast(activityKey string, lat float32, lng float32, date string) (f
 		Ref: "78666",
 		City: "San Marcos",
 		State: "Texas",
-		Sunrise: time.Date(2023, time.February, 6, 23, 0, 0, 0, austin),
-		Sunset: time.Date(2023, time.February, 19, 03, 0, 0, 0, austin),
+		Sunrise: time.Date(2023, time.February, 23, 7, 05, 0, 0, austin),
+		Sunset: time.Date(2023, time.February, 23, 19, 23, 0, 0, austin),
 	}
 	forecast = &NewForecastOutput{
 		Verb:     activitySchema.Verb,
