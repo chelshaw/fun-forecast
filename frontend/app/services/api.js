@@ -26,16 +26,27 @@ export default class ApiService extends Service {
   baseUrl = 'http://localhost:1323/api/v0';
 
   async fetch(path) {
-    let response = await fetch(`${this.baseUrl}/${encodeURIComponent(path)}`);
-    if (response.ok) {
-      return response.json();
+    var myHeaders = new Headers();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+    };
+    try {
+      let response = await fetch(`${this.baseUrl}/${path}`, requestOptions);
+      console.log({ response });
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText);
+    } catch (e) {
+      console.log('error at fetch', e);
     }
-    throw new Error(response.statusText);
   }
 
   singleActivity(verb, zipcode) {
     if (!ENV.APP.USE_MOCK) {
-      console.info('API not yet implemented. Using generated data');
+      return this.fetch(`go/${verb}_${zipcode}`);
     }
     return this.generateForecast(verb, zipcode);
   }
@@ -49,10 +60,12 @@ export default class ApiService extends Service {
     const loc = exampleLocations(zipcode);
     for (let hour = 0; hour < 24; hour++) {
       const time = today.set({ hour, minute: 0 });
+      const score = hour < 5 ? 2 : getRandomInt(3);
       forecast.push({
         start: time.toISO(),
         end: time.plus({ hours: 1 }).toISO(),
-        score: getRandomInt(3),
+        score,
+        conditions: score > 0 ? ['cloudy'] : [],
       });
     }
     return {
