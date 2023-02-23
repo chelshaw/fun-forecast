@@ -25,28 +25,28 @@ function exampleLocations(zipcode) {
 export default class ApiService extends Service {
   baseUrl = 'http://localhost:1323/api/v0';
 
-  async fetch(path) {
-    var myHeaders = new Headers();
-    myHeaders.append('Access-Control-Allow-Origin', '*');
-    var requestOptions = {
+  get headers() {
+    var headers = new Headers();
+    headers.append('Access-Control-Allow-Origin', '*');
+    return {
       method: 'GET',
-      headers: myHeaders,
+      headers,
     };
-    try {
-      let response = await fetch(`${this.baseUrl}/${path}`, requestOptions);
-      console.log({ response });
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    } catch (e) {
-      console.log('error at fetch', e);
+  }
+
+  async fetch(path) {
+    const requestOptions = this.headers;
+    let response = await fetch(`${this.baseUrl}/${path}`, requestOptions);
+    if (response.ok) {
+      return response.json();
     }
+    throw new Error(response.statusText);
   }
 
   singleActivity(verb, zipcode) {
     if (!ENV.APP.USE_MOCK) {
-      return this.fetch(`go/${verb}_${zipcode}`);
+      const activityRef = `${verb}_${zipcode}`;
+      return this.fetch(`go/${encodeURIComponent(activityRef)}`);
     }
     return this.generateForecast(verb, zipcode);
   }
