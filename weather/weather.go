@@ -68,18 +68,6 @@ func ForecastForCoords(lat float32, lng float32) (hours []*HourData, err error) 
 	return
 }
 
-type HourData struct {
-	Units       string
-	Timezone    string
-	Location    string
-	Start       time.Time
-	End         time.Time
-	Daytime     bool
-	Temp        int
-	Wind        int
-	Weather     string
-	WeatherCode int
-}
 
 func periodToHourData(d WeatherPeriod) (h HourData, err error) {
 	// HELPFUL: https://dzhg.dev/posts/2020/08/how-to-parse-string-as-time-in-go/
@@ -113,17 +101,6 @@ func periodToHourData(d WeatherPeriod) (h HourData, err error) {
 	return
 }
 
-var WeatherMap = map[int]string{
-	0: "clear",
-	1: "mostly clear",
-	2: "partly clear",
-	3: "partly cloudy",
-	4: "mostly cloudy",
-	5: "cloudy",
-	6: "fog",
-	7: "rain",
-	8: "storm",
-}
 
 // TODO: Change return value to int (map)
 func cloudCover(fromApi string) (cloudcover int) {

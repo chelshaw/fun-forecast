@@ -1,11 +1,36 @@
 package weather
 
+import "time"
 
+var WeatherMap = map[int]string{
+	0: "clear",
+	1: "mostly clear",
+	2: "partly clear",
+	3: "partly cloudy",
+	4: "mostly cloudy",
+	5: "cloudy",
+	6: "fog",
+	7: "rain",
+	8: "storm",
+}
 type Location struct {
 	LocationKey     string		`json:"location_key"`
 	LocationName 	string		`json:"location_name"`
 	Lat 			float64
 	Long 			float64
+}
+
+type HourData struct {
+	Units       string
+	Timezone    string
+	Location    string
+	Start       time.Time
+	End         time.Time
+	Daytime     bool
+	Temp        int
+	Wind        int
+	Weather     string
+	WeatherCode int
 }
 
 // TODO: How to flatten from nested json to flattened struct?
