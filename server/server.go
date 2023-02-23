@@ -60,6 +60,27 @@ func myActivityHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, &output)
 }
 
+func newActivityHandler(ctx echo.Context) error {
+	key := ctx.Param("activity_ref")
+	verb, locationRef, err := splitActivityRef(key)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, err.Error())
+	}
+	activityKey := strings.ToUpper(verb)
+	fmt.Printf("ref %v, activity %v, locRef %v", key, verb, locationRef)
+	lat, lng, err := location.GetCoordsFromLocRef(locationRef)
+	if err != nil {
+		fmt.Println(err)
+		return ctx.JSON(http.StatusNotFound, err.Error())
+	}
+	output, err := forecast.ScoreForecast(activityKey, lat, lng, "2023-02-23")
+	if err != nil {
+		fmt.Println(err)
+		return ctx.JSON(http.StatusNotFound, err.Error())
+	}
+	return ctx.JSON(http.StatusOK, &output)
+}
+
 func zipcodeInfoHandler(ctx echo.Context) error {
 	zipcode := ctx.Param("zipcode")
 	url, err := location.FetchLocationByZipcode(zipcode)
@@ -94,6 +115,7 @@ func StartServer() {
 		return c.String(http.StatusOK, "This is your fun forecast. Hint: go to /api/v0/me/motorcycle_78666")
 	})
 	e.GET("/api/v0/zipcode/:zipcode", zipcodeInfoHandler)
+	e.GET("/api/v0/go/:activity_ref", newActivityHandler)
 	e.GET("/api/v0/me/:activity_ref", myActivityHandler)
 
 	e.Logger.Fatal(e.Start("localhost:1323"))
