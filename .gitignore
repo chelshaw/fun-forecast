@@ -169,3 +169,9 @@ data_*.json
 *.sqlite
 venv/
 *~
+
+# IDE
+.idea/
+
+# Other
+notes.md
