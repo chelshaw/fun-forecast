@@ -3,6 +3,9 @@ from typing import Dict, Any
 
 from fastapi import FastAPI
 
+from fun_forecast_backend.activity_schema.dataclasses import ActivitySchema
+from fun_forecast_backend.activity_schema.activity import get_activity_schema_by_key
+
 app = FastAPI(title="Fun Forecast Backend")
 
 # app.add_middleware(
@@ -19,17 +22,22 @@ app = FastAPI(title="Fun Forecast Backend")
 @app.on_event("startup")
 async def startup():
     # await init_app_state(app.state)
+    pass
+
 
 @app.get("/")
 async def health_check():
     return "I'm healthy, yo!"
 
+
 @app.get("/api/v0/go/{verb}/{lat}/{long}")
 async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str, Any]:
     try:
         # fetch activity schema
-        activity_schema
+        schema: ActivitySchema = get_activity_schema_by_key(verb)
+        
         # get weather forecast for coordinates
+
         # sunrise/sunset forecast (times)
         # compare each hour to forecast activity
         # return answer

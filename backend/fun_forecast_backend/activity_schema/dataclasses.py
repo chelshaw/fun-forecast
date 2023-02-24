@@ -18,7 +18,7 @@ class ActivitySchema:
 	temp_never_above: int
 	wind_never_below: int
 	wind_never_above: int
-	weather_never: List[str] `json:"weather_never"`
-	DaytimeOnly    bool     `json:"daytime_only"`
-	Ranges         []Range  `json:"ranges"`
-}
+	weather_never: List[str] 
+	daytime_only: bool     
+	ranges: List[Range]
+

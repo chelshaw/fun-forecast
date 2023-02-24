@@ -1,0 +1,164 @@
+[
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "dacite",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "dacite",
+        "description": "dacite",
+        "detail": "dacite",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "ActivitySchema",
+        "importPath": "fun_forecast_backend.activity_schema.dataclasses",
+        "description": "fun_forecast_backend.activity_schema.dataclasses",
+        "isExtraImport": true,
+        "detail": "fun_forecast_backend.activity_schema.dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "get_activity_schema_by_key",
+        "importPath": "fun_forecast_backend.activity_schema.activity",
+        "description": "fun_forecast_backend.activity_schema.activity",
+        "isExtraImport": true,
+        "detail": "fun_forecast_backend.activity_schema.activity",
+        "documentation": {}
+    },
+    {
+        "label": "get_activity_schema_by_key",
+        "kind": 2,
+        "importPath": "backend.fun_forecast_backend.activity_schema.activity",
+        "description": "backend.fun_forecast_backend.activity_schema.activity",
+        "peekOfCode": "def get_activity_schema_by_key(key: str) -> ActivitySchema:\n    if key not in activity_map:\n        raise KeyError\n        # add file exists check\n    json_data = json.load(activity_map[key])\n    return dacite.from_dict(ActivitySchema, json_data)",
+        "detail": "backend.fun_forecast_backend.activity_schema.activity",
+        "documentation": {}
+    },
+    {
+        "label": "Range",
+        "kind": 6,
+        "importPath": "backend.fun_forecast_backend.activity_schema.dataclasses",
+        "description": "backend.fun_forecast_backend.activity_schema.dataclasses",
+        "peekOfCode": "class Range:\n\tlow: int\n\thigh: int\n\twith_weather: List[int]\n@dataclass\nclass ActivitySchema:\n\tverb: str\n\ttemp_unit: str\n\tduration: int\n\ttemp_never_below: int",
+        "detail": "backend.fun_forecast_backend.activity_schema.dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "ActivitySchema",
+        "kind": 6,
+        "importPath": "backend.fun_forecast_backend.activity_schema.dataclasses",
+        "description": "backend.fun_forecast_backend.activity_schema.dataclasses",
+        "peekOfCode": "class ActivitySchema:\n\tverb: str\n\ttemp_unit: str\n\tduration: int\n\ttemp_never_below: int\n\ttemp_never_above: int\n\twind_never_below: int\n\twind_never_above: int\n\tweather_never: List[str] \n\tdaytime_only: bool     ",
+        "detail": "backend.fun_forecast_backend.activity_schema.dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "WeatherApiPointProperties",
+        "kind": 6,
+        "importPath": "backend.fun_forecast_backend.weather.dataclasses",
+        "description": "backend.fun_forecast_backend.weather.dataclasses",
+        "peekOfCode": "class WeatherApiPointProperties:\n\tcity: str\n    state: str\n@dataclass\nclass WeatherApiRelativeLocation:\n\tproperties: WeatherApiPointProperties\n@dataclass\nclass WeatherApiPoint:\n    gridId: str\n    gridX: int",
+        "detail": "backend.fun_forecast_backend.weather.dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "WeatherApiRelativeLocation",
+        "kind": 6,
+        "importPath": "backend.fun_forecast_backend.weather.dataclasses",
+        "description": "backend.fun_forecast_backend.weather.dataclasses",
+        "peekOfCode": "class WeatherApiRelativeLocation:\n\tproperties: WeatherApiPointProperties\n@dataclass\nclass WeatherApiPoint:\n    gridId: str\n    gridX: int\n    gridY: int\n    relativeLocation: WeatherApiRelativeLocation\n    timezone: str\n# type Point struct {",
+        "detail": "backend.fun_forecast_backend.weather.dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "WeatherApiPoint",
+        "kind": 6,
+        "importPath": "backend.fun_forecast_backend.weather.dataclasses",
+        "description": "backend.fun_forecast_backend.weather.dataclasses",
+        "peekOfCode": "class WeatherApiPoint:\n    gridId: str\n    gridX: int\n    gridY: int\n    relativeLocation: WeatherApiRelativeLocation\n    timezone: str\n# type Point struct {\n# \tProperties struct{\n# \t} `json:\"properties\"`\n# }",
+        "detail": "backend.fun_forecast_backend.weather.dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "backend.fun_forecast_backend.main",
+        "description": "backend.fun_forecast_backend.main",
+        "peekOfCode": "app = FastAPI(title=\"Fun Forecast Backend\")\n# app.add_middleware(\n#     CORSMiddleware,\n#     allow_origins=[\"*\"],\n#     allow_credentials=True,\n#     allow_methods=[\"*\"],\n#     allow_headers=[\"*\"],\n# )\n# logger = get_logger()\n@app.on_event(\"startup\")",
+        "detail": "backend.fun_forecast_backend.main",
+        "documentation": {}
+    }
+]
