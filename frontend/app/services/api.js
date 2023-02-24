@@ -43,10 +43,15 @@ export default class ApiService extends Service {
     throw new Error(response.statusText);
   }
 
-  singleActivity(verb, zipcode) {
+  singleActivity(verb, zipcode, when) {
     if (!ENV.APP.USE_MOCK) {
       const activityRef = `${verb}_${zipcode}`;
-      return this.fetch(`go/${encodeURIComponent(activityRef)}`);
+      let path = `go/${encodeURIComponent(activityRef)}`;
+      if (when) {
+        path += `?when=${when}`;
+      }
+      console.log({ path });
+      return this.fetch(path);
     }
     return this.generateForecast(verb, zipcode);
   }

@@ -55,6 +55,8 @@ func ForecastForCoords(lat float32, lng float32) (hours []*HourData, err error) 
 	}
 	weather, err := weatherFromPoint(point)
 	if err != nil {
+		fmt.Println("ERROR getting forecast from coords")
+		fmt.Print(err)
 		return hours, err
 	}
 	for i := 0; i < len(weather.Properties.Periods); i++ {

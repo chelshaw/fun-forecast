@@ -62,6 +62,11 @@ func myActivityHandler(ctx echo.Context) error {
 
 func newActivityHandler(ctx echo.Context) error {
 	key := ctx.Param("activity_ref")
+	day := ctx.QueryParam("when")
+	if day == "" {
+		day = time.Now().Format("2006-01-02")
+	}
+	fmt.Printf("\nday: %s\n", day)
 	verb, locationRef, err := splitActivityRef(key)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, err.Error())
@@ -73,7 +78,7 @@ func newActivityHandler(ctx echo.Context) error {
 		fmt.Println(err)
 		return ctx.JSON(http.StatusNotFound, err.Error())
 	}
-	output, err := forecast.ScoreForecast(activityKey, lat, lng, "2023-02-23")
+	output, err := forecast.ScoreForecast(activityKey, lat, lng, day)
 	if err != nil {
 		fmt.Println(err)
 		return ctx.JSON(http.StatusNotFound, err.Error())

@@ -2,21 +2,21 @@
 
 <Portal @target='onboard-title'>
   <WhereToTitle
-    @zipcode={{this.model.location.ref}}
-    @verb={{this.model.verb}}
+    @zipcode={{this.model.data.location.ref}}
+    @verb={{this.model.data.verb}}
   />
 </Portal>
 
 <div class='flex items-center justify-around'>
   ⬅️
-  <h2 class='text-2xl font-bold text-center'>Today</h2>
+  <h2 class='text-2xl font-bold text-center'>{{this.model.when}}</h2>
   ➡️
 </div>
 
 <ForecastDetail
-  @verb={{this.model.verb}}
-  @loc={{this.model.location.ref}}
-  @forecast={{this.model.forecast}}
-  @sunrise={{this.model.location.sunrise}}
-  @sunset={{this.model.location.sunset}}
+  @verb={{this.model.data.verb}}
+  @loc={{this.model.data.location.ref}}
+  @forecast={{this.model.data.forecast}}
+  @sunrise={{this.model.data.location.sunrise}}
+  @sunset={{this.model.data.location.sunset}}
 />
