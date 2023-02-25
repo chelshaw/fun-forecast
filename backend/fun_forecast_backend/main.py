@@ -30,12 +30,12 @@ async def health_check():
     return "I'm healthy, yo!"
 
 
-@app.get("/api/v0/go/{verb}/{lat}/{long}")
+@app.get("/api/v0/go/{verb}/{lat},{long}")
 async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str, Any]:
     try:
         # fetch activity schema
         schema: ActivitySchema = get_activity_schema_by_key(verb)
-        
+
         # get weather forecast for coordinates
 
         # sunrise/sunset forecast (times)

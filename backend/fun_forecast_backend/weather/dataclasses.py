@@ -1,15 +1,20 @@
+from typing import List
+
 from dataclasses import dataclass
+import datetime
 
 
 @dataclass
 class WeatherApiPointProperties:
-	city: str
+    city: str
     state: str
+
 
 @dataclass
 class WeatherApiRelativeLocation:
-	properties: WeatherApiPointProperties
-                
+    properties: WeatherApiPointProperties
+
+
 @dataclass
 class WeatherApiPoint:
     gridId: str
@@ -18,24 +23,37 @@ class WeatherApiPoint:
     relativeLocation: WeatherApiRelativeLocation
     timezone: str
 
-# type Point struct {
-# 	Properties struct{
 
-# 	} `json:"properties"`
-# }
+@dataclass
+class WeatherDataPeriod:
+    startTime: str
+    endTime: str
+    isDaytime: bool
+    temperature: int
+    temperatureUnit: str
+    windSpeed: str
+    shortForecast: str
 
-# // From api.weather.gov forecast/hourly
-# // https://api.weather.gov/gridpoints/EWX/137,72/forecast/hourly?units=us
-# type WeatherData struct {
-# 	Properties struct{
-# 		Periods []struct{
-# 			StartTime	string `json:"startTime"`
-# 			EndTime	string `json:"endTime"`
-# 			IsDaytime bool `json:"isDaytime"`
-# 			Temperature int `json:"temperature"`
-# 			TemperatureUnit string `json:"temperatureUnit"`
-# 			WindSpeed string `json:"windSpeed"`
-# 			WeatherStr string `json:"shortForecast"`
-# 		} `json:"periods"`
-# 	}
-# }
+
+@dataclass
+class WeatherDataProperties:
+    periods: List[WeatherDataPeriod]
+
+
+@dataclass
+class WeatherData:
+    properties: WeatherDataProperties
+
+
+@dataclass
+class HourData:
+    unit: str
+    timezone: str
+    location: str
+    start: datetime.datetime
+    end: datetime.datetime
+    daytime: bool
+    temp: int
+    wind: int
+    weather: str
+    weatherCode: int
