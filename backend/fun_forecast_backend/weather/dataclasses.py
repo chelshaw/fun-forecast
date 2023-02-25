@@ -1,5 +1,6 @@
-from dataclasses import dataclass
 from typing import Bool, List
+import datetime
+from dataclasses import dataclass
 
 
 @dataclass
@@ -56,24 +57,17 @@ class WeatherDataProperties:
 @dataclass
 class WeatherData:
     properties: WeatherDataProperties
-# type Point struct {
-# 	Properties struct{
 
-# 	} `json:"properties"`
-# }
 
-# // From api.weather.gov forecast/hourly
-# // https://api.weather.gov/gridpoints/EWX/137,72/forecast/hourly?units=us
-# type WeatherData struct {
-# 	Properties struct{
-# 		Periods []struct{
-# 			StartTime	string `json:"startTime"`
-# 			EndTime	string `json:"endTime"`
-# 			IsDaytime bool `json:"isDaytime"`
-# 			Temperature int `json:"temperature"`
-# 			TemperatureUnit string `json:"temperatureUnit"`
-# 			WindSpeed string `json:"windSpeed"`
-# 			WeatherStr string `json:"shortForecast"`
-# 		} `json:"periods"`
-# 	}
-# }
+@dataclass
+class HourData:
+    unit: str
+    timezone: str
+    location: str
+    start: datetime.datetime
+    end: datetime.datetime
+    daytime: bool
+    temp: int
+    wind: int
+    weather: str
+    weatherCode: int
