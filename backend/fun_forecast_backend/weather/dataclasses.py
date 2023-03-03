@@ -1,23 +1,61 @@
 from dataclasses import dataclass
+from typing import Bool, List
+
+
+@dataclass
+class Location:
+    LocationKey: str
+    LocationName: str
+    Lat: float
+    Long: float
+
+
+# Weather API Point
+@dataclass
+class WeatherApiPointLocationProperties:
+    city: str
+    state: str
+
+
+@dataclass
+class WeatherApiRelativeLocation:
+    properties: WeatherApiPointLocationProperties
 
 
 @dataclass
 class WeatherApiPointProperties:
-	city: str
-    state: str
-
-@dataclass
-class WeatherApiRelativeLocation:
-	properties: WeatherApiPointProperties
-                
-@dataclass
-class WeatherApiPoint:
     gridId: str
     gridX: int
     gridY: int
     relativeLocation: WeatherApiRelativeLocation
-    timezone: str
+    timeZone: str
 
+
+@dataclass
+class WeatherApiPoint:
+    properties: WeatherApiPointProperties
+
+
+# Weather Data
+@dataclass
+class Period:
+    startTime: str
+    endTime:	str
+    isDaytime: Bool
+    temperature: int
+    temperatureUnit: str
+    windSpeed: str
+    shortforecast: str
+
+
+@dataclass
+class WeatherDataProperties:
+    periods: List[Period]
+
+
+@dataclass
+class WeatherData:
+    properties: WeatherDataProperties
 # type Point struct {
 # 	Properties struct{
 
