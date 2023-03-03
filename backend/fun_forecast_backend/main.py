@@ -31,8 +31,10 @@ async def health_check():
 
 
 @app.get("/api/v0/go/{verb}/{lat},{long}")
-async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str, Any]:
+async def get_activity_forecast(verb: str, lat: float, long: float, when: str = 'today') -> Dict[str, Any]:
     try:
+        # make sure params are valid, calculate date for hours response
+
         # fetch activity schema
         schema: ActivitySchema = get_activity_schema_by_key(verb)
 

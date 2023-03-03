@@ -4,7 +4,8 @@ from typing import List
 import dacite
 import requests
 
-from .dataclasses import WeatherApiPoint, WeatherData, HourData, WeatherCondition, Period
+from weather.dataclasses import WeatherApiPoint, WeatherData, Period
+from shared.dataclasses import HourData, WeatherCondition
 
 
 def point_from_coords(lat: float, long: float) -> WeatherApiPoint:
