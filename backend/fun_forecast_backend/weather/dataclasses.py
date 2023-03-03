@@ -1,6 +1,20 @@
 from typing import Bool, List
+from enum import Enum
 import datetime
 from dataclasses import dataclass
+
+
+class WeatherCondition(Enum):
+    CLEAR = 0
+    MOSTLY_CLEAR = 1
+    PARTLY_CLEAR = 2
+    PARTLY_CLOUDY = 3
+    MOSTLY_CLOUDY = 4
+    CLOUDY = 5
+    FOG = 6
+    RAIN = 7
+    STORM = 8
+    UNKNOWN = 9
 
 
 @dataclass
@@ -61,7 +75,7 @@ class WeatherData:
 
 @dataclass
 class HourData:
-    unit: str
+    unit: str = None
     timezone: str
     location: str
     start: datetime.datetime
@@ -70,4 +84,4 @@ class HourData:
     temp: int
     wind: int
     weather: str
-    weatherCode: int
+    condition: WeatherCondition
