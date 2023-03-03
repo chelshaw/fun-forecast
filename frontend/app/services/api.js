@@ -25,17 +25,33 @@ function exampleLocations(zipcode) {
 export default class ApiService extends Service {
   baseUrl = 'http://localhost:1323/api/v0';
 
+  get headers() {
+    var headers = new Headers();
+    headers.append('Access-Control-Allow-Origin', '*');
+    return {
+      method: 'GET',
+      headers,
+    };
+  }
+
   async fetch(path) {
-    let response = await fetch(`${this.baseUrl}/${encodeURIComponent(path)}`);
+    const requestOptions = this.headers;
+    let response = await fetch(`${this.baseUrl}/${path}`, requestOptions);
     if (response.ok) {
       return response.json();
     }
     throw new Error(response.statusText);
   }
 
-  singleActivity(verb, zipcode) {
+  singleActivity(verb, zipcode, when) {
     if (!ENV.APP.USE_MOCK) {
-      console.info('API not yet implemented. Using generated data');
+      const activityRef = `${verb}_${zipcode}`;
+      let path = `go/${encodeURIComponent(activityRef)}`;
+      if (when) {
+        path += `?when=${when}`;
+      }
+      console.log({ path });
+      return this.fetch(path);
     }
     return this.generateForecast(verb, zipcode);
   }
@@ -49,10 +65,12 @@ export default class ApiService extends Service {
     const loc = exampleLocations(zipcode);
     for (let hour = 0; hour < 24; hour++) {
       const time = today.set({ hour, minute: 0 });
+      const score = hour < 5 ? 2 : getRandomInt(3);
       forecast.push({
         start: time.toISO(),
         end: time.plus({ hours: 1 }).toISO(),
-        score: getRandomInt(3),
+        score,
+        conditions: score > 0 ? ['cloudy'] : [],
       });
     }
     return {

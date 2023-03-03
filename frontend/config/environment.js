@@ -35,7 +35,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.APP.USE_MOCK = true;
+    ENV.APP.USE_MOCK = false;
     ENV.contentSecurityPolicy = {
       // ... other stuff here
       'connect-src': "'self' http://localhost:1323",

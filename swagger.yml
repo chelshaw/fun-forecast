@@ -309,7 +309,7 @@ components:
         end:
           type: string
           example: "2023-02-14T09:00:00-05:00"
-        activityScore:
+        score:
           type: integer
           format: int32
           example: 0
@@ -413,6 +413,10 @@ components:
               - dark
               - damp
               - inclement
+              - cloudy
+              - sunny
+              - foggy
+              - rainy
     GearRequest:
       type: object
       properties:

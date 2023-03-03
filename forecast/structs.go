@@ -1,6 +1,8 @@
 package forecast
 
-import "time"
+import (
+	"time"
+)
 
 
 type ForecastOutput struct {
@@ -16,4 +18,26 @@ type ForecastHour struct {
 	Good     bool	`json:"good"`
 	Reason   string	`json:"reason"`
 	Overview string	`json:"overview"`
+}
+
+// v2 ScoreForecast
+type LocationInfo struct {
+    Ref    	string 	`json:"ref"`
+	Sunrise	time.Time `json:"sunrise"`
+	Sunset	time.Time `json:"sunset"`
+	City	string	`json:"city"`
+	State	string	`json:"state"`
+}
+type NewForecastOutput struct {
+	Verb     string				`json:"verb"`
+	Location LocationInfo		`json:"location"`
+	Forecast []HourForecast	`json:"forecast"`
+}
+type HourForecast struct {
+	Start    	time.Time	`json:"start"`
+	End      	time.Time	`json:"end"`
+	Score   	int	`json:"score"`
+	Conditions	[]string	`json:"conditions"`
+	Temperature int 	`json:"temperature"`
+	Unit 		string	`json:"unit"`
 }
