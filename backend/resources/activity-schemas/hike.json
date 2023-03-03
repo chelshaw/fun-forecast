@@ -1,49 +1,29 @@
 {
-  "type": "hike",
   "verb": "hike",
-  "duration": 1,
-  "temp_unit": "F",
-  "temp_never_below": 29,
-  "temp_never_above": 97,
-  "weather_never": [
-    "sleet",
-    "lightning"
-  ],
-  "wind_never_above": 45,
-  "wind_never_below": 0,
-  "daytime_only": true,
-  "ranges": [
-    {
-      "low": 30,
-      "high": 48,
-      "with_weather": [
-        0,
-        3
-      ]
+  "wind": {
+    "min": 0,
+    "ideal": 3,
+    "max": 35,
+    "units": "mph"
+  },
+  "temp": {
+    "min": 30,
+    "ideal": 64,
+    "max": 97,
+    "units": "F"
+  },
+  "weather_conditions": {
+    "acceptable": {
+      "sunny": -2,
+      "foggy": 5
     },
-    {
-      "low": 49,
-      "high": 86,
-      "old_weather_types": [
-        "partly cloudy",
-        "cloudy"
-      ],
-      "with_weather": [
-        0,
-        7
-      ]
-    },
-    {
-      "low": 87,
-      "high": 97,
-      "old_weather_types": [
-        "partly cloudy",
-        "cloudy"
-      ],
-      "with_weather": [
-        2,
-        7
-      ]
-    }
-  ]
+    "never": [
+      "sleet",
+      "lightning"
+    ]
+  },
+  "light_conditions": {
+    "daytime": true,
+    "nighttime": true
+  }
 }

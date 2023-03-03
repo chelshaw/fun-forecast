@@ -1,56 +1,60 @@
 # Activity schema
 
-There's a lot of considerations when it comes to whether you want to go do a thing outside. It's not quite as simple as weather X temperature -- sometimes you're ok with doing something when it's sunny and below 70°, but if it's above 70° you want some cover. 
+There are many considerations when it comes to deciding whether to go do a thing outside. Three main factors intertwine to make the conditions suitable or not for a given activity, and each activity has a different threshold of these components. 
 
-To cover this complexity, the activity schema has some essential properties and philosophy:
+The factors are:
+- Temperature
+- Wind
+- Weather conditions (sunny, rain, fog, etc)
 
-## "Never" scenarios
-Some temperatures you don't want to do something, no matter the type of weather. Vice versa as well -- if there's a tornado, no matter how nice the temperature, you don't want to be outside. So the activity schema has some "never" values, which get checked first:
+Other factors (UV, allergens, ground conditions) may be added in the future, but these are most universal to outdoor activities.
 
-```json
+## Structure
+On the top level, we have the verb for the activity. This is a unique reference key for the base schemas. Under that, we have a few blocks. All of the numbers in the blocks are *inclusive*.
+
+```
 {
-    "temp_never_below": 60, // exclusive
-    "temp_never_above": 97, // exclusive
-    "weather_never": [
-        "sleet",
-        "rain",
-        "lightning"
-    ],
-    "wind_never_above": 18, // exclusive
-    "wind_never_below": 0, // exclusive
-    "daytime_only": true,
+    "verb": "swim",
+    "wind": {...},
+    "temp": {...},
+    "weather_conditions": {...},
+    "light_conditions": {...}
 }
 ```
 
-Think of these as the moment you *don't* want to go outside. 
+`wind` and `temp` have similar structures, defining the min, max, and ideal units for the given activity so that each factor has its own bell curve for suitability. The `ideal` number assumes that the weather condition is partly sunny. 
 
-## Desired ranges
-Once you know there isn't weather you never want to be in, you want to know whether the temperature and weather combinations are ideal for your activity. That's where ranges come in. This is an array of scenarios in which you would be ok with being outside.
+```
+"temp": {
+    "min": 75,
+    "ideal": 89,
+    "max": 102,
+    "units": "F"
+},
+```
 
-You'll notice in the "never" blocks the integer values are exclusive. That means the evaluation will use `<` and `>`, and will not match if equal. The ranges, in contrast, are inclusive (`>=` or `<=`). So you must make sure the lowest temp of the ranges matches the "never below" value, and the highest temp of the ranges matches the "never above" value. Additionally, there should never be overlap between the highest and lowest ranges. 
+The `weather_conditions` block includes an `acceptable` block which describes the offset (from ideal) for temperature if the hourly condition matches that key. 
 
-With weather is also inclusive, so the values represented are the desired limits of weather for the activity. 
+Within the block for weather conditions is also a `never` stanza, which includes weather in which the activity is never suitable, no matter the other factors. 
 
-### Invalid ranges
-```json
-{
-    "ranges": [
-        {
-            "low": 60,
-            "high": 70,
-            "with_weather": [
-                0,
-                3
-            ]
-        },
-        {
-            "low": 70,
-            "high": 80,
-            "with_weather": [
-                0,
-                5
-            ]
-        }
+```
+"weather_conditions": {
+    "acceptable": {
+        "sunny": -5,
+        "foggy": 10,
+    },
+    "never": [
+        "sleet",
+        "lightning"
     ]
+},
+```
+
+Lastly is `light_conditions`, which simply describes whether the activity can be done in daytime, nighttime, or both
+
+```
+"light_conditions": {
+    "daytime": true,
+    "nighttime": true
 }
 ```
