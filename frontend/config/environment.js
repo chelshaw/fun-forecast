@@ -35,7 +35,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.APP.USE_MOCK = false;
+    ENV.APP.USE_MOCK = true;
     ENV.contentSecurityPolicy = {
       // ... other stuff here
       'connect-src': "'self' http://localhost:1323",
@@ -56,6 +56,7 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.APP.USE_MOCK = true;
   }
 
   return ENV;
