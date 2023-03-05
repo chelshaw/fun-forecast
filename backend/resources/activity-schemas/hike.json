@@ -1,0 +1,29 @@
+{
+  "verb": "hike",
+  "wind": {
+    "min": 0,
+    "ideal": 3,
+    "max": 35,
+    "units": "mph"
+  },
+  "temp": {
+    "min": 30,
+    "ideal": 64,
+    "max": 97,
+    "units": "F"
+  },
+  "weather_conditions": {
+    "acceptable": {
+      "sunny": -2,
+      "foggy": 5
+    },
+    "never": [
+      "sleet",
+      "lightning"
+    ]
+  },
+  "light_conditions": {
+    "daytime": true,
+    "nighttime": true
+  }
+}

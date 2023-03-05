@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
  * module ForecastBar renders a horizontal bar for a single day of hours
  * @param {array} hours - Array of hours for a single day
  * @param {string} verb - Verb (lowercase) for display purposes
+ * @param {string} loc - Location
  * @param {boolean} interactive - When true, displays details on click
  * @param {boolean} showSky - When true, displays sky gradient
  */
@@ -14,6 +15,7 @@ export default class ForecastBarComponent extends Component {
   frameHeight = 50;
   pointOffset = 10;
   chartHeight = 20;
+  chartWidthPct = 30;
   @tracked highlighted = null;
 
   @action

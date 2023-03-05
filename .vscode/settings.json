@@ -3,5 +3,6 @@
   "go.formatTool": "gofmt",
   "editor.formatOnSave": true,
   "editor.tabSize": 4,
-  "terminal.integrated.tabs.enabled": true
+  "terminal.integrated.tabs.enabled": true,
+  "files.autoSave": "onFocusChange"
 }

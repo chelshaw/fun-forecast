@@ -4,17 +4,9 @@ import (
 	"chelshaw/funforecast/activity"
 	"chelshaw/funforecast/weather"
 	"fmt"
+	"log"
+	"time"
 )
-
-/** Helper func */
-// func contains(elems []string, v string) bool {
-// 	for _, s := range elems {
-// 		if v == s {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
 
 func hasNeverWeather(a *activity.ActivitySchema, h *weather.HourData) (r string) {
 	if h.Temp > a.TempNeverAbove {
@@ -44,15 +36,15 @@ func reasonFromWeatherCode(weatherCode int) (reason string) {
 	// TODO: How to codify windiness?
 	switch weatherCode {
 	case 0, 1, 2:
-		reason = "too clear"
+		reason = "sunny"
 	case 3, 4, 5:
-		reason = "too cloudy"
+		reason = "cloudy"
 	case 6:
-		reason = "too foggy"
+		reason = "foggy"
 	case 7:
-		reason = "too rainy"
+		reason = "rainy"
 	default:
-		reason = "too stormy"
+		reason = "stormy"
 	}
 	return
 }
@@ -133,6 +125,124 @@ func GetActivityForecast(activityKey string, lat float32, lng float32) (forecast
 		Verb:     activitySchema.Verb,
 		LocationKey: "78666",
 		LocationName: "San Marcos, TX",
+		Forecast: finalHours,
+	}
+	return
+}
+
+// V2 ScoreForecast
+func conditionsForRange(weather *weather.HourData, activityRange *activity.Range) (score int, conditions []string) {
+	score = 0
+	conditions = make([]string, 0, 7)
+	for idx, limit := range activityRange.WithWeather {
+		// First in array is lower limit
+		if idx == 0 && weather.WeatherCode < limit {
+			conditions = append(conditions, reasonFromWeatherCode(weather.WeatherCode))
+			score += 1
+		}
+		// second in array is upper limit
+		if idx == 1 && weather.WeatherCode > limit {
+			conditions = append(conditions, reasonFromWeatherCode(weather.WeatherCode))
+			score += 1
+		}
+		// TODO: check other conditions like wind, UV, etc
+	}
+	return
+}
+
+const SCORE_MAX = 2
+
+// V2 ScoreForecast
+func ScoreHour(a *activity.ActivitySchema, h *weather.HourData) (HourForecast) {
+	// TODO: check the units match
+	var conditions = make([]string, 0, 7)
+	var score = 0
+
+	// Step 1: Check never params
+	if h.Temp > a.TempNeverAbove {
+		conditions = append(conditions, "hot")
+		score += SCORE_MAX
+	}
+	if h.Temp < a.TempNeverBelow {
+		conditions = append(conditions, "cold")
+		score += SCORE_MAX
+	}
+	if h.Wind > a.WindNeverAbove {
+		conditions = append(conditions, "wind")
+		score += SCORE_MAX
+	}
+	if !h.Daytime && a.DaytimeOnly {
+		conditions = append(conditions, "dark")
+		score += SCORE_MAX
+	}
+	if score > 0 {
+		return HourForecast{
+			Start:    h.Start,
+			End:      h.End,
+			Score: 	  score,
+			Conditions: conditions,
+			Temperature: h.Temp,
+			Unit: h.Units,
+		}
+	}
+
+	// Step 2: Calculate conditions based on range
+	matchingRangeIdx := getMatchingRangeIndex(a.Ranges, h.Temp)
+	if matchingRangeIdx < 0 {
+		// Shouldn't ever get here because if there isn't a temp
+		// range that matches it should be caught above
+		log.Fatalf("No matching range idx for %v when %v°%v. Check the activity schema for validity.", a.Verb, h.Temp, h.Units)
+	}
+	matchingRange := a.Ranges[matchingRangeIdx]
+	rangeScore, rangeConditions := conditionsForRange(h, &matchingRange)
+	conditions = append(conditions, rangeConditions...)
+	score += rangeScore;
+
+	return HourForecast{
+		Start:    h.Start,
+		End:      h.End,
+		Score: 	  score,
+		Conditions: conditions,
+		Temperature: h.Temp,
+		Unit: h.Units,
+	}
+}
+
+// V2 ScoreForecast
+func ScoreForecast(activityKey string, lat float32, lng float32, date string) (forecast *NewForecastOutput, err error) {
+	activitySchema, err := activity.GetActivityByKey(activityKey)
+	if err != nil {
+		return nil, err
+	}
+	// lat, lng, err := getLatLngForZipcode
+	weather, err := weather.ForecastForCoords(lat, lng)
+	if err != nil {
+		return nil, err
+	}
+	finalHours := []HourForecast{}
+	layout := "2006-01-02"
+	desiredDay, err := time.Parse(layout, date)
+	// d := time.Date(2000, 2, 1, 12, 30, 0, 0, time.UTC)
+	matchYear, matchMonth, matchDay := desiredDay.Date()
+	for i := 0; i < len(weather); i++ {
+		year, month, day := weather[i].Start.Date()
+		if year == matchYear && month == matchMonth && day == matchDay {
+			score := ScoreHour(activitySchema, weather[i])
+			finalHours = append(finalHours, score)
+		}
+	}
+	secondsEastOfUTC := int((-5 * time.Hour).Seconds())
+	austin := time.FixedZone("Beijing Time", secondsEastOfUTC)
+	location := LocationInfo{
+		Ref: "78666",
+		City: "San Marcos",
+		State: "Texas",
+		Sunrise: time.Date(2023, time.February, 23, 7, 05, 0, 0, austin),
+		Sunset: time.Date(2023, time.February, 23, 19, 23, 0, 0, austin),
+	}
+	forecast = &NewForecastOutput{
+		Verb:     activitySchema.Verb,
+		Location: location,
 		Forecast: finalHours,
 	}
 	return
