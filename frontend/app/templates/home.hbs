@@ -1,33 +1,30 @@
 {{page-title 'Home'}}
 
 {{#if this.currentUser}}
-  {{#if (gt this.model.activities.length 0)}}
-    <div class='flex justify-between'>
-      <Typography @level='h2'>My Activities</Typography>
-      <LinkTo @route='me.add'>Add</LinkTo>
-    </div>
-    {{#each this.model.activities as |activity|}}
-      <LinkTo @route='me.activity' @model={{activity.ref}}>
-        <ActivityOverview @verb={{activity.verb}} @hours={{activity.hours}} />
-      </LinkTo>
-    {{/each}}
-  {{else}}
-    <section class='p-8'>
-      <Typography @level='h2'>Oooh this is about to be fun!</Typography>
-      <LinkTo @route='me.add'>Add an activity</LinkTo>
-    </section>
-  {{/if}}
+{{#if (gt this.model.activities.length 0)}}
+<div class='flex justify-between'>
+  <Typography @level='h2'>My Activities</Typography>
+  <LinkTo @route='me.add'>Add</LinkTo>
+</div>
+{{#each this.model.activities as |activity|}}
+<LinkTo @route='me.activity' @model={{activity.ref}}>
+  <ActivityOverview @verb={{activity.verb}} @hours={{activity.hours}} />
+</LinkTo>
+{{/each}}
 {{else}}
-  <section class='p-8 bg-slate-300 dark:bg-slate-600'>
-    <Typography @level='h2'>Oooh this is about to be fun!</Typography>
-    <Typography>
-      Welcome to Fun Forecast, the place for outdoor enthusiasts to figure out
-      when to do the things they love
-    </Typography>
-  </section>
+<section class='p-8'>
+  <Typography @level='h2'>Oooh this is about to be fun!</Typography>
+  <LinkTo @route='me.add'>Add an activity</LinkTo>
+</section>
+{{/if}}
+{{else}}
+<section class='p-8 bg-gray-300 dark:bg-gray-600'>
+  <Typography @level='h2'>Oooh this is about to be fun!</Typography>
+  <Typography>
+    Welcome to Fun Forecast, the place for outdoor enthusiasts to figure out
+    when to do the things they love
+  </Typography>
+</section>
 
-  <LocationSelector
-    @title='Enter your location to start'
-    class='py-4 mx-auto text-center'
-  />
+<LocationSelector @title='Enter your location to start' class='py-4 mx-auto text-center' />
 {{/if}}

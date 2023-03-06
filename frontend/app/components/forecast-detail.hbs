@@ -1,124 +1,81 @@
 {{#if this.hours}}
-  <Lineal::Fluid class='w-full h-content relative pb-16' as |width|>
-    <svg class='w-full' height={{add (mult 25 this.hourHeight) 100}}>
-      {{#let
-        (scale-linear domain=(array this.pad 105) range=(array 0 width))
-        (scale-time
-          range=(array this.pad (add this.pad (mult 25 this.hourHeight)))
-        )
-        (scale-linear domain=(array this.pad 105) range=(array 0 width))
-        (scale-ordinal
-          range=(array
-            'fill-sky-500 dark:fill-sky-500'
-            'fill-sky-200 dark:fill-sky-800'
-            'fill-slate-200 dark:fill-slate-800'
-          )
-          domain=(array 0 1 2)
-          unknown='fill-slate-200 dark:fill-slate-800'
-        )
-        as |xScale yScale heightScale colors|
-      }}
-        {{#if (and xScale.isValid yScale.isValid)}}
-          {{#let (add (scale-fn-compute xScale 50) this.pad) as |baseX|}}
-            <g id='dayInfo'>
-              {{#each this.dayInfo as |tick|}}
-                <rect
-                  width={{scale-fn-compute xScale 100}}
-                  height='20'
-                  x={{this.pad}}
-                  y={{scale-fn-compute yScale tick.time}}
-                  class='fill-slate-300 dark:fill-slate-700'
-                />
-                <text
-                  class='fill-slate-100 dark:fill-slate-900 font-bold'
-                  x={{add baseX 20}}
-                  dx={{this.dayInfoSpace}}
-                  y={{scale-fn-compute yScale tick.time}}
-                  dy={{15}}
-                  text-anchor='start'
-                >{{tick.label}}</text>
+<Lineal::Fluid class='w-full h-content relative pb-16' as |width|>
+  <svg class='w-full' height={{add (mult 25 this.hourHeight) 100}}>
+    {{#let
+    (scale-linear domain=(array this.pad 105) range=(array 0 width))
+    (scale-time
+    range=(array this.pad (add this.pad (mult 25 this.hourHeight)))
+    )
+    (scale-linear domain=(array this.pad 105) range=(array 0 width))
+    (scale-ordinal
+    range=(array
+    'fill-blue-main dark:fill-blue-main'
+    'fill-blue-lighter dark:fill-blue-darker'
+    'fill-gray-200 dark:fill-gray-800'
+    )
+    domain=(array 0 1 2)
+    unknown='fill-gray-200 dark:fill-gray-800'
+    )
+    as |xScale yScale heightScale colors|
+    }}
+    {{#if (and xScale.isValid yScale.isValid)}}
+    {{#let (add (scale-fn-compute xScale 50) this.pad) as |baseX|}}
+    <g id='dayInfo'>
+      {{#each this.dayInfo as |tick|}}
+      <rect width={{scale-fn-compute xScale 100}} height='20' x={{this.pad}} y={{scale-fn-compute yScale tick.time}}
+        class='fill-gray-300 dark:fill-gray-700' />
+      <text class='fill-gray-100 dark:fill-gray-900 font-bold' x={{add baseX 20}} dx={{this.dayInfoSpace}}
+        y={{scale-fn-compute yScale tick.time}} dy={{15}} text-anchor='start'>{{tick.label}}</text>
 
-              {{/each}}
-            </g>
-          {{/let}}
-          <g id='hours' {{on 'mouseleave' (fn this.highlightHour '')}}>
-            {{#each this.hours as |hour|}}
-              <rect
-                role='button'
-                width={{scale-fn-compute xScale 30}}
-                height={{this.hourHeight}}
-                x={{this.pad}}
-                y={{scale-fn-compute yScale hour.startTime}}
-                class='stroke-2
+      {{/each}}
+    </g>
+    {{/let}}
+    <g id='hours' {{on 'mouseleave' (fn this.highlightHour '' )}}>
+      {{#each this.hours as |hour|}}
+      <rect role='button' width={{scale-fn-compute xScale 30}} height={{this.hourHeight}} x={{this.pad}}
+        y={{scale-fn-compute yScale hour.startTime}} class='stroke-2
                   {{scale-fn-compute colors hour.score}}
                   {{if
                     (eq hour.startTime this.highlighted.startTime)
                     "stroke-black"
-                  }}'
-                {{on 'mouseenter' (fn this.highlightHour hour)}}
-                {{on 'click' (fn (mut this.sticky) (not this.sticky))}}
-              />
-              <text
-                class='fill-slate-100 dark:fill-slate-900 font-bold'
-                x={{scale-fn-compute xScale 20}}
-                dx={{0}}
-                y={{scale-fn-compute yScale hour.startTime}}
-                dy={{20}}
-                text-anchor='start'
-              >{{hour.conditionIcon}}</text>
-            {{/each}}
-          </g>
-          <Lineal::Axis
-            @scale={{yScale}}
-            @orientation='right'
-            fill='transparent'
-            transform='translate({{add
+                  }}' {{on 'mouseenter' (fn this.highlightHour hour)}} {{on 'click' (fn (mut this.sticky) (not
+        this.sticky))}} />
+      <text class='fill-gray-100 dark:fill-gray-900 font-bold' x={{scale-fn-compute xScale 20}} dx={{0}}
+        y={{scale-fn-compute yScale hour.startTime}} dy={{20}} text-anchor='start'>{{hour.conditionIcon}}</text>
+      {{/each}}
+    </g>
+    <Lineal::Axis @scale={{yScale}} @orientation='right' fill='transparent' transform='translate({{add
               this.pad
               (scale-fn-compute xScale 30)
-            }}, 0)'
-            class='text-gray-800 dark:text-gray-100 text-xs'
-          />
-        {{/if}}
-        {{! This is just here to qualify the scales }}
-        <Lineal::Line
-          @data={{this.hours}}
-          @x='score'
-          @y='startTime'
-          @xScale={{xScale}}
-          @yScale={{yScale}}
-          fill='transparent'
-          stroke='transparent'
-        />
-      {{/let}}
-    </svg>
-    <div
-      class='absolute top-5 right-0 w-3/5 bg-white text-black drop-shadow p-2'
-    >
-      {{#if this.highlighted}}
-        <div class='flex justify-between'>
-          <h2 class='font-bold text-center'>{{this.highlighted.title}}</h2>
-          <p class='font-bold text-xl'>{{this.highlighted.temperature}}°</p>
-        </div>
-        <p
-          class='italic text-slate-500 text-center text-sm'
-        >{{this.highlighted.verdict}}
-          {{@verb}}
-          in
-          {{@loc}}</p>
-        <ul>
-          {{#each this.highlighted.conditions as |cond|}}
-            <li>{{cond}}</li>
-          {{/each}}
-        </ul>
-        <p>[ gear list ]</p>
-        <div
-          class='w-full h-32 bg-slate-700 text-center text-slate-500 font-bold'
-        >Suggested gear</div>
-      {{else}}
-        <h2 class='text-center'>Choose a time to see details</h2>
-      {{/if}}
+            }}, 0)' class='text-gray-800 dark:text-gray-100 text-xs' />
+    {{/if}}
+    {{! This is just here to qualify the scales }}
+    <Lineal::Line @data={{this.hours}} @x='score' @y='startTime' @xScale={{xScale}} @yScale={{yScale}}
+      fill='transparent' stroke='transparent' />
+    {{/let}}
+  </svg>
+  <div class='absolute top-5 right-0 w-3/5 bg-white text-black drop-shadow p-2'>
+    {{#if this.highlighted}}
+    <div class='flex justify-between'>
+      <h2 class='font-bold text-center'>{{this.highlighted.title}}</h2>
+      <p class='font-bold text-xl'>{{this.highlighted.temperature}}°</p>
     </div>
-  </Lineal::Fluid>
+    <p class='italic text-gray-500 text-center text-sm'>{{this.highlighted.verdict}}
+      {{@verb}}
+      in
+      {{@loc}}</p>
+    <ul>
+      {{#each this.highlighted.conditions as |cond|}}
+      <li>{{cond}}</li>
+      {{/each}}
+    </ul>
+    <p>[ gear list ]</p>
+    <div class='w-full h-32 bg-gray-700 text-center text-gray-500 font-bold'>Suggested gear</div>
+    {{else}}
+    <h2 class='text-center'>Choose a time to see details</h2>
+    {{/if}}
+  </div>
+</Lineal::Fluid>
 {{else}}
-  [ empty state ]
+[ empty state ]
 {{/if}}

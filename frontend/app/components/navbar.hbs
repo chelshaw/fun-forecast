@@ -1,13 +1,10 @@
-<div class='px-6 w-full bg-slate-200 dark:bg-slate-800 flex justify-between'>
-  <LinkTo @route='home' class='underline text-lime-700'>
-    <Typography @level='h1'>Fun Forecast</Typography>
+<div class='px-6 w-full bg-blue-lighter dark:bg-blue-darkest flex justify-between'>
+  <LinkTo @route='home' class='underline text-blue-darkest'>
+    <Typography @level='h1'>🌞 Fun Forecast ⛈</Typography>
   </LinkTo>
 
-  <LinkTo
-    @route='where.activity.detail'
-    @models={{array 78701 'run'}}
-    class='border-2 p-2 border-gray-700 text-gray-700 hover:underline'
-  >See Example</LinkTo>
+  <LinkTo @route='where.activity.detail' @models={{array 78701 'run' }}
+    class='border-2 p-2 border-gray-700 text-gray-700 hover:underline'>See Example</LinkTo>
 
 </div>
 {{yield}}
