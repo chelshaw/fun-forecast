@@ -9,15 +9,9 @@ export default class Router extends EmberRouter {
 Router.map(function () {
   this.route('home', { path: '/' });
 
-  this.route('join');
-  this.route('login');
-  this.route('logout');
-  this.route('me', { path: 'i' }, function () {
-    this.route('add', function () {
-      this.route('verb');
-    });
-    this.route('activity', { path: 'go/:activity_id' });
-  });
+  this.route('example');
+  this.route('access-denied');
+
   this.route('where', function () {
     this.route('choose');
     this.route('activity', { path: ':loc_ref/to' }, function () {
@@ -25,6 +19,4 @@ Router.map(function () {
       this.route('detail', { path: ':verb' });
     });
   });
-  this.route('example');
-  this.route('access-denied');
 });
