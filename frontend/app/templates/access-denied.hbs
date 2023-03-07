@@ -1,0 +1,20 @@
+{{page-title "Beta Access Denied"}}
+
+
+<div class="mx-auto max-w-xs text-center flex flex-col gap-4 py-16">
+    <p class="text-8xl">😞</p>
+    <h1 class="text-4xl font-bold text-red-main">Access Denied</h1>
+    <p>Someone gave you the wrong passcode. Or maybe you typed it in wrong?</p>
+    <div class="flex text-center justify-around">
+        <LinkTo @route='example'
+            class="text-blue-dark hover:text-blue-darkest transition font-bold underline underline-offset-4 p-4">
+            🏠 Go home
+        </LinkTo>
+        <LinkTo @route="where"
+            class="text-blue-dark hover:text-blue-darkest transition font-bold underline underline-offset-4 p-4">
+            🗝 Try again
+        </LinkTo>
+    </div>
+</div>
+
+{{outlet}}

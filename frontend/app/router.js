@@ -25,4 +25,6 @@ Router.map(function () {
       this.route('detail', { path: ':verb' });
     });
   });
+  this.route('example');
+  this.route('access-denied');
 });
