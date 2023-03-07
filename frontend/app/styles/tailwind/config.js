@@ -1,4 +1,4 @@
-const colors = require('tailwindcss/colors')
+const colors = require('tailwindcss/colors');
 
 module.exports = {
   content: ['./app/**/*.hbs', './app/components/*.js'],
@@ -40,11 +40,11 @@ module.exports = {
         dark: '#DE9E15',
         darker: '#BD8203',
         darkest: '#865B00',
-      }
+      },
     },
     extend: {
       dropShadow: {
-        glow: '0 35px 35px rgba(255, 255, 255, 0.55)'
+        glow: '0 35px 35px rgba(255, 255, 255, 0.55)',
       },
       keyframes: {
         leftToRight: {
@@ -68,17 +68,17 @@ module.exports = {
           '35%': { left: '65%', transform: 'rotate(35deg)' },
           '45%': { left: '55%', transform: 'rotate(0deg)' },
           '100%': { left: '-20%' },
-        }
+        },
       },
       animation: {
         'l-r': 'leftToRight 10s ease-in infinite',
         'r-l': 'rightToLeft 8s ease-in-out infinite',
         'big-small': 'bigSmall 6s ease-in-out infinite',
-        'step': 'step 4s ease infinite',
-        'bicycle': 'bicycle 8s linear infinite',
-        'kayak': 'spin 5s ease infinite'
-      }
-    }
+        step: 'step 4s ease infinite',
+        bicycle: 'bicycle 8s linear infinite',
+        kayak: 'spin 5s ease infinite',
+      },
+    },
   },
   plugins: [],
 };
