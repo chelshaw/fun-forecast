@@ -1,8 +1,8 @@
 {{page-title 'Choose Activity'}}
 <Portal @target='onboard-title'>
-  <WhereToTitle @zipcode={{this.model}} />
+  <WhereToTitle @location={{this.model.location}} />
 </Portal>
 
-<Field::ChooseActivity @zipcode={{this.model}} />
+<Field::ChooseActivity @location={{this.model}} />
 
 {{outlet}}
