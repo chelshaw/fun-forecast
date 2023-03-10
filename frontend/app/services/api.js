@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 import { DateTime } from 'luxon';
 import ENV from 'fun-forecast-frontend/config/environment';
-import { SINGLE_DAY_FORECAST_MOTO } from '../utils/mock-responses';
+import locationSuggestions from '../utils/example-location-response';
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -43,10 +43,11 @@ export default class ApiService extends Service {
     throw new Error(response.statusText);
   }
 
-  singleActivity(verb, zipcode, when) {
+  singleActivity(verb, location, when) {
     if (!ENV.APP.USE_MOCK) {
-      const activityRef = `${verb}_${zipcode}`;
-      let path = `go/${encodeURIComponent(activityRef)}`;
+      let path = `go/${encodeURIComponent(verb)}/${location.lat},${
+        location.long
+      }`;
       if (when) {
         path += `?when=${when}`;
       }
@@ -56,13 +57,12 @@ export default class ApiService extends Service {
     return this.generateForecast(verb, zipcode);
   }
 
-  generateForecast(verb = 'hike', zipcode = '90210') {
+  generateForecast(verb = 'hike', location) {
     // Mock what we get back from the API
     const today = DateTime.now().startOf('day');
     const sunrise = today.set({ hour: 6, minute: 45 });
     const sunset = today.set({ hour: 17, minute: 57 });
     const forecast = [];
-    const loc = exampleLocations(zipcode);
     for (let hour = 0; hour < 24; hour++) {
       const time = today.set({ hour, minute: 0 });
       const score = hour < 5 ? 2 : getRandomInt(3);
@@ -76,8 +76,7 @@ export default class ApiService extends Service {
     return {
       verb,
       location: {
-        ref: zipcode,
-        ...loc,
+        ...location,
         sunrise: sunrise.toISO(),
         sunset: sunset.toISO(),
       },
@@ -85,61 +84,22 @@ export default class ApiService extends Service {
     };
   }
 
-  /* DEPRECATED */
-  async getActivityByRef(aRef) {
-    const json = ENV.APP.USE_MOCK
-      ? SINGLE_DAY_FORECAST_MOTO
-      : await this.fetch(`me/${aRef}`);
-    const [verb, zipcode] = aRef.split('_');
-    return {
-      verb,
-      locationKey: zipcode,
-      locationName: json.location_name,
-      location: {
-        key: zipcode,
-        name: json.location_name,
-      },
-      hours: this.formatHours(json.forecast),
+  async searchLocation(keywords) {
+    if (ENV.APP.USE_MOCK) {
+      return locationSuggestions;
+    }
+    const headers = new Headers();
+    const requestOptions = {
+      method: 'GET',
+      headers,
     };
-  }
-
-  /* DEPRECATED */
-  groupBy(arr, key) {
-    return arr.reduce(function (prev, val) {
-      (prev[val[key]] = prev[val[key]] || []).push(val);
-      return prev;
-    }, {});
-  }
-
-  /* DEPRECATED */
-  formatHours(hours) {
-    return hours.map((d) => {
-      const startTime = DateTime.fromISO(d.start, { setZone: true });
-      const endTime = DateTime.fromISO(d.end, { setZone: true });
-      const dayKey = startTime.toLocaleString({
-        month: 'short',
-        day: 'numeric',
-      });
-      if (!dayKey) {
-        console.log('NO DAYKEY', d);
-      }
-      return {
-        description: `between ${startTime.toLocaleString({
-          hour: 'numeric',
-        })} and ${endTime.toLocaleString({ hour: 'numeric' })}`,
-        ...d,
-        dayOfYear: startTime.year + startTime.ordinal,
-        dayKey,
-        dayOfWeek: startTime.toLocaleString({
-          weekday: 'short',
-        }),
-        jsDate: startTime.toJSDate(),
-        startTime: startTime.toMillis(),
-        hour: startTime.hour,
-        time: startTime.toLocaleString({
-          hour: 'numeric',
-        }),
-      };
-    });
+    let response = await this.fetch(
+      `location-search/${encodeURIComponent(keywords)}`,
+      requestOptions
+    );
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error(response.statusText);
   }
 }
