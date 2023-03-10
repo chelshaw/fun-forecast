@@ -21,7 +21,7 @@ export default class LocationService extends Service {
    * @attr {string} name
    * @attr {string} id
    * @attr {float} lat
-   * @attr {float} long
+   * @attr {float} lng
    * @attr {string} search
    */
   add(loc) {

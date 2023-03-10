@@ -46,7 +46,7 @@ export default class ApiService extends Service {
   singleActivity(verb, location, when) {
     if (!ENV.APP.USE_MOCK) {
       let path = `go/${encodeURIComponent(verb)}/${location.lat},${
-        location.long
+        location.lng
       }`;
       if (when) {
         path += `?when=${when}`;

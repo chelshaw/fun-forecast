@@ -2,7 +2,7 @@
 
 <Portal @target='onboard-title'>
   <WhereToTitle
-    @zipcode={{this.model.data.location.ref}}
+    @location={{this.model.location}}
     @verb={{this.model.data.verb}}
   />
 </Portal>
@@ -15,7 +15,7 @@
 
 <ForecastDetail
   @verb={{this.model.data.verb}}
-  @loc={{this.model.data.location.ref}}
+  @location={{this.model.location}}
   @forecast={{this.model.data.forecast}}
   @sunrise={{this.model.data.location.sunrise}}
   @sunset={{this.model.data.location.sunset}}

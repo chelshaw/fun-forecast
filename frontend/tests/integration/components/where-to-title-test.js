@@ -11,7 +11,7 @@ module('Integration | Component | where-to-title', function (hooks) {
       name: 'San Antonio',
       id: 'loc-id-1',
       lat: 32.4931,
-      long: -72.4383,
+      lng: -72.4383,
       searchText: 'san anton',
     });
   });

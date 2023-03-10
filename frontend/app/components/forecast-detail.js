@@ -4,6 +4,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 /**
+ * @verb string, lowercase
+ * @location Location obj (id, name, lat, lng)
  * @forecast array of forecast data { start, end, score }
  * @sunrise ISO timestamp
  * @sunset ISO timestamp
