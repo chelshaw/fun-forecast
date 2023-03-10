@@ -6,21 +6,57 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | where-to-title', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  hooks.beforeEach(function () {
+    this.set('loc', {
+      name: 'San Antonio',
+      id: 'loc-id-1',
+      lat: 32.4931,
+      long: -72.4383,
+      searchText: 'san anton',
+    });
+  });
 
+  test('it renders with nothing passed in', async function (assert) {
     await render(hbs`<WhereToTitle />`);
 
-    assert.dom(this.element).hasText('');
+    assert
+      .dom('[data-test-where-to-title]')
+      .hasText('When to __________ in __________');
+    assert.dom('[data-test-activity-link]').hasAttribute('disabled');
+    assert.dom('[data-test-where-link]').hasAttribute('disabled');
+  });
 
-    // Template block usage:
-    await render(hbs`
-      <WhereToTitle>
-        template block text
-      </WhereToTitle>
-    `);
+  test('it renders with only where passed in', async function (assert) {
+    await render(hbs`<WhereToTitle @location={{this.loc}} />`);
 
-    assert.dom(this.element).hasText('template block text');
+    assert
+      .dom('[data-test-where-to-title]')
+      .hasText('When to __________ in San Antonio');
+    assert.dom('[data-test-activity-link]').doesNotHaveAttribute('disabled');
+    assert
+      .dom('[data-test-activity-link]')
+      .hasProperty('href', 'http://localhost:4200/where/loc-id-1/to/choose');
+    assert.dom('[data-test-where-link]').doesNotHaveAttribute('disabled');
+    assert
+      .dom('[data-test-where-link]')
+      .hasProperty('href', 'http://localhost:4200/where/choose');
+  });
+
+  test('it renders with all params passed in', async function (assert) {
+    await render(
+      hbs`<WhereToTitle @verb="paddleboard" @location={{this.loc}} />`
+    );
+
+    assert
+      .dom('[data-test-where-to-title]')
+      .hasText('When to paddleboard in San Antonio');
+    assert.dom('[data-test-activity-link]').doesNotHaveAttribute('disabled');
+    assert
+      .dom('[data-test-activity-link]')
+      .hasProperty('href', 'http://localhost:4200/where/loc-id-1/to/choose');
+    assert.dom('[data-test-where-link]').doesNotHaveAttribute('disabled');
+    assert
+      .dom('[data-test-where-link]')
+      .hasProperty('href', 'http://localhost:4200/where/choose');
   });
 });
