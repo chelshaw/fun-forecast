@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "fun-forecast-backend"
+version = "0.1.0"
+description = "Python based backend for Fun Forecast"
+authors = ["Chelsea Shaw <>", "Shayaan Jagtap <shayaan.jagtap@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+gunicorn = "^20.1.0"
+fastapi = "^0.94.0"
+uvicorn = "^0.21.0"
+dacite = "^1.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
