@@ -5,7 +5,7 @@
   "description": "Small description for fun-forecast-frontend goes here",
   "repository": "",
   "license": "MIT",
-  "author": "",
+  "author": "Chelsea Shaw <chelshaw.dev@gmail.com>",
   "directories": {
     "doc": "doc",
     "test": "tests"

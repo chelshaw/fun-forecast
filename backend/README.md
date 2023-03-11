@@ -1,6 +1,6 @@
 # Fun Forecast Backend
 
-Python based backend for fun forecase
+Python based backend for fun forecast
 
 <hr/>
 
@@ -12,13 +12,14 @@ Python linter/formatter/etc... setup follows a mixture of [this guide](https://s
 and [this example](https://github.com/bitphage/cookiecutter-base-py-project).
 
 ## Local Development Setup
+
 As of now, this repo only contains Python code. For smooth local development, do the following:
 
 Install:
-* [Docker](https://www.docker.com/).
-* [Poetry](https://python-poetry.org/) for Python package and environment management.
-* [Homebrew](https://brew.sh/)
 
+- [Docker](https://www.docker.com/).
+- [Poetry](https://python-poetry.org/) for Python package and environment management.
+- [Homebrew](https://brew.sh/)
 
 ```
 # Install pyenv
@@ -32,7 +33,7 @@ pyenv global 3.9.0 # might need to do more to set your global pyenv version
 brew install poetry
 
 # cd into the top level directory
-cd joblytics-backend
+cd fun-forecast/backend
 
 # Install the dependencies
 poetry install
@@ -52,7 +53,9 @@ docker run ff-backend:latest
 <hr/>
 
 ## Misc
+
 Changing pre-commit configuration (not sure if this is necessary multiple times)
+
 ```
 poetry run pre-commit install -t pre-commit
 poetry run pre-commit install -t pre-push

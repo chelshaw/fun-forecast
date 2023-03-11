@@ -2,7 +2,7 @@
 name = "fun-forecast-backend"
 version = "0.1.0"
 description = "Python based backend for Fun Forecast"
-authors = ["Chelsea Shaw <>", "Shayaan Jagtap <shayaan.jagtap@gmail.com>"]
+authors = ["Chelsea Shaw <chelshaw.dev@gmail.com>", "Shayaan Jagtap <shayaan.jagtap@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
