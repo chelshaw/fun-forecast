@@ -6,22 +6,6 @@ import locationSuggestions from '../utils/example-location-response';
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
-function exampleLocations(zipcode) {
-  switch (zipcode) {
-    case 78133:
-      return { city: 'Canyon Lake', state: 'TX' };
-    case 78666:
-      return { city: 'San Marcos', state: 'TX' };
-    case 78701:
-    case 78702:
-    case 78703:
-    case 78704:
-    case 78751:
-      return { city: 'Austin', state: 'TX' };
-    default:
-      return { city: 'Beverly Hills', state: 'CA' };
-  }
-}
 export default class ApiService extends Service {
   baseUrl = 'http://localhost:1323/api/v0';
 
@@ -51,10 +35,9 @@ export default class ApiService extends Service {
       if (when) {
         path += `?when=${when}`;
       }
-      console.log({ path });
       return this.fetch(path);
     }
-    return this.generateForecast(verb, zipcode);
+    return this.generateForecast(verb, location);
   }
 
   generateForecast(verb = 'hike', location) {
