@@ -66,3 +66,13 @@ Changing pre-commit configuration (not sure if this is necessary multiple times)
 poetry run pre-commit install -t pre-commit
 poetry run pre-commit install -t pre-push
 ```
+
+### Troubleshooting
+
+If you are encountering the following error when running the docker container on an Apple M1 chip:
+
+```
+docker: Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:5000 -> 0.0.0.0:0: listen tcp 0.0.0.0:5000: bind: address already in use.
+```
+
+Read (this tutorial)[https://twissmueller.medium.com/resolving-the-problem-of-port-5000-already-being-in-use-dd2fe4bad0be] to learn more (TL;DR Turn off `Airplay Receiving` in Sharing system preferences)
