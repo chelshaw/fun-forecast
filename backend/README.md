@@ -39,6 +39,10 @@ cd fun-forecast/backend
 poetry install
 ```
 
+### VSCode configuration
+
+- Do Python: Create environment with .venv
+
 ### Making Changes
 
 ```
@@ -48,6 +52,8 @@ poetry run pytest  # run at backend root level, runs all unit tests
 
 docker build . -t ff-backend
 docker run ff-backend:latest
+OR (for networking, before docker-compose is set up):
+docker run -d -p 5000:5000 ff-backend:latest
 ```
 
 <hr/>
