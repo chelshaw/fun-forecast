@@ -18,7 +18,7 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "start": "ember serve --proxy=http://localhost:1323 --port=4200",
+    "start": "ember serve --proxy=http://localhost:5000 --port=4200",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test"
   },
@@ -53,6 +53,7 @@
     "ember-page-title": "^7.0.0",
     "ember-qunit": "^6.0.0",
     "ember-resolver": "^8.0.3",
+    "ember-sinon": "^5.0.0",
     "ember-source": "~4.9.1",
     "ember-stargate": "^0.4.3",
     "ember-style-modifier": "^3.0.0",
