@@ -39,7 +39,7 @@ module.exports = function (environment) {
     ENV.APP.USE_MOCK = true;
     ENV.contentSecurityPolicy = {
       // ... other stuff here
-      'connect-src': "'self' http://localhost:1323",
+      'connect-src': "'self' http://localhost:5000",
     };
   }
 

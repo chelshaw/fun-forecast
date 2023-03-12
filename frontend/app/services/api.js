@@ -7,7 +7,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 export default class ApiService extends Service {
-  baseUrl = 'http://localhost:1323/api/v0';
+  baseUrl = 'http://localhost:4200/api/v0';
 
   get headers() {
     var headers = new Headers();
@@ -28,7 +28,7 @@ export default class ApiService extends Service {
   }
 
   singleActivity(verb, location, when) {
-    if (!ENV.APP.USE_MOCK) {
+    if (!ENV.APP.USE_MOCK && ENV.APP.API_READY) {
       let path = `go/${encodeURIComponent(verb)}/${location.lat},${
         location.lng
       }`;
@@ -67,7 +67,7 @@ export default class ApiService extends Service {
     };
   }
 
-  async searchLocation(keywords) {
+  searchLocation(keywords) {
     if (ENV.APP.USE_MOCK) {
       return locationSuggestions;
     }
@@ -76,13 +76,9 @@ export default class ApiService extends Service {
       method: 'GET',
       headers,
     };
-    let response = await this.fetch(
+    return this.fetch(
       `location-search/${encodeURIComponent(keywords)}`,
       requestOptions
     );
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error(response.statusText);
   }
 }
