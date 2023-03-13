@@ -8,3 +8,7 @@ export const verb_icons = {
   motorcycle: '🏍',
   sunbathe: '👙',
 };
+
+export default function allowedVerbs() {
+  return Object.keys(verb_icons);
+}

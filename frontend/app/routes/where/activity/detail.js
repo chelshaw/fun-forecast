@@ -1,12 +1,19 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { DateTime } from 'luxon';
+import { daysFromToday, DATE_FORMAT } from 'fun-forecast-frontend/utils/dates';
 
-const DATE_FORMAT = 'yyyy-MM-dd';
+const MAX_DATE = 10;
 export default class WhereActivityDetailRoute extends Route {
   @service api;
   @service location;
   @service router;
+
+  queryParams = {
+    when: {
+      refreshModel: true,
+    },
+  };
 
   beforeModel() {
     const { loc_ref } = this.paramsFor('where.activity');
@@ -16,36 +23,45 @@ export default class WhereActivityDetailRoute extends Route {
     }
   }
 
+  calcWhen(whenParam) {
+    // TODO: some people have access to more dates?
+    const errorOnDatesExceed = MAX_DATE;
+    if (whenParam > errorOnDatesExceed) {
+      throw new Error(
+        `Sorry, date is too far in the future to calculate at this time.`
+      );
+    }
+    return daysFromToday(whenParam, 19);
+  }
+
+  relativeWhen(dt) {
+    const start = DateTime.now();
+    const { days } = dt.diff(start, 'days').toObject();
+
+    if (days <= 1) {
+      return dt.toRelativeCalendar();
+    }
+    return `${dt.toRelativeCalendar()} (${dt.toFormat('EEE')})`;
+  }
+
   async model(params, transition) {
-    const { loc_ref } = this.paramsFor('where.activity');
     const { verb } = params;
-    const loc = this.getLocationDetails(loc_ref);
-    const whenDate = this.parseDateFromParam(transition.to.queryParams.when);
+    const { loc_ref } = this.paramsFor('where.activity');
+    const location = this.getLocationDetails(loc_ref);
+    const whenDate = this.calcWhen(transition.to.queryParams.when);
+    const when = this.relativeWhen(whenDate);
     const data = await this.api.singleActivity(
       verb,
-      loc,
+      location,
       whenDate.toFormat(DATE_FORMAT)
     );
     return {
+      location,
+      when,
       data,
-      location: loc,
-      when: whenDate.toRelativeCalendar(),
+      dayParam: transition.to.queryParams.when || 0,
+      maxDay: MAX_DATE,
     };
-  }
-
-  parseDateFromParam(whenParam) {
-    const now = DateTime.now();
-    if (!whenParam && now.hour > 19) {
-      return now.plus({ days: 1 });
-    } else if (!whenParam) {
-      return now;
-    }
-    const whenInt = parseInt(whenParam, 10);
-    if (isNaN(whenInt) || whenInt > 2) {
-      // TODO: only paid can see future?
-      return now;
-    }
-    return now.plus({ days: whenInt });
   }
 
   getLocationDetails(locId) {

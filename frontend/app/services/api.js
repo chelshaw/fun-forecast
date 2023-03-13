@@ -1,11 +1,13 @@
 import Service from '@ember/service';
 import { DateTime } from 'luxon';
 import ENV from 'fun-forecast-frontend/config/environment';
-import locationSuggestions from '../utils/example-location-response';
+import locationSuggestions from 'fun-forecast-frontend/utils/example-location-response';
+import allowedVerbs from 'fun-forecast-frontend/utils/verbs';
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
+
 export default class ApiService extends Service {
   baseUrl = 'http://localhost:4200/api/v0';
 
@@ -28,6 +30,9 @@ export default class ApiService extends Service {
   }
 
   singleActivity(verb, location, when) {
+    if (!allowedVerbs().includes(verb)) {
+      throw new Error(`No activity schema for "${verb}"`);
+    }
     if (!ENV.APP.USE_MOCK && ENV.APP.API_READY) {
       let path = `go/${encodeURIComponent(verb)}/${location.lat},${
         location.lng
