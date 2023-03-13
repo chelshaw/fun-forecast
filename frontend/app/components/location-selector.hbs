@@ -16,12 +16,12 @@
       <div class='flex justify-between py-2'>
         <input
           {{on 'click' this.resetForm}}
-          class='block p-2 bg-red-main dark:bg-red-darker text-white text-sm'
+          class='block p-2 bg-red-bright dark:bg-red-darker text-white text-sm'
           type='reset'
           value='Reset'
         />
         <input
-          class='block p-2 bg-blue-main dark:bg-blue-darker dark:text-white text-sm'
+          class='block p-2 bg-blue-bright dark:bg-blue-darker dark:text-white text-sm'
           type='submit'
           value='Search'
         />
@@ -29,7 +29,7 @@
     </form>
     {{#if this.error}}
       <div
-        class='my-4 border p-2 bg-red-lightest dark:bg-red-darkest border-red-main text-red-darkest dark:text-white'
+        class='my-4 border p-2 bg-red-lightest dark:bg-red-darkest border-red-bright text-red-darkest dark:text-white'
       >
         {{this.error}}
       </div>

@@ -12,7 +12,7 @@ module.exports = {
       blue: {
         lightest: '#C1F0FF',
         lighter: '#87E2FF',
-        main: '#2ECDFF',
+        bright: '#2ECDFF',
         dark: '#00A1E0',
         darker: '#0070A8',
         darkest: '#004368',
@@ -20,7 +20,7 @@ module.exports = {
       green: {
         lightest: '#B0F7C7',
         lighter: '#66DE8E',
-        main: '#2CCD62',
+        bright: '#2CCD62',
         dark: '#0AAD40',
         darker: '#1C863F',
         darkest: '#16542B',
@@ -28,7 +28,7 @@ module.exports = {
       red: {
         lightest: '#FFBBBD',
         lighter: '#FF9295',
-        main: '#F14B50',
+        bright: '#F14B50',
         dark: '#D12025',
         darker: '#A50E13',
         darkest: '#6B1215',
@@ -36,7 +36,7 @@ module.exports = {
       yellow: {
         lightest: '#FFE6B0',
         lighter: '#FDD173',
-        main: '#FEBB2D',
+        bright: '#FEBB2D',
         dark: '#DE9E15',
         darker: '#BD8203',
         darkest: '#865B00',
