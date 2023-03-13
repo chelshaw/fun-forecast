@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'fun-forecast-frontend/tests/helpers';
+import { setupTest } from 'ff-frontend/tests/helpers';
 
 module('Unit | Controller | where/activity/detail', function (hooks) {
   setupTest(hooks);

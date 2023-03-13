@@ -1,5 +1,5 @@
 import { module, skip } from 'qunit';
-import { setupRenderingTest } from 'fun-forecast-frontend/tests/helpers';
+import { setupRenderingTest } from 'ff-frontend/tests/helpers';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 

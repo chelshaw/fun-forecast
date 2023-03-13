@@ -1,5 +1,10 @@
 {
     "compilerOptions": {
-        "experimentalDecorators": true
-    }
+        "baseUrl": ".",
+        "experimentalDecorators": true,
+        "paths": {
+            "ff-frontend/*": ["./*"]
+        }
+    },
+    "exclude": ["node_modules", "tmp", "temp"]
 }
