@@ -29,7 +29,7 @@
     </form>
     {{#if this.error}}
       <div
-        class='my-4 border p-2 bg-red-lightest dark:bg-red-darkest border-red-bright text-red-darkest dark:text-white'
+        class='my-4 border p-2 bg-red-lighter dark:bg-red-darkest border-red-bright text-red-darkest dark:text-white'
       >
         {{this.error}}
       </div>
@@ -40,7 +40,7 @@
           below to continue</h3>
         {{#each this.suggestions as |sugg|}}
           <button
-            class='border-y block w-full p-2 bg-white dark:bg-gray-900 hover:bg-green-lightest dark:hover:bg-green-darkest text-left'
+            class='border-y block w-full p-2 bg-white dark:bg-gray-900 hover:bg-green-lighter dark:hover:bg-green-darkest text-left'
             type='button'
             {{on 'click' (fn this.selectLocation sugg)}}
           >
