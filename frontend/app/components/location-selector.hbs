@@ -1,8 +1,54 @@
-<form {{on 'submit' this.saveLocation}} ...attributes>
-  <label for='zipcode'>{{@title}}</label>
-  <div class='mt-2'>
-    <Input id='zipcode' @type='text' @value={{this.zipcode}} placeholder='90210'
-      class='dark:bg-gray-600 dark:text-white p-2' />
-    <button class='py-2 px-4 bg-gray-500 text-white' type='submit'>Go</button>
+<div class='mx-auto max-w-sm'>
+  <div class='py-4'>
+    <form {{on 'submit' this.searchForLocations}} ...attributes>
+      <label
+        class='text-gray-600 dark:text-gray-300 font-bold'
+        for='location'
+      >Search for a location by name, zipcode, etc</label>
+      <div class='flex'>
+        <Input
+          id='location'
+          @type='text'
+          @value={{this.searchText}}
+          class='border p-2 block mt-2 w-full bg-white dark:bg-gray-600'
+        />
+      </div>
+      <div class='flex justify-between py-2'>
+        <input
+          {{on 'click' this.resetForm}}
+          class='block p-2 bg-red-bright dark:bg-red-darker text-white text-sm'
+          type='reset'
+          value='Reset'
+        />
+        <input
+          class='block p-2 bg-blue-bright dark:bg-blue-darker dark:text-white text-sm'
+          type='submit'
+          value='Search'
+        />
+      </div>
+    </form>
+    {{#if this.error}}
+      <div
+        class='my-4 border p-2 bg-red-lighter dark:bg-red-darkest border-red-bright text-red-darkest dark:text-white'
+      >
+        {{this.error}}
+      </div>
+    {{/if}}
+    {{#if this.suggestions}}
+      <div class='py-4'>
+        <h3 class='text-gray-600 dark:text-gray-300 font-bold'>Select an option
+          below to continue</h3>
+        {{#each this.suggestions as |sugg|}}
+          <button
+            class='border-y block w-full p-2 bg-white dark:bg-gray-900 hover:bg-green-lighter dark:hover:bg-green-darkest text-left'
+            type='button'
+            {{on 'click' (fn this.selectLocation sugg)}}
+          >
+            <h3 class='font-bold'>{{sugg.text}}</h3>
+            <p class='text-xs italic'>{{sugg.place_name}}</p>
+          </button>
+        {{/each}}
+      </div>
+    {{/if}}
   </div>
-</form>
+</div>

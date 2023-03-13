@@ -2,21 +2,19 @@
 
 <Portal @target='onboard-title'>
   <WhereToTitle
-    @zipcode={{this.model.data.location.ref}}
+    @location={{this.model.location}}
     @verb={{this.model.data.verb}}
   />
 </Portal>
 
-<div class='flex items-center justify-around'>
-  ⬅️
-  <h2 class='text-2xl font-bold text-center'>{{this.model.when}}</h2>
-  ➡️
-</div>
+<DateScroller @maxDay={{this.model.maxDay}} @param={{this.model.dayParam}} />
 
-<ForecastDetail
-  @verb={{this.model.data.verb}}
-  @loc={{this.model.data.location.ref}}
-  @forecast={{this.model.data.forecast}}
-  @sunrise={{this.model.data.location.sunrise}}
-  @sunset={{this.model.data.location.sunset}}
-/>
+<div class='mx-auto max-w-md'>
+  <ForecastDetail
+    @verb={{this.model.data.verb}}
+    @location={{this.model.location}}
+    @forecast={{this.model.data.forecast}}
+    @sunrise={{this.model.data.location.sunrise}}
+    @sunset={{this.model.data.location.sunset}}
+  />
+</div>

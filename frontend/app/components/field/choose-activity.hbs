@@ -1,10 +1,13 @@
 <Typography @level='h2'>{{@title}}</Typography>
 <div class='grid grid-cols-2 gap-2'>
   {{#each this.activities as |activity|}}
-  <LinkTo @route='where.activity.detail' @models={{array @zipcode activity.verb}}
-    class='p-3 text-center min-h-24 border-4 bg-white dark:bg-gray-600 hover:border-green-lighter focus:border-green-lighter focus-within:border-green-lighter border-transparent'>
-    <p class='text-3xl'>{{activity.icon}}</p>
-    <Typography>{{activity.verb}}</Typography>
-  </LinkTo>
+    <LinkTo
+      @route='where.activity.detail'
+      @models={{array @location.id activity.verb}}
+      class='p-3 text-center min-h-24 border-4 bg-white dark:bg-gray-600 hover:border-green-light focus:border-green-light focus-within:border-green-light border-transparent'
+    >
+      <p class='text-3xl'>{{activity.icon}}</p>
+      <Typography>{{activity.verb}}</Typography>
+    </LinkTo>
   {{/each}}
 </div>

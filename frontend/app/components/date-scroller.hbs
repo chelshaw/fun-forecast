@@ -1,0 +1,74 @@
+<div class='bg-gray-100 dark:bg-gray-900 w-full py-1'>
+  <div class='flex items-center justify-between mx-auto max-w-xs'>
+    {{#if (eq this.currentOffset 0)}}
+      <div class='bg-gray-200 dark:bg-gray-700 rounded p-2'>
+        <svg
+          viewBox='0 0 47 80'
+          class='fill-gray-300 dark:fill-gray-800 w-3'
+          aria-label='previous day'
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          <path
+            fill-rule='evenodd'
+            clip-rule='evenodd'
+            d='M2.75375 44.2326C0.415416 41.895 0.415416 38.105 2.75375 35.7674L35.7784 2.7532C38.1167 0.415601 41.9079 0.415602 44.2463 2.7532C46.5846 5.09079 46.5846 8.88078 44.2463 11.2184L15.4555 40L44.2463 68.7816C46.5846 71.1192 46.5846 74.9092 44.2463 77.2468C41.9079 79.5844 38.1167 79.5844 35.7784 77.2468L2.75375 44.2326Z'
+          />
+        </svg>
+      </div>
+    {{else}}
+      <LinkTo
+        @query={{hash when=this.prevDay}}
+        class='bg-yellow-bright drop-shadow rounded p-2'
+      >
+        <svg
+          viewBox='0 0 47 80'
+          class='fill-yellow-darkest w-3'
+          aria-hidden='true'
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          <path
+            fill-rule='evenodd'
+            clip-rule='evenodd'
+            d='M2.75375 44.2326C0.415416 41.895 0.415416 38.105 2.75375 35.7674L35.7784 2.7532C38.1167 0.415601 41.9079 0.415602 44.2463 2.7532C46.5846 5.09079 46.5846 8.88078 44.2463 11.2184L15.4555 40L44.2463 68.7816C46.5846 71.1192 46.5846 74.9092 44.2463 77.2468C41.9079 79.5844 38.1167 79.5844 35.7784 77.2468L2.75375 44.2326Z'
+          />
+        </svg>
+      </LinkTo>
+    {{/if}}
+    <h2 class='text-2xl font-bold text-center'>{{this.relativeWhen}}</h2>
+    {{#if this.nextDay}}
+      <LinkTo
+        @query={{hash when=this.nextDay}}
+        class='bg-yellow-bright drop-shadow rounded p-2'
+      >
+        <svg
+          class='fill-yellow-darkest w-3'
+          viewBox='0 0 47 80'
+          aria-label='next day'
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          <path
+            fill-rule='evenodd'
+            clip-rule='evenodd'
+            d='M44.2463 35.7674C46.5846 38.105 46.5846 41.895 44.2463 44.2326L11.2216 77.2468C8.88327 79.5844 5.09208 79.5844 2.75375 77.2468C0.415415 74.9092 0.415415 71.1192 2.75375 68.7816L31.5445 40L2.75376 11.2184C0.41542 8.88078 0.415421 5.09079 2.75376 2.75319C5.09209 0.415598 8.88328 0.415597 11.2216 2.75319L44.2463 35.7674Z'
+          />
+        </svg>
+      </LinkTo>
+    {{else}}
+      <div class='bg-gray-200 dark:bg-gray-700 rounded p-2'>
+        <svg
+          class='fill-gray-300 dark:fill-gray-800 w-3'
+          viewBox='0 0 47 80'
+          aria-hidden='true'
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          <path
+            fill-rule='evenodd'
+            clip-rule='evenodd'
+            d='M44.2463 35.7674C46.5846 38.105 46.5846 41.895 44.2463 44.2326L11.2216 77.2468C8.88327 79.5844 5.09208 79.5844 2.75375 77.2468C0.415415 74.9092 0.415415 71.1192 2.75375 68.7816L31.5445 40L2.75376 11.2184C0.41542 8.88078 0.415421 5.09079 2.75376 2.75319C5.09209 0.415598 8.88328 0.415597 11.2216 2.75319L44.2463 35.7674Z'
+          />
+        </svg>
+      </div>
+    {{/if}}
+  </div>
+  {{yield}}
+</div>

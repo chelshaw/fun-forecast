@@ -1,29 +1,15 @@
 import Service from '@ember/service';
 import { DateTime } from 'luxon';
 import ENV from 'fun-forecast-frontend/config/environment';
-import { SINGLE_DAY_FORECAST_MOTO } from '../utils/mock-responses';
+import locationSuggestions from 'fun-forecast-frontend/utils/example-location-response';
+import allowedVerbs from 'fun-forecast-frontend/utils/verbs';
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
-function exampleLocations(zipcode) {
-  switch (zipcode) {
-    case 78133:
-      return { city: 'Canyon Lake', state: 'TX' };
-    case 78666:
-      return { city: 'San Marcos', state: 'TX' };
-    case 78701:
-    case 78702:
-    case 78703:
-    case 78704:
-    case 78751:
-      return { city: 'Austin', state: 'TX' };
-    default:
-      return { city: 'Beverly Hills', state: 'CA' };
-  }
-}
+
 export default class ApiService extends Service {
-  baseUrl = 'http://localhost:1323/api/v0';
+  baseUrl = 'http://localhost:4200/api/v0';
 
   get headers() {
     var headers = new Headers();
@@ -43,26 +29,28 @@ export default class ApiService extends Service {
     throw new Error(response.statusText);
   }
 
-  singleActivity(verb, zipcode, when) {
-    if (!ENV.APP.USE_MOCK) {
-      const activityRef = `${verb}_${zipcode}`;
-      let path = `go/${encodeURIComponent(activityRef)}`;
+  singleActivity(verb, location, when) {
+    if (!allowedVerbs().includes(verb)) {
+      throw new Error(`No activity schema for "${verb}"`);
+    }
+    if (!ENV.APP.USE_MOCK && ENV.APP.API_READY) {
+      let path = `go/${encodeURIComponent(verb)}/${location.lat},${
+        location.lng
+      }`;
       if (when) {
         path += `?when=${when}`;
       }
-      console.log({ path });
       return this.fetch(path);
     }
-    return this.generateForecast(verb, zipcode);
+    return this.generateForecast(verb, location);
   }
 
-  generateForecast(verb = 'hike', zipcode = '90210') {
+  generateForecast(verb = 'hike', location) {
     // Mock what we get back from the API
     const today = DateTime.now().startOf('day');
     const sunrise = today.set({ hour: 6, minute: 45 });
     const sunset = today.set({ hour: 17, minute: 57 });
     const forecast = [];
-    const loc = exampleLocations(zipcode);
     for (let hour = 0; hour < 24; hour++) {
       const time = today.set({ hour, minute: 0 });
       const score = hour < 5 ? 2 : getRandomInt(3);
@@ -76,8 +64,7 @@ export default class ApiService extends Service {
     return {
       verb,
       location: {
-        ref: zipcode,
-        ...loc,
+        ...location,
         sunrise: sunrise.toISO(),
         sunset: sunset.toISO(),
       },
@@ -85,61 +72,18 @@ export default class ApiService extends Service {
     };
   }
 
-  /* DEPRECATED */
-  async getActivityByRef(aRef) {
-    const json = ENV.APP.USE_MOCK
-      ? SINGLE_DAY_FORECAST_MOTO
-      : await this.fetch(`me/${aRef}`);
-    const [verb, zipcode] = aRef.split('_');
-    return {
-      verb,
-      locationKey: zipcode,
-      locationName: json.location_name,
-      location: {
-        key: zipcode,
-        name: json.location_name,
-      },
-      hours: this.formatHours(json.forecast),
+  searchLocation(keywords) {
+    if (ENV.APP.USE_MOCK) {
+      return locationSuggestions;
+    }
+    const headers = new Headers();
+    const requestOptions = {
+      method: 'GET',
+      headers,
     };
-  }
-
-  /* DEPRECATED */
-  groupBy(arr, key) {
-    return arr.reduce(function (prev, val) {
-      (prev[val[key]] = prev[val[key]] || []).push(val);
-      return prev;
-    }, {});
-  }
-
-  /* DEPRECATED */
-  formatHours(hours) {
-    return hours.map((d) => {
-      const startTime = DateTime.fromISO(d.start, { setZone: true });
-      const endTime = DateTime.fromISO(d.end, { setZone: true });
-      const dayKey = startTime.toLocaleString({
-        month: 'short',
-        day: 'numeric',
-      });
-      if (!dayKey) {
-        console.log('NO DAYKEY', d);
-      }
-      return {
-        description: `between ${startTime.toLocaleString({
-          hour: 'numeric',
-        })} and ${endTime.toLocaleString({ hour: 'numeric' })}`,
-        ...d,
-        dayOfYear: startTime.year + startTime.ordinal,
-        dayKey,
-        dayOfWeek: startTime.toLocaleString({
-          weekday: 'short',
-        }),
-        jsDate: startTime.toJSDate(),
-        startTime: startTime.toMillis(),
-        hour: startTime.hour,
-        time: startTime.toLocaleString({
-          hour: 'numeric',
-        }),
-      };
-    });
+    return this.fetch(
+      `location-search/${encodeURIComponent(keywords)}`,
+      requestOptions
+    );
   }
 }

@@ -17,7 +17,7 @@ module.exports = function (environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-      betacode: 'play outside'
+      betacode: process.env.FF_BETACODE,
     },
     metricsAdapters: [
       {
@@ -39,7 +39,7 @@ module.exports = function (environment) {
     ENV.APP.USE_MOCK = true;
     ENV.contentSecurityPolicy = {
       // ... other stuff here
-      'connect-src': "'self' http://localhost:1323",
+      'connect-src': "'self' http://localhost:5000",
     };
   }
 
