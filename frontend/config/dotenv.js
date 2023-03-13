@@ -6,11 +6,11 @@ const path = require('path');
 
 module.exports = function (env) {
   return {
-    clientAllowedKeys: [],
+    clientAllowedKeys: ['FF_BETACODE'],
     fastbootAllowedKeys: [],
     failOnMissingKey: true,
     path: path.join(path.dirname(__dirname), '.env'),
-    // Allows this to run in Vercel
+    // Prevent build failure in Vercel
     enabled: env !== 'production',
   };
 };
