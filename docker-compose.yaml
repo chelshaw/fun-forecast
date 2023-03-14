@@ -1,0 +1,10 @@
+version: "3.4"
+services:
+  backend:
+    build: Dockerfile
+    image: ff-backend:latest
+    ports:
+      - 5001:5001
+    environment:
+      HOST: 0.0.0.0
+      PORT: 5001

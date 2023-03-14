@@ -30,9 +30,11 @@ async def startup():
 async def health_check():
     return "I'm healthy, yo!"
 
+
 @app.get("/api/v0/location-search/{search}")
 async def get_location_suggestions(search: str) -> Dict[str, Any]:
     return {}
+
 
 @app.get("/api/v0/go/{verb}/{lat},{long}")
 async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str, Any]:

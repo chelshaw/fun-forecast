@@ -50,8 +50,9 @@ poetry run pytest  # run at backend root level, runs all unit tests
 docker build . -t ff-backend
 docker run -d -p 5001:5001 ff-backend:latest
 
-# User docker compose
-TODO
+# Use docker compose
+docker compose up -d
+docker compose down
 ```
 
 <hr/>
