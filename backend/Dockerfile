@@ -4,7 +4,10 @@ RUN apt-get update
 RUN apt-get install -y build-essential
 
 ARG PORT=5001
+ARG HOST="0.0.0.0"
+
 ENV PORT=$PORT
+ENV HOST=$HOST
 
 # STANDARD PYTHON SETUP
 ENV PYTHONWRITEBYTECODE=1
@@ -19,8 +22,6 @@ ENV PYTHONPATH="/app/service/src/fun_forecast_backend:/app/service/src"
 ENV STAGE=$STAGE
 
 EXPOSE $PORT
-
-RUN echo $PORT
 
 RUN pip install "poetry==$POETRY_VERSION"
 RUN poetry config virtualenvs.create false

@@ -47,6 +47,3 @@ async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str,
         # return answer
     except:
         return {}
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=os.getenv("PORT", 5000))

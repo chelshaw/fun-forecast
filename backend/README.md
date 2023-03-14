@@ -25,17 +25,13 @@ Install:
 # Install pyenv
 brew install pyenv
 
-# Create a Virtualenv that runs Python `3.9.0`
-pyenv install 3.9.0
-pyenv global 3.9.0 # might need to do more to set your global pyenv version
+# Create an env that runs Python `3.11.0`, set it to global default
+pyenv install 3.11.0
+pyenv global 3.11.0
 
-# Install Poetry dependencies
-brew install poetry
-
-# cd into the top level directory
+# Install Poetry and project dependencies
+pip install poetry
 cd fun-forecast/backend
-
-# Install the dependencies
 poetry install
 ```
 
@@ -50,10 +46,12 @@ poetry add <library>
 poetry lock  # locks the dependency file for Docker/future builds
 poetry run pytest  # run at backend root level, runs all unit tests
 
+# Build and run image
 docker build . -t ff-backend
-docker run ff-backend:latest
-OR (for networking, before docker-compose is set up):
-docker run -d -p 5000:5000 ff-backend:latest
+docker run -d -p 5001:5001 ff-backend:latest
+
+# User docker compose
+TODO
 ```
 
 <hr/>
