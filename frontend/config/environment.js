@@ -26,7 +26,9 @@ module.exports = function (environment) {
         name: 'SimpleAnalytics',
         environments: ['production'],
         config: {
-          hostname: 'fun-forecast.vercel.app',
+          hostname: 'beta.myfunforecast.com',
+          // Uncomment below to use custom source
+          // src: 'sa.beta.myfunforecast.com/latest.js',
         },
       },
     ],
