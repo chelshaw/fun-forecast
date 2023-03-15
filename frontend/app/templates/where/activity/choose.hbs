@@ -1,8 +1,10 @@
 {{page-title 'Choose Activity'}}
+{{log this.model}}
 <Portal @target='onboard-title'>
-  <WhereToTitle @zipcode={{this.model}} />
+  <WhereToTitle @location={{this.model}} />
 </Portal>
 
-<Field::ChooseActivity @zipcode={{this.model}} />
-
+<div class='mx-auto max-w-md'>
+  <Field::ChooseActivity @location={{this.model}} />
+</div>
 {{outlet}}

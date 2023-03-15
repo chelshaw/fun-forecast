@@ -1,8 +1,10 @@
-<h1 class='text-3xl'>When to
+<h1 class='text-3xl' data-test-where-to-title>When to
   <LinkTo
     class='font-bold hover:underline'
     @route='where.activity.choose'
-    @model={{@zipcode}}
+    @model={{@location.id}}
+    disabled={{not @location}}
+    data-test-activity-link
   >
     {{or @verb '__________'}}
   </LinkTo><br />
@@ -10,8 +12,9 @@
   <LinkTo
     class='font-bold hover:underline'
     @route='where.choose'
-    disabled={{not @zipcode}}
+    disabled={{not @location}}
+    data-test-where-link
   >
-    {{or @zipcode '__________'}}
+    {{or @location.name '__________'}}
   </LinkTo>
 </h1>

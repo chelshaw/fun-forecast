@@ -1,60 +1,121 @@
 {{#if this.hours}}
-<Lineal::Fluid class='w-full h-max min-h-full relative pb-16' as |width height clientRect|>
-  {{#let
-  (scale-band domain=this.dayDomain range=(array 0 width) padding=0.5)
-  (scale-linear range=(array 50 height) domain='0..24' padding=0.5)
-  (scale-ordinal
-  range=(array
-  'fill-green-lighter hover:fill-green-lighter'
-  'fill-gray-100 hover:fill-gray-200'
-  )
-  domain=(array true false)
-  )
-  as |xScale yScale colorScale|
-  }}
-  {{#if this.selected}}
-  <div class='absolute bg-white shadow p-4 left-5 right-5 translate-y-1' role='status' {{style top=(concat (add (round
-    (scale-fn-compute yScale this.selected.hour)) this.hourHeight ) 'px' ) }}>
-    {{this.selected.time}}
-  </div>
-  {{/if}}
-  <svg class='w-full' height='1200'>
-    <defs>
-      <linearGradient id='skyGradient' gradientTransform='rotate(90)'>
-        {{#each this.sky as |skyStop|}}
-        <stop offset={{skyStop.offset}} stop-color={{skyStop.color}} />
-        {{/each}}
-      </linearGradient>
-    </defs>
-    <rect x='0' y='50' width={{width}} height={{add height -50}} fill="url('#skyGradient')" class='opacity-75'></rect>
-    {{#if (and xScale.isValid yScale.isValid)}}
-    <Lineal::Gridlines @scale={{yScale}} @direction='horizontal' @length={{width}} class='stroke-white'
-      transform='translate(0, 0)' />
-    <Lineal::Axis @scale={{xScale}} @orientation='top' transform='translate(0,50)' />
-    <Lineal::Axis @orientation='left' @scale={{yScale}} @includeDomain={{false}} {{!-- @tickValues={{this.ticks}} --}}
-      @tickFormat={{this.tickFormat}} {{!-- @tickValue={{this.tickValue}} --}} transform='translate(20,15)'
-      class='fill-white' aria-hidden='true' as |tick|>
-      <text y={{tick.offset}} dy={{tick.textOffset}}>
-        tick
-      </text>
-    </Lineal::Axis>
-    {{#each this.hours as |hour|}}
-    <g>
-      <rect width={{this.hourWidth}} height={{this.hourHeight}} x={{scale-fn-compute xScale hour.dayOfWeek}}
-        y={{scale-fn-compute yScale hour.hour}} class='stroke-2 bg-red-200
-                  {{scale-fn-compute colorScale hour.good}}' {{on 'mouseenter' (fn (mut this.selected) hour)}}
-        {{on 'mouseleave' (fn (mut this.selected) null)}} {{on 'touchstart' (fn (mut this.selected) hour)}}></rect>
-      <text x={{add (scale-fn-compute xScale hour.dayOfWeek) (div this.hourWidth 2) -10 }} y={{add (scale-fn-compute
-        yScale hour.hour) (div this.hourHeight 2) }} class='text-red text-xl'>{{if hour.good '😎' '⛔️'}}</text>
-    </g>
-    {{/each}}
-    {{/if}}
-    {{! This is just here to qualify the scales }}
-    <Lineal::Line @data={{this.hours}} @x='dayOfWeek' @y='time' @xScale={{xScale}} @yScale={{yScale}} fill='transparent'
-      stroke='transparent' />
-  </svg>
-  {{/let}}
-</Lineal::Fluid>
+  <Lineal::Fluid
+    class='w-full h-max min-h-full relative pb-16'
+    as |width height clientRect|
+  >
+    {{#let
+      (scale-band domain=this.dayDomain range=(array 0 width) padding=0.5)
+      (scale-linear range=(array 50 height) domain='0..24' padding=0.5)
+      (scale-ordinal
+        range=(array
+          'fill-green-light hover:fill-green-light'
+          'fill-gray-100 hover:fill-gray-200'
+        )
+        domain=(array true false)
+      )
+      as |xScale yScale colorScale|
+    }}
+      {{#if this.selected}}
+        <div
+          class='absolute bg-white shadow p-4 left-5 right-5 translate-y-1'
+          role='status'
+          {{style
+            top=(concat
+              (add
+                (round (scale-fn-compute yScale this.selected.hour))
+                this.hourHeight
+              )
+              'px'
+            )
+          }}
+        >
+          {{this.selected.time}}
+        </div>
+      {{/if}}
+      <svg class='w-full' height='1200'>
+        <defs>
+          <linearGradient id='skyGradient' gradientTransform='rotate(90)'>
+            {{#each this.sky as |skyStop|}}
+              <stop offset={{skyStop.offset}} stop-color={{skyStop.color}} />
+            {{/each}}
+          </linearGradient>
+        </defs>
+        <rect
+          x='0'
+          y='50'
+          width={{width}}
+          height={{add height -50}}
+          fill="url('#skyGradient')"
+          class='opacity-75'
+        ></rect>
+        {{#if (and xScale.isValid yScale.isValid)}}
+          <Lineal::Gridlines
+            @scale={{yScale}}
+            @direction='horizontal'
+            @length={{width}}
+            class='stroke-white'
+            transform='translate(0, 0)'
+          />
+          <Lineal::Axis
+            @scale={{xScale}}
+            @orientation='top'
+            transform='translate(0,50)'
+          />
+          <Lineal::Axis
+            @orientation='left'
+            @scale={{yScale}}
+            @includeDomain={{false}}
+            @tickFormat={{this.tickFormat}}
+            transform='translate(20,15)'
+            class='fill-white'
+            aria-hidden='true'
+            as |tick|
+          >
+            <text y={{tick.offset}} dy={{tick.textOffset}}>
+              tick
+            </text>
+          </Lineal::Axis>
+          {{#each this.hours as |hour|}}
+            <g>
+              <rect
+                width={{this.hourWidth}}
+                height={{this.hourHeight}}
+                x={{scale-fn-compute xScale hour.dayOfWeek}}
+                y={{scale-fn-compute yScale hour.hour}}
+                class='stroke-2 bg-red-200
+                  {{scale-fn-compute colorScale hour.good}}'
+                {{on 'mouseenter' (fn (mut this.selected) hour)}}
+                {{on 'mouseleave' (fn (mut this.selected) null)}}
+                {{on 'touchstart' (fn (mut this.selected) hour)}}
+              ></rect>
+              <text
+                x={{add
+                  (scale-fn-compute xScale hour.dayOfWeek)
+                  (div this.hourWidth 2)
+                  -10
+                }}
+                y={{add
+                  (scale-fn-compute yScale hour.hour)
+                  (div this.hourHeight 2)
+                }}
+                class='text-red text-xl'
+              >{{if hour.good '😎' '⛔️'}}</text>
+            </g>
+          {{/each}}
+        {{/if}}
+        {{! This is just here to qualify the scales }}
+        <Lineal::Line
+          @data={{this.hours}}
+          @x='dayOfWeek'
+          @y='time'
+          @xScale={{xScale}}
+          @yScale={{yScale}}
+          fill='transparent'
+          stroke='transparent'
+        />
+      </svg>
+    {{/let}}
+  </Lineal::Fluid>
 {{else}}
-[ empty state ]
+  [ empty state ]
 {{/if}}

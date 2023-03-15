@@ -1,43 +1,74 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { DateTime } from 'luxon';
+import { daysFromToday, DATE_FORMAT } from 'fun-forecast-frontend/utils/dates';
 
-const DATE_FORMAT = 'yyyy-MM-dd';
+const MAX_DATE = 10;
 export default class WhereActivityDetailRoute extends Route {
   @service api;
+  @service location;
+  @service router;
 
-  parseDateFromParam(whenParam) {
-    const now = DateTime.now();
-    console.log({ whenParam });
-    if (!whenParam && now.hour > 19) {
-      return now.plus({ days: 1 });
-    } else if (!whenParam) {
-      return now;
+  queryParams = {
+    when: {
+      refreshModel: true,
+    },
+  };
+
+  beforeModel() {
+    const { loc_ref } = this.paramsFor('where.activity');
+    const location = this.location.getById(loc_ref);
+    if (!location) {
+      return this.router.transitionTo('where.choose');
     }
-    const whenInt = parseInt(whenParam, 10);
-    if (isNaN(whenInt) || whenInt > 2) {
-      // TODO: only paid can see future?
-      return now;
+  }
+
+  calcWhen(whenParam) {
+    // TODO: some people have access to more dates?
+    const errorOnDatesExceed = MAX_DATE;
+    if (whenParam > errorOnDatesExceed) {
+      throw new Error(
+        `Sorry, date is too far in the future to calculate at this time.`
+      );
     }
-    return now.plus({ days: whenInt });
+    return daysFromToday(whenParam, 19);
+  }
+
+  relativeWhen(dt) {
+    const start = DateTime.now();
+    const { days } = dt.diff(start, 'days').toObject();
+
+    if (days <= 1) {
+      return dt.toRelativeCalendar();
+    }
+    return `${dt.toRelativeCalendar()} (${dt.toFormat('EEE')})`;
   }
 
   async model(params, transition) {
-    const { loc_ref } = this.paramsFor('where.activity');
     const { verb } = params;
-    const whenDate = this.parseDateFromParam(transition.to.queryParams.when);
-    console.log({
-      format: whenDate.toFormat(DATE_FORMAT),
-      rel: whenDate.toRelativeCalendar(),
-    });
+    const { loc_ref } = this.paramsFor('where.activity');
+    const location = this.getLocationDetails(loc_ref);
+    const whenDate = this.calcWhen(transition.to.queryParams.when);
+    const when = this.relativeWhen(whenDate);
     const data = await this.api.singleActivity(
       verb,
-      loc_ref,
+      location,
       whenDate.toFormat(DATE_FORMAT)
     );
     return {
+      location,
+      when,
       data,
-      when: whenDate.toRelativeCalendar(),
+      dayParam: transition.to.queryParams.when || 0,
+      maxDay: MAX_DATE,
     };
+  }
+
+  getLocationDetails(locId) {
+    const location = this.location.getById(locId);
+    if (undefined === location) {
+      throw new Error('No location found');
+    }
+    return location;
   }
 }

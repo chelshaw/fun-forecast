@@ -1,16 +1,25 @@
-{{page-title "Example"}}
+{{page-title 'Example'}}
 
-<div class="mx-auto max-w-md p-8">
-    <h1 class='text-3xl text-center'>When to
-        <span class="underline font-bold">{{this.model.verb}}</span>
-        <br />
-        in
-        <span class="underline font-bold">{{this.model.where}}</span>*
-    </h1>
-    <p class="text-xs text-center p-8">
-        * This is made-up data to showcase what the app does. Please do not base your activities on this information.
+<div class='mx-auto max-w-md p-8'>
+  <h1 class='text-3xl text-center'>When to
+    <span class='underline font-bold'>{{this.model.verb}}</span>
+    <br />
+    in
+    <span class='underline font-bold'>{{this.model.where}}</span>*
+  </h1>
+
+  <Alert @level='warning' @class='my-8 mx-2'>
+    <p class='text-sm text-center'>
+      * This is made-up data to showcase what the app does. Please do not base
+      your activities on this information.
     </p>
-    <ForecastDetail @verb={{this.model.data.verb}} @loc={{this.model.data.location.ref}}
-        @forecast={{this.model.data.forecast}} @sunrise={{this.model.data.location.sunrise}}
-        @sunset={{this.model.data.location.sunset}} />
+  </Alert>
+
+  <ForecastDetail
+    @verb={{this.model.data.verb}}
+    @loc={{this.model.data.location.ref}}
+    @forecast={{this.model.data.forecast}}
+    @sunrise={{this.model.data.location.sunrise}}
+    @sunset={{this.model.data.location.sunset}}
+  />
 </div>

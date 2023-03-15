@@ -1,5 +1,10 @@
 {
     "compilerOptions": {
-        "experimentalDecorators": true
-    }
+        "baseUrl": ".",
+        "experimentalDecorators": true,
+        "paths": {
+            "fun-forecast-frontend/*": ["./*"]
+        }
+    },
+    "exclude": ["node_modules", "tmp", "temp"]
 }

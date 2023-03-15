@@ -1,5 +1,5 @@
 export const verb_icons = {
-  run: '🏃🏽',
+  run: '🏃🏾',
   hike: '🥾',
   bicycle: '🚲',
   swim: '🏊🏽',
@@ -8,3 +8,7 @@ export const verb_icons = {
   motorcycle: '🏍',
   sunbathe: '👙',
 };
+
+export default function allowedVerbs() {
+  return Object.keys(verb_icons);
+}

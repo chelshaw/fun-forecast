@@ -4,24 +4,57 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
 export default class LocationSelectorComponent extends Component {
-  @service local;
   @service router;
-  @tracked zipcode = '';
+  @service api;
 
-  @action saveLocation(evt) {
+  @tracked error = '';
+  @tracked searchText = '';
+  @tracked suggestions = [];
+
+  constructor() {
+    super(...arguments);
+
+    const { initialSearch } = this.args;
+    if (initialSearch) {
+      this.searchText = initialSearch;
+      this.fetchLocationSuggestions(initialSearch);
+    }
+  }
+
+  async fetchLocationSuggestions(searchText) {
+    this.suggestions = [];
+    if (!searchText) return;
+    try {
+      const { features } = await this.api.searchLocation(searchText);
+      this.suggestions = features;
+    } catch (e) {
+      this.error =
+        e.message ||
+        'There was an error fetching location suggestions based on your search. Try a different search term, or try again later.';
+    }
+  }
+
+  @action resetForm() {
+    this.searchText = '';
+    this.suggestions = [];
+  }
+
+  // TODO: concurrency for loading state
+  @action
+  searchForLocations(evt) {
     evt.preventDefault();
-    // TODO: check if location is valid
-    if (!this.zipcode) return;
-    if (this.args.verb) {
-      return this.router.transitionTo(
-        'where.activity.details',
-        this.zipcode,
-        this.args.verb
-      );
-    }
-    this.router.transitionTo('where.activity.choose', this.zipcode);
-    if (this.args.onSave) {
-      this.args.onSave(location);
-    }
+    const searchText = this.searchText;
+    this.fetchLocationSuggestions(searchText);
+  }
+
+  @action selectLocation(loc) {
+    const locData = {
+      id: loc.id,
+      lat: loc.center[1],
+      lng: loc.center[0],
+      name: loc.text,
+      search: this.searchText,
+    };
+    this.args.onSelect(locData);
   }
 }
