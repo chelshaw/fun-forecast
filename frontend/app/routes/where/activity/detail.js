@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { DateTime } from 'luxon';
-import { daysFromToday, DATE_FORMAT } from 'ff-frontend/utils/dates';
+import { daysFromToday, DATE_FORMAT } from 'fun-forecast-frontend/utils/dates';
 
 const MAX_DATE = 10;
 export default class WhereActivityDetailRoute extends Route {

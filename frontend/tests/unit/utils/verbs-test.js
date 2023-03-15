@@ -1,4 +1,4 @@
-import verbs from 'ff-frontend/utils/verbs';
+import verbs from 'fun-forecast-frontend/utils/verbs';
 import { module, test } from 'qunit';
 
 module('Unit | Utility | verbs', function () {

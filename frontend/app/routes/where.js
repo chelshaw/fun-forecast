@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import ENV from 'ff-frontend/config/environment';
+import ENV from 'fun-forecast-frontend/config/environment';
 
 const storageKey = `FF_beta_access`;
 const correctAnswer = ENV.APP.betacode;

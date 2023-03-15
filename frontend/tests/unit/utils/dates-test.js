@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-import { daysFromToday, DATE_FORMAT } from 'ff-frontend/utils/dates';
+import { daysFromToday, DATE_FORMAT } from 'fun-forecast-frontend/utils/dates';
 
 module('Unit | Utility | date', function () {
   module('daysFromToday', function (hooks) {

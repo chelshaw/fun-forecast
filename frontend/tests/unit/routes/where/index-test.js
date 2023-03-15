@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'ff-frontend/tests/helpers';
+import { setupTest } from 'fun-forecast-frontend/tests/helpers';
 
 module('Unit | Route | where/index', function (hooks) {
   setupTest(hooks);

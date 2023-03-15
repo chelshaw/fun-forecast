@@ -1,8 +1,8 @@
 import Service from '@ember/service';
 import { DateTime } from 'luxon';
-import ENV from 'ff-frontend/config/environment';
-import locationSuggestions from 'ff-frontend/utils/example-location-response';
-import allowedVerbs from 'ff-frontend/utils/verbs';
+import ENV from 'fun-forecast-frontend/config/environment';
+import locationSuggestions from 'fun-forecast-frontend/utils/example-location-response';
+import allowedVerbs from 'fun-forecast-frontend/utils/verbs';
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);

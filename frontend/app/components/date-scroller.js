@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { DateTime } from 'luxon';
-import { daysFromToday } from 'ff-frontend/utils/dates';
+import { daysFromToday } from 'fun-forecast-frontend/utils/dates';
 
 export default class DateScrollerComponent extends Component {
   get currentOffset() {
