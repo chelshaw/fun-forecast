@@ -47,14 +47,6 @@ module.exports = {
         glow: '0 35px 35px rgba(255, 255, 255, 0.55)',
       },
       keyframes: {
-        leftToRight: {
-          '0%': { left: '-50%' },
-          '100%': { left: '150%' },
-        },
-        rightToLeft: {
-          '0%': { left: '150%' },
-          '100%': { left: '-50%' },
-        },
         bigSmall: {
           '0%, 100%': { transform: 'scale(100%)' },
           '50%': { transform: 'scale(350%)' },
@@ -65,18 +57,37 @@ module.exports = {
         },
         bicycle: {
           '0%': { left: '100%', transform: 'rotate(40deg)' },
-          '35%': { left: '65%', transform: 'rotate(35deg)' },
-          '45%': { left: '55%', transform: 'rotate(0deg)' },
+          '25%': { left: '65%', transform: 'rotate(35deg)' },
+          '35%': { left: '55%', transform: 'rotate(0deg)' },
+          '70%': { left: '0' },
           '100%': { left: '-20%' },
+        },
+        'skate-x': {
+          from: {
+            left: '-10%',
+            transform: 'rotate(30deg)',
+          },
+          to: {
+            left: '110%',
+            transform: 'rotate(0deg)',
+          },
+        },
+        'skate-y': {
+          from: {
+            top: '30%',
+          },
+          to: {
+            top: '35%',
+          },
         },
       },
       animation: {
-        'l-r': 'leftToRight 10s ease-in infinite',
-        'r-l': 'rightToLeft 8s ease-in-out infinite',
         'big-small': 'bigSmall 6s ease-in-out infinite',
         step: 'step 4s ease infinite',
-        bicycle: 'bicycle 8s linear infinite',
+        bicycle: 'bicycle 8s linear 1s infinite',
         kayak: 'spin 5s ease infinite',
+        skateboard:
+          'skate-x 5s linear 6s, skate-y 5s cubic-bezier(0.5,5,0.5,-10) 6s',
       },
     },
   },

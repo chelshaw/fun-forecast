@@ -18,13 +18,17 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
       betacode: process.env.FF_BETACODE,
+      USE_MOCK: true,
     },
+
     metricsAdapters: [
       {
         name: 'SimpleAnalytics',
         environments: ['production'],
         config: {
-          hostname: 'fun-forecast.vercel.app',
+          hostname: 'beta.myfunforecast.com',
+          // Uncomment below to use custom source
+          // src: 'sa.beta.myfunforecast.com/latest.js',
         },
       },
     ],

@@ -4,9 +4,13 @@
     <LinkTo
       @route='where.activity.detail'
       @models={{array @location.id activity.verb}}
-      class='p-3 text-center min-h-24 border-4 bg-white dark:bg-gray-600 hover:border-green-light focus:border-green-light focus-within:border-green-light border-transparent'
+      class='p-3 text-center min-h-24 bg-blue-light dark:bg-blue-darkest cursor-pointer hover:bg-green-light focus:bg-green-light dark:hover:bg-green-darker dark:focus:bg-green-darker hover:font-bold focus:font-bold'
     >
-      <p class='text-3xl'>{{activity.icon}}</p>
+      <div
+        class='rounded rounded-full bg-blue-lighter inline-block mx-auto w-12 h-12 flex justify-center items-center'
+      >
+        <p class='text-3xl'>{{activity.icon}}</p>
+      </div>
       <Typography>{{activity.verb}}</Typography>
     </LinkTo>
   {{/each}}

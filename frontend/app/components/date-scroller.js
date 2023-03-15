@@ -19,7 +19,6 @@ export default class DateScrollerComponent extends Component {
   }
 
   get prevDay() {
-    console.log('prev', this.currentOffset);
     if (this.currentOffset === 0) {
       return null;
     }

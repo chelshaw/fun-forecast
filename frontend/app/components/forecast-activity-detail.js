@@ -67,20 +67,12 @@ export default class ForecastActivityDetailComponent extends Component {
 
   @action onSeek(evt) {
     this.selected = evt ? evt.datum.datum : null;
-    console.log('yes', this.selected);
-  }
-
-  @action hoverHour(data) {
-    console.log('yes!', data);
   }
   get ticks() {
     return this.hours.map((h) => ({ label: h.time, value: h.hour }));
   }
   tickFormat(tick) {
     return tick.time;
-  }
-  tickValue(tick) {
-    return tick.value;
   }
 
   get hours() {

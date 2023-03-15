@@ -1,5 +1,5 @@
 export const verb_icons = {
-  run: '🏃🏽',
+  run: '🏃🏾',
   hike: '🥾',
   bicycle: '🚲',
   swim: '🏊🏽',

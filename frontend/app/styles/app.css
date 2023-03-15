@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a:focus, *:focus-visible {
+    outline: 4px dotted #865B00;
+}
+
+@media (prefers-color-scheme: dark) {
+    a:focus, *:focus-visible {
+        outline: 4px dotted #FFE6B0;
+    }
+}
