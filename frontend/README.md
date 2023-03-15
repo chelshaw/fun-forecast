@@ -21,7 +21,7 @@ You will need the following things properly installed on your computer.
 
 ## Running / Development
 
-- `ember serve`
+- `yarn start` (or `ember serve`)
 - Visit your app at [http://localhost:4200](http://localhost:4200).
 - Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
@@ -46,7 +46,11 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-Specify what it takes to deploy your app.
+Make sure .env has the appropriate keys. Copy the env file and fill in the missing values.
+`cp .example-env .env`
+
+- `ember deploy production`
+- `ember deploy staging`
 
 ## Further Reading / Useful Links
 
