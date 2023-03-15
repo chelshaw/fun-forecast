@@ -1,4 +1,5 @@
 import os
+import uvicorn
 from typing import Dict, Any
 
 from fastapi import FastAPI
@@ -30,11 +31,14 @@ async def health_check():
     return "I'm healthy, yo!"
 
 
-@app.get("/api/v0/go/{verb}/{lat},{long}")
-async def get_activity_forecast(verb: str, lat: float, long: float, when: str = 'today') -> Dict[str, Any]:
-    try:
-        # make sure params are valid, calculate date for hours response
+@app.get("/api/v0/location-search/{search}")
+async def get_location_suggestions(search: str) -> Dict[str, Any]:
+    return {}
 
+
+@app.get("/api/v0/go/{verb}/{lat},{long}")
+async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str, Any]:
+    try:
         # fetch activity schema
         schema: ActivitySchema = get_activity_schema_by_key(verb)
 
@@ -45,6 +49,3 @@ async def get_activity_forecast(verb: str, lat: float, long: float, when: str = 
         # return answer
     except:
         return {}
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=os.getenv("PORT", 5000))

@@ -176,6 +176,9 @@ venv/
 # Other
 notes.md
 
+.venv
+
+
 ############################ UI - EMBER
 # compiled output
 /frontend/dist/
