@@ -11,6 +11,6 @@ module.exports = function (env) {
     failOnMissingKey: true,
     path: path.join(path.dirname(__dirname), '.env'),
     // Vercel doesn't have access to .env file, so disable for env
-    enabled: !process.env.IS_VERCEL,
+    enabled: env !== 'vercel',
   };
 };
