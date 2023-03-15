@@ -10,7 +10,5 @@ module.exports = function (env) {
     fastbootAllowedKeys: [],
     failOnMissingKey: true,
     path: path.join(path.dirname(__dirname), '.env'),
-    // Prevent build failure in Vercel
-    enabled: env !== 'production',
   };
 };

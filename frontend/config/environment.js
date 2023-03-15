@@ -18,7 +18,9 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
       betacode: process.env.FF_BETACODE,
+      USE_MOCK: true,
     },
+
     metricsAdapters: [
       {
         name: 'SimpleAnalytics',
