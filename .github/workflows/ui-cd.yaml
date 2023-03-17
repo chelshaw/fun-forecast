@@ -2,7 +2,8 @@
 name: UI CD
 
 on:
-  push:
+  pull_request:
+    branches: [ "main" ]
     tags:
       - 'ui'
 
