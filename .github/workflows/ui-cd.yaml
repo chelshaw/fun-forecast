@@ -3,7 +3,6 @@ name: UI CD
 
 on:
   pull_request:
-    branches: [ "main" ]
     tags:
       - 'ui'
 
