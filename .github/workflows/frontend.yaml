@@ -1,6 +1,6 @@
 # Evolved from https://www.kaliber5.de/en/blog/preview-deployments_en
 ---
-name: UI CD
+name: Preview UI
 
 on:
   push:
@@ -28,18 +28,14 @@ jobs:
           cmd: install
           dir: 'frontend'
 
-  deploy:
-    name: Actual deploy
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
-    steps:
       - name: Deploy to staging
         run: |
           cd frontend
           yarn deploy:staging
         env:
-          FF_BETACODE: ${{ secrets.FF_BETACODE }}
-          AWS_KEY: ${{ secrets.DEPLOY_UI_AWS_KEY }}
-          AWS_SECRET: ${{ secrets.DEPLOY_UI_SSH_KEY }}
+          FF_BETACODE: ${{ secrets.FF_BETACODE_STAGING }}
+          AWS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
           STAGING_BUCKET: "staging.myfunforecast"
+
