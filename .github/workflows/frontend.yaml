@@ -25,6 +25,7 @@ jobs:
       - name: Install dependencies
         uses: borales/actions-yarn@v4
         with:
+          cmd: install
           dir: 'frontend'
 
   deploy:
