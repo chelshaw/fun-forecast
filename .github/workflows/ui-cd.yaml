@@ -1,0 +1,35 @@
+# Evolved from https://www.kaliber5.de/en/blog/preview-deployments_en
+name: UI CD
+
+on:
+  push:
+    tags:
+      - 'ui'
+
+jobs:
+  staging:
+    name: Deploy to staging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Deploy to staging
+        run: |
+          cd frontend
+          yarn deploy:staging
+        env:
+          FF_BETACODE: ${{ secrets.FF_BETACODE }}
+          AWS_KEY: ${{ secrets.DEPLOY_UI_AWS_KEY }}
+          AWS_SECRET: ${{ secrets.DEPLOY_UI_SSH_KEY }}
+          AWS_REGION: "us-east-1"
+          STAGING_BUCKET: "staging.myfunforecast"

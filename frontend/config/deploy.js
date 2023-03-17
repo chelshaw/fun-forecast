@@ -27,7 +27,8 @@ module.exports = function (deployTarget) {
     ENV.build.environment = 'production';
     ENV.s3.bucket = process.env.STAGING_BUCKET;
     ENV.s3.region = process.env.AWS_REGION;
-    ENV.cloudfront.distribution = process.env.STAGING_DISTRIBUTION;
+    // Staging env doesn't use cloudfront
+    ENV.pipeline.activateOnDeploy = false
   }
 
   if (deployTarget === 'production') {
