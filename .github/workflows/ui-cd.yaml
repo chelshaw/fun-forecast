@@ -23,6 +23,11 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
+  deploy:
+    name: Actual deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
       - name: Deploy to staging
         run: |
           cd frontend
