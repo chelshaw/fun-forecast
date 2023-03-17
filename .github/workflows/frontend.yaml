@@ -3,9 +3,9 @@ name: UI CD
 
 on:
   workflow_dispatch: {}
-  push:
-    tags:
-      - 'ui'
+  branches:
+      - main
+      - 'ui-**'
 
 jobs:
   staging:
