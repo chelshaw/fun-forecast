@@ -1,6 +1,6 @@
-from typing import List
 import datetime
 from dataclasses import dataclass
+from typing import List
 
 from shared.dataclasses import HourData, WeatherCondition
 
@@ -28,5 +28,5 @@ class HourForecast:
     score: int
     conditions: List[WeatherCondition]
     temperature: int
-    wind:		int
-    unit: 		str
+    wind: int
+    unit: str

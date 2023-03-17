@@ -1,11 +1,9 @@
-import os
-import uvicorn
-from typing import Dict, Any
+from typing import Any, Dict
 
 from fastapi import FastAPI
 
-from fun_forecast_backend.activity_schema.dataclasses import ActivitySchema
 from fun_forecast_backend.activity_schema.activity import get_activity_schema_by_key
+from fun_forecast_backend.activity_schema.dataclasses import ActivitySchema
 
 app = FastAPI(title="Fun Forecast Backend")
 
