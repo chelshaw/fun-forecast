@@ -1,12 +1,14 @@
 # Evolved from https://www.kaliber5.de/en/blog/preview-deployments_en
+---
 name: UI CD
 
 on:
-  workflow_dispatch: {}
-  branches:
+  push:
+    branches:
       - main
       - 'ui-**'
-
+  workflow_dispatch: {}
+  
 jobs:
   staging:
     name: Deploy to staging
