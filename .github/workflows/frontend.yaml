@@ -15,15 +15,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup node.js
-        uses: actions/setup-node@v1
+      - name: Setup node v16
+        uses: actions/setup-node@v3
         with:
           node-version: 16
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        uses: borales/actions-yarn@v4
+        with:
+          dir: 'frontend'
 
   deploy:
     name: Actual deploy
