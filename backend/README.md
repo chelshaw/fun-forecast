@@ -37,9 +37,16 @@ poetry install
 
 ### VSCode configuration
 
-- Do Python: Create environment with .venv
+```
+cd fun-forecast
+code .
+```
+Open the file .vscode/backend.code-workspace and click on the "open workspace" button.
 
-### Making Changes
+This will open vscode in the backend project with all of the Python settings defined in that file.
+
+
+### Changes & Deployment
 
 ```
 poetry add <library>
@@ -55,16 +62,12 @@ docker compose up -d
 docker compose down
 ```
 
+You can now use the running docker container to test as needed.
+
+To deploy changes to AWS, simply commit and push your changes to your development branch. Upon successful merge with main, github actions will build and deploy the backend image to AWS ECR. The details are in `.github/workflows/main.yaml`. To change the container version on ECR, change line 30 in `main.yaml` to one of the following: `minor, major, patch`. This will update the container version by incrementing the respective value `v{Major}.{Minor}.{Patch}`, as well as add the image to ECR with the tag `latest` to make the following ECS deployment easier.
+
 <hr/>
 
-## Misc
-
-Changing pre-commit configuration (not sure if this is necessary multiple times)
-
-```
-poetry run pre-commit install -t pre-commit
-poetry run pre-commit install -t pre-push
-```
 
 ### Troubleshooting
 
@@ -77,6 +80,6 @@ docker: Error response from daemon: Ports are not available: exposing port TCP 0
 Read (this tutorial)[https://twissmueller.medium.com/resolving-the-problem-of-port-5000-already-being-in-use-dd2fe4bad0be] to learn more (TL;DR Turn off `Airplay Receiving` in Sharing system preferences)
 
 
-## AWS Resources
+## AWS Architecture & Resources
 CICD/ECR reference: https://www.youtube.com/watch?v=Hv5UcBYseus&feature=youtu.be
 ECS tutorial: https://www.youtube.com/watch?v=esISkPlnxL0
