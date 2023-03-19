@@ -2,8 +2,9 @@
 name: Build and Push Backend Image to AWS ECR
 on:
   push:
+    paths:
+    - backend/**
     branches: [ main ]
-  pull_request: {}
 jobs:
   build-and-push:
     name: Build and Push to ECR
