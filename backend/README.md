@@ -75,3 +75,8 @@ docker: Error response from daemon: Ports are not available: exposing port TCP 0
 ```
 
 Read (this tutorial)[https://twissmueller.medium.com/resolving-the-problem-of-port-5000-already-being-in-use-dd2fe4bad0be] to learn more (TL;DR Turn off `Airplay Receiving` in Sharing system preferences)
+
+
+## AWS Resources
+CICD/ECR reference: https://www.youtube.com/watch?v=Hv5UcBYseus&feature=youtu.be
+ECS tutorial: https://www.youtube.com/watch?v=esISkPlnxL0
