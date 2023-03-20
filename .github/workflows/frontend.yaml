@@ -4,14 +4,14 @@ name: Preview UI
 
 on:
   push:
-    branches:
-      - main
-      - 'ui/**'
+    paths:
+    - frontend/**
+    branches: [ main ]
   workflow_dispatch: {}
   
 jobs:
   staging:
-    name: Deploy to staging
+    name: Deploy to production
     runs-on: ubuntu-latest
     if: ${{ github.event.label.name == 'ui' }}
     steps:
@@ -29,14 +29,15 @@ jobs:
           cmd: install
           dir: 'frontend'
 
-      - name: Deploy to staging
+      - name: Deploy to prod
         run: |
           cd frontend
-          yarn deploy:staging
+          yarn deploy:prod
         env:
-          FF_BETACODE: ${{ secrets.FF_BETACODE_STAGING }}
+          FF_BETACODE: ${{ $FF_BETACODE }}
           AWS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
-          STAGING_BUCKET: "staging.myfunforecast"
+          PROD_BUCKET: "myfunforecast"
+          PROD_DISTRIBUTION: ${{ $AWS_DISTRIBUTION }}
 
