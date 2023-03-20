@@ -6,13 +6,14 @@ on:
   push:
     branches:
       - main
-      - 'ui-**'
+      - 'ui/**'
   workflow_dispatch: {}
   
 jobs:
   staging:
     name: Deploy to staging
     runs-on: ubuntu-latest
+    if: ${{ github.event.label.name == 'ui' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
