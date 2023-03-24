@@ -5,7 +5,6 @@ import dacite
 
 from .dataclasses import ActivitySchema
 
-
 activity_map: Dict[str, str] = {
     "MOTORCYCLE": "../../resources/activity-schemas/motorbike.json",
     "HIKE": "../../resources/activity-schemas/hike.json",
@@ -20,5 +19,5 @@ def get_activity_schema_by_key(key: str) -> ActivitySchema:
         raise KeyError
 
         # add file exists check
-    json_data = json.load(activity_map[key])
+    json_data = json.loads(activity_map[key])
     return dacite.from_dict(ActivitySchema, json_data)

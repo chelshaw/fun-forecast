@@ -1,6 +1,7 @@
-from dataclasses import dataclass
 import datetime
+from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 
 class WeatherCondition(Enum):
@@ -27,5 +28,5 @@ class HourData:
     wind: int
     weather: str
     condition: WeatherCondition
-    score: int = None
+    score: Optional[int] = None
     unit: str = None

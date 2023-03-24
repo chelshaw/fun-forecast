@@ -1,19 +1,21 @@
 from typing import Any, Dict
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from fun_forecast_backend.activity_schema.activity import get_activity_schema_by_key
 from fun_forecast_backend.activity_schema.dataclasses import ActivitySchema
 
 app = FastAPI(title="Fun Forecast Backend")
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://myfunforecast.com", "http://beta.myfunforecast.com"],
+    allow_credentials=True,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+    max_age=3600,
+)
 
 # logger = get_logger()
 
@@ -45,5 +47,6 @@ async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str,
         # sunrise/sunset forecast (times)
         # compare each hour to forecast activity
         # return answer
+        return {}
     except:
         return {}

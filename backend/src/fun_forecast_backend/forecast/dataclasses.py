@@ -2,7 +2,7 @@ import datetime
 from dataclasses import dataclass
 from typing import List
 
-from shared.dataclasses import HourData, WeatherCondition
+from fun_forecast_backend.shared.dataclasses import HourData, WeatherCondition
 
 
 @dataclass

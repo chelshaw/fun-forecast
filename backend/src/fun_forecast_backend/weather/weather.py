@@ -3,7 +3,7 @@ from requests import Response
 
 import dacite
 
-from .dataclasses import WeatherApiPoint, WeatherData
+from fun_forecast_backend.weather.dataclasses import WeatherApiPoint, WeatherData
 
 
 def point_from_coords(lat: float, long: float) -> WeatherApiPoint:
