@@ -26,7 +26,8 @@ class HourData:
     daytime: bool
     temp: int
     wind: int
-    weather: str
+    weatherStr: str
+    weatherCode: str
     condition: WeatherCondition
     score: Optional[int] = None
     unit: str = None
