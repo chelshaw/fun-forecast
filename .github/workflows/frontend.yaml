@@ -34,10 +34,10 @@ jobs:
           cd frontend
           yarn deploy:prod
         env:
-          FF_BETACODE: ${{ $FF_BETACODE }}
+          FF_BETACODE: ${{ env.FF_BETACODE }}
           AWS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
           PROD_BUCKET: "myfunforecast"
-          PROD_DISTRIBUTION: ${{ $AWS_DISTRIBUTION }}
+          PROD_DISTRIBUTION: ${{ env.AWS_DISTRIBUTION }}
 
