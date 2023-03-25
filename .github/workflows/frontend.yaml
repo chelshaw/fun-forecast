@@ -1,6 +1,6 @@
 # Evolved from https://www.kaliber5.de/en/blog/preview-deployments_en
 ---
-name: Preview UI
+name: Deploy UI
 
 on:
   push:
@@ -13,7 +13,6 @@ jobs:
   staging:
     name: Deploy to production
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'ui' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
