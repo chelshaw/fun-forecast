@@ -44,7 +44,7 @@ async def get_location_suggestions(search: str) -> Dict[str, Any]:
 
 @app.get("/api/v0/go/{verb}/{lat},{long}")
 async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str, Any]:
-    logger.debug(f"get_activity_forecast called, inputs verb={verb}, lat={lat}, long={long}")
+    logger.debug(f"Processing get_activity_forecast request, inputs verb={verb}, lat={lat}, long={long}")
     try:
         # fetch activity schema
         schema: ActivitySchema = get_activity_schema_by_key(verb)
@@ -55,7 +55,9 @@ async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str,
         # predict activity viability
         forecast: Forecast = calculate_forecast(schema, hours)
 
+        logger.debug(f'Successfully processed get_activity_forecast, inputs verb={verb}, lat={lat}, long={long}')
         return asdict(forecast)
     except:
         logger.error(f"get_activity_forecast failed, inputs verb={verb}, lat={lat}, long={long}")
-        return {}
+        empty_return = Forecast(verb=verb)
+        return asdict(empty_return)

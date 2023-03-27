@@ -5,6 +5,7 @@ from typing import Optional
 
 
 class WeatherCondition(Enum):
+    UNKNOWN = -1
     CLEAR = 0
     MOSTLY_CLEAR = 1
     PARTLY_CLEAR = 2
@@ -14,7 +15,10 @@ class WeatherCondition(Enum):
     FOG = 6
     RAIN = 7
     STORM = 8
-    UNKNOWN = 9
+    SNOW = 9
+    SLEET = 10
+    HAIL = 11
+    ICE = 12
 
 
 @dataclass
@@ -24,7 +28,7 @@ class HourData:
     timezone: Optional[datetime.timezone]
     start: datetime.datetime
     end: datetime.datetime
-    daytime: bool
+    isDaytime: bool
     weatherStr: str
     weatherCode: WeatherCondition
     score: Optional[int] = None

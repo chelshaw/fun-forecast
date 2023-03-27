@@ -49,6 +49,7 @@ def weather_from_point(p: WeatherApiPoint) -> WeatherData:
     if r.status_code != 200:
         logger.error(f"Error in weather_from_point request, status code {r.status_code}")
 
+    print(r.json())
     try:
         weather_data = dacite.from_dict(WeatherData, r.json())
     except Exception as e:
@@ -74,7 +75,7 @@ def period_to_hour_data(d: Period) -> HourData:
             timezone=start.tzinfo,
             start=start,
             end=end,
-            daytime=d.isDaytime,
+            isDaytime=d.isDaytime,
             weatherStr=d.shortForecast.lower(),
             weatherCode=assign_weather_code(d.shortForecast.lower()),
             unit="F",
@@ -96,6 +97,18 @@ def assign_weather_code(weather_string: str) -> WeatherCondition:
 
     if "fog" in weather_string:
         return WeatherCondition.FOG
+
+    if "snow" in weather_string:
+        return WeatherCondition.SNOW
+
+    if "hail" in weather_string:
+        return WeatherCondition.HAIL
+
+    if "sleet" in weather_string:
+        return WeatherCondition.SLEET
+
+    if "ice" in weather_string:
+        return WeatherCondition.ICE
 
     if weather_string == "sunny" or weather_string == "clear":
         return WeatherCondition.CLEAR
