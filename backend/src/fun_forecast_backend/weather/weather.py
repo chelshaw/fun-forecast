@@ -20,7 +20,9 @@ def hourly_forecast_for_coords(lat: float, long: float) -> List[HourData]:
     for period in weather.properties.periods:
         hour = period_to_hour_data(period)
         hours.append(hour)
+
     return hours
+
 
 def point_from_coords(lat: float, long: float) -> WeatherApiPoint:
     url = f"https://api.weather.gov/points/{lat},{long}"
@@ -30,18 +32,30 @@ def point_from_coords(lat: float, long: float) -> WeatherApiPoint:
     if r.status_code != 200:
         logger.error(f"Error in point_from_coords request, status code {r.status_code}")
 
-    return dacite.from_dict(WeatherApiPoint, r.json())
+    try:
+        point = dacite.from_dict(WeatherApiPoint, r.json())
+    except Exception as e:
+        logger.error(e)
+        raise e
+
+    return point
 
 
 def weather_from_point(p: WeatherApiPoint) -> WeatherData:
-    url = f"https://api.weather.gov/gridpoints/{p.Properties.Id}/{p.Properties.X},{p.Properties.Y}/forecast/hourly?units=us"
+    url = f"https://api.weather.gov/gridpoints/{p.properties.gridId}/{p.properties.gridX},{p.properties.gridY}/forecast/hourly?units=us"
     logger.debug(f"Fetching data from: {url}")
 
     r: Response = requests.get(url)
     if r.status_code != 200:
         logger.error(f"Error in weather_from_point request, status code {r.status_code}")
 
-    return dacite.from_dict(WeatherData, r.json())
+    try:
+        weather_data = dacite.from_dict(WeatherData, r.json())
+    except Exception as e:
+        logger.error(e)
+        raise e
+
+    return weather_data
 
 
 def period_to_hour_data(d: Period) -> HourData:
@@ -49,26 +63,26 @@ def period_to_hour_data(d: Period) -> HourData:
     # datetime.strptime("Tue May 08 15:14:45 +0800 2012","%a %b %d %H:%M:%S %z %Y")
     # layout = "2006-01-02T15:04:05-07:00" "01/02"
     layout = "%Y-%m-%dT%H:%M:%S%z"
-
-    # TODO Add try/except here
     start = datetime.strptime(d.startTime, layout)
     end = datetime.strptime(d.endTime, layout)
 
-    # TODO figure out how to make this work
-    zone = start.zone()
-
     # TODO: Does the timezone come back based on location or requester?
-    h = HourData(
-        unit="F",
-        timezone=zone,
-        start=start,
-        end=end,
-        daytime=d.isDaytime,
-        temp=d.temperature,
-        wind=d.windSpeed.split(" "),
-        weatherStr=d.weatherStr.lower(),
-        weatherCode=assign_weather_code(d.weatherStr.lower()),
-    )
+    try:
+        h = HourData(
+            temp=d.temperature,
+            wind=int(d.windSpeed.split(" ")[0]),
+            timezone=start.tzinfo,
+            start=start,
+            end=end,
+            daytime=d.isDaytime,
+            weatherStr=d.shortForecast.lower(),
+            weatherCode=assign_weather_code(d.shortForecast.lower()),
+            unit="F",
+        )
+    except Exception as e:
+        logger.error(e)
+        raise e
+
     return h
 
 

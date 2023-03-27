@@ -19,15 +19,13 @@ class WeatherCondition(Enum):
 
 @dataclass
 class HourData:
-    timezone: str
-    location: str
+    temp: int
+    wind: int
+    timezone: Optional[datetime.timezone]
     start: datetime.datetime
     end: datetime.datetime
     daytime: bool
-    temp: int
-    wind: int
     weatherStr: str
-    weatherCode: str
-    condition: WeatherCondition
+    weatherCode: WeatherCondition
     score: Optional[int] = None
     unit: str = None

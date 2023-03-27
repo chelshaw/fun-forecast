@@ -1,23 +1,39 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict
 
 
 @dataclass
-class Range:
-    low: int
-    high: int
-    with_weather: List[int]
+class Wind:
+    min: int
+    max: int
+    ideal: int
+    units: str
+
+
+@dataclass
+class Temp:
+    min: int
+    max: int
+    ideal: int
+    units: str
+
+
+@dataclass
+class WeatherConditions:
+    acceptable: Dict[str, int]
+    never: List[str]
+
+
+@dataclass
+class LightConditions:
+    daytime: bool
+    nighttime: bool
 
 
 @dataclass
 class ActivitySchema:
     verb: str
-    temp_unit: str
-    duration: int
-    temp_never_below: int
-    temp_never_above: int
-    wind_never_below: int
-    wind_never_above: int
-    weather_never: List[str]
-    daytime_only: bool
-    ranges: List[Range]
+    wind: Wind
+    temp: Temp
+    weather_conditions: WeatherConditions
+    light_conditions: LightConditions

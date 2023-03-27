@@ -45,8 +45,7 @@ class Period:
     temperature: int
     temperatureUnit: str
     windSpeed: str
-    shortforecast: str
-    weatherStr: str
+    shortForecast: str
 
 
 @dataclass

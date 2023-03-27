@@ -2,7 +2,7 @@ import datetime
 from dataclasses import dataclass
 from typing import List
 
-from fun_forecast_backend.shared.dataclasses import HourData, WeatherCondition
+from fun_forecast_backend.shared.dataclasses import WeatherCondition
 
 
 @dataclass
@@ -15,18 +15,18 @@ class LocationInfo:
 
 
 @dataclass
-class NewForecastOutput:
-    verb: str
-    location: LocationInfo
-    forecast: List[HourData]
-
-
-@dataclass
-class HourForecast:
+class EvaluatedHour:
     start: datetime.datetime
     end: datetime.datetime
-    score: int
+    score: float
     conditions: List[WeatherCondition]
     temperature: int
     wind: int
     unit: str
+
+
+@dataclass
+class Forecast:
+    verb: str
+    location: LocationInfo
+    evaluated_hours: List[EvaluatedHour]
