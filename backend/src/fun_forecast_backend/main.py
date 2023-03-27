@@ -9,6 +9,8 @@ from fun_forecast_backend.activity_schema.dataclasses import ActivitySchema
 from fun_forecast_backend.core.standard_logger import get_logger
 from fun_forecast_backend.forecast.dataclasses import Forecast
 from fun_forecast_backend.forecast.forecast import calculate_forecast
+from fun_forecast_backend.location.location import get_location_suggestions
+from fun_forecast_backend.location.dataclasses import GeocodeResponse
 from fun_forecast_backend.shared.dataclasses import HourData
 from fun_forecast_backend.weather.weather import hourly_forecast_for_coords
 
@@ -37,9 +39,9 @@ async def health_check():
     return "I'm healthy, yo!"
 
 
-@app.get("/api/v0/location-search/{search}")
-async def get_location_suggestions(search: str) -> Dict[str, Any]:
-    return {}
+@app.get("/api/v0/location-search/{keyword}")
+async def search_location_by_keyword(keyword: str) -> GeocodeResponse:
+    return get_location_suggestions(keyword)
 
 
 @app.get("/api/v0/go/{verb}/{lat},{long}")
