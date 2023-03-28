@@ -9,11 +9,11 @@ function getRandomInt(max) {
 }
 
 export default class ApiService extends Service {
-  baseUrl = 'http://localhost:4200/api/v0';
+  baseUrl = ENV.APP.apiBase;
 
   get headers() {
     var headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
+    // headers.append('Access-Control-Allow-Origin', '*');
     return {
       method: 'GET',
       headers,

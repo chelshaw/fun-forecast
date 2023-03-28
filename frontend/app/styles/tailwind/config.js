@@ -62,6 +62,13 @@ module.exports = {
           '70%': { left: '0' },
           '100%': { left: '-20%' },
         },
+        bicycleSmall: {
+          '0%': { left: '100%', transform: 'rotate(40deg)' },
+          '25%': { left: '65%', transform: 'rotate(35deg)' },
+          '35%': { left: '55%', transform: 'rotate(0deg)' },
+          '80%': { left: '-50%' },
+          '100%': { left: '-100%' },
+        },
         'skate-x': {
           from: {
             left: '-10%',
@@ -85,9 +92,11 @@ module.exports = {
         'big-small': 'bigSmall 6s ease-in-out infinite',
         step: 'step 4s ease infinite',
         bicycle: 'bicycle 8s linear 1s infinite',
+        'bicycle-small': 'bicycleSmall 8s linear 1s infinite',
         kayak: 'spin 5s ease infinite',
         skateboard:
           'skate-x 5s linear 6s, skate-y 5s cubic-bezier(0.5,5,0.5,-10) 6s',
+        'spin-slow': 'spin 3s linear infinite;'
       },
     },
   },

@@ -37,6 +37,21 @@ export default class LocationService extends Service {
     return this.locations.find((val) => val.id === id);
   }
 
+  getAll() {
+    return this.locations;
+  }
+
+  clear() {
+    console.log('here agins')
+    const count = this.locations.length;
+    window.localStorage.removeItem(LOCALSTORAGE_KEY);
+    this.locations.splice(0, count);
+  }
+
+  removeIdx(idx) {
+    this.locations.splice(idx, 1);
+  }
+
   _save() {
     window.localStorage.setItem(
       LOCALSTORAGE_KEY,

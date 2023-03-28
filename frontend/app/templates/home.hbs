@@ -26,10 +26,10 @@
       class='hidden md:block absolute top-0 left-60 translate-y--20 text-9xl lg:scale-150'
     >☁️</span>
     <span
-      class='hidden md:block absolute bottom-24 right-40 xl:bottom-32 lg:right-64 text-8xl'
+      class='absolute bottom-5 md:bottom-24 right-20 md:right-40 xl:bottom-32 lg:right-64 text-8xl'
     >☁️</span>
     <span
-      class='absolute top-1/3 left-20 md:top-10 md:left-20 origin-top-left motion-safe:animate-step inline-block text-8xl'
+      class='absolute top-5 left-20 md:top-10 md:left-20 origin-top-left motion-safe:animate-step inline-block text-4xl md:text-8xl'
     >
       🥾
     </span>
@@ -39,7 +39,7 @@
       🤿
     </span>
     <span
-      class='absolute origin-bottom-right motion-safe:animate-bicycle bottom-1 text-9xl motion-reduce:right-1/4'
+      class='absolute origin-bottom-right motion-safe:animate-bicycle-small md:motion-safe:animate-bicycle bottom-1 text-9xl motion-reduce:right-1/4'
     >
       🚲
     </span>
@@ -52,7 +52,7 @@
       ⛰
     </span>
     <span
-      class='absolute text-8xl top-0 -left-40 origin-center motion-safe:animate-skateboard'
+      class='absolute text-5xl md:text-8xl top-0 -left-40 origin-center motion-safe:animate-skateboard'
     >
       🛹
     </span>
@@ -60,10 +60,10 @@
 </section>
 
 <section
-  class='w-full bg-green-dark dark:bg-green-darkest text-center text-white p-24'
+  class='w-full bg-green-dark dark:bg-green-darkest text-center text-white py-24 px-8 md:p-24'
 >
   <div class='mx-auto max-w-sm'>
-    <h2 class='text-3xl font-bold pb-4 relative'>
+    <h2 class='text-3xl font-bold pb-4 relative mx-auto mx-16'>
       Welcome to Fun Forecast
       <svg
         aria-hidden='true'
@@ -113,16 +113,16 @@
     </h2>
     <p class='text-xl'>Where outdoor enthusiasts find out the best time to do
       the things they love.</p>
-    <div class='flex text-center justify-around'>
+    <div class='md:flex text-center justify-around'>
       <LinkTo
         @route='example'
-        class='text-green-darkest dark:text-green-light hover:text-white transition font-bold underline underline-offset-4 p-4'
+        class='text-green-darkest dark:text-green-light hover:text-white transition font-bold underline underline-offset-4 p-4 block'
       >
         👀 Take a peek
       </LinkTo>
       <LinkTo
         @route='where'
-        class='text-green-darkest dark:text-green-light hover:text-white transition font-bold underline underline-offset-4 p-4'
+        class='text-green-darkest dark:text-green-light hover:text-white transition font-bold underline underline-offset-4 p-4 block'
       >
         🗝 Beta Tester Access
       </LinkTo>
@@ -133,15 +133,15 @@
 <div
   class='fixed bottom-0 left-0 right-0 p-2 bg-yellow-bright dark:bg-yellow-darkest md:tracking-widest font-bold text-white text-center flex justify-around'
 >
-  <span>🍪</span>
-  <span>🍪</span>
-  <span>🍪</span>
-  <span>🍪</span>
-  <span>🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
   <span>We don't use cookies</span>
-  <span>🍪</span>
-  <span>🍪</span>
-  <span>🍪</span>
-  <span>🍪</span>
-  <span>🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
 </div>
