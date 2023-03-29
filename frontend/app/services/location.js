@@ -36,16 +36,19 @@ export default class LocationService extends Service {
   getById(id) {
     return this.locations.find((val) => val.id === id);
   }
+  
+  getByCoords(coordString) {
+    return this.locations.find((val) => `${val.lat},${val.lng}` === coordString);
+  }
 
   getAll() {
     return this.locations;
   }
 
   clear() {
-    console.log('here agins')
     const count = this.locations.length;
-    window.localStorage.removeItem(LOCALSTORAGE_KEY);
     this.locations.splice(0, count);
+    this._save(LOCALSTORAGE_KEY, []);
   }
 
   removeIdx(idx) {

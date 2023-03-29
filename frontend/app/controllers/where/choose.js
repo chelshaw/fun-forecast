@@ -8,6 +8,6 @@ export default class WhereChooseController extends Controller {
 
   @action onLocationSelect(locData) {
     this.location.add(locData);
-    this.router.transitionTo('where.activity.choose', { loc_ref: locData.id });
+    this.router.transitionTo('where.activity.choose', { loc_ref: `${locData.lat},${locData.lng}` });
   }
 }

@@ -7,6 +7,6 @@ export default class WhereActivityChooseRoute extends Route {
   model() {
     const { loc_ref } = this.paramsFor('where.activity');
     // TODO: Handle error case if cannot find location
-    return this.location.getById(loc_ref);
+    return this.location.getByCoords(loc_ref);
   }
 }
