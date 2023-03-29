@@ -3,6 +3,7 @@ from typing import List
 
 import requests
 from requests import Response
+from decimal import *
 
 import dacite
 
@@ -24,8 +25,16 @@ def hourly_forecast_for_coords(lat: float, long: float) -> List[HourData]:
     return hours
 
 
+def convert_to_point_coord(coord:float) -> str:
+    precise = Decimal(coord).quantize(Decimal('.0001'))
+    logger.debug(f"converted coord {coord} to precise {precise}")
+    return str(precise)
+
+
 def point_from_coords(lat: float, long: float) -> WeatherApiPoint:
-    url = f"https://api.weather.gov/points/{lat},{long}"
+    preciseLat = convert_to_point_coord(lat)
+    preciseLong = convert_to_point_coord(long)
+    url = f"https://api.weather.gov/points/{preciseLat},{preciseLong}"
     logger.debug(f"Fetching data from: {url}")
 
     r: Response = requests.get(url)
