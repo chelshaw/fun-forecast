@@ -20,7 +20,7 @@ module.exports = function (environment) {
       betacode: process.env.FF_BETACODE,
       USE_MOCK: true,
       // TODO: replace with real
-      apiBase: 'http://localhost:4200/api/v0'
+      apiBase: 'http://localhost:4200/api/v0',
     },
 
     metricsAdapters: [
@@ -47,7 +47,7 @@ module.exports = function (environment) {
       // ... other stuff here
       'connect-src': "'self' http://localhost:5001",
     };
-    ENV.APP.apiBase = 'http://localhost:4200/api/v0'
+    ENV.APP.apiBase = 'http://localhost:4200/api/v0';
   }
 
   if (environment === 'test') {

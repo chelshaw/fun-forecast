@@ -10,14 +10,16 @@ module.exports = {
       white: colors.white,
       gray: colors.gray,
       blue: {
+        lightest: '#E8F9FF',
         lighter: '#C1F0FF',
         light: '#87E2FF',
         bright: '#2ECDFF',
         dark: '#00A1E0',
-        darker: '#0070A8',
+        darker: '#00699E',
         darkest: '#004368',
       },
       green: {
+        lightest: '#E2FCEB',
         lighter: '#B0F7C7',
         light: '#66DE8E',
         bright: '#2CCD62',
@@ -26,6 +28,7 @@ module.exports = {
         darkest: '#16542B',
       },
       red: {
+        lightest: '#FFECEC',
         lighter: '#FFBBBD',
         light: '#FF9295',
         bright: '#F14B50',
@@ -34,12 +37,22 @@ module.exports = {
         darkest: '#6B1215',
       },
       yellow: {
+        lightest: '#FFE6B0',
         lighter: '#FFE6B0',
         light: '#FDD173',
         bright: '#FEBB2D',
         dark: '#DE9E15',
         darker: '#BD8203',
         darkest: '#865B00',
+      },
+      magenta: {
+        lightest: '#FCE8FC',
+        lighter: '#F5B5F6',
+        light: '#F48DF6',
+        bright: '#F652F9',
+        dark: '#DE25E2',
+        darker: '#A52EA7',
+        darkest: '#712572',
       },
     },
     extend: {
@@ -96,7 +109,7 @@ module.exports = {
         kayak: 'spin 5s ease infinite',
         skateboard:
           'skate-x 5s linear 6s, skate-y 5s cubic-bezier(0.5,5,0.5,-10) 6s',
-        'spin-slow': 'spin 3s linear infinite;'
+        'spin-slow': 'spin 3s linear infinite;',
       },
     },
   },

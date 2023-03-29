@@ -1,5 +1,5 @@
 <section
-  class='p-8 pb-32 bg-blue-bright dark:bg-blue-darkest relative overflow-x-clip'
+  class='p-8 pb-32 bg-gradient-to-b from-blue-bright to-blue-light dark:from-blue-darkest dark:to-blue-darker relative overflow-x-clip'
 >
   <svg
     viewBox='0 0 1150 220'
@@ -14,7 +14,7 @@
     />
     <text
       x='60'
-      class='font-bold text-display text-7xl drop-shadow-lg fill-white'
+      class='font-bold text-display text-7xl fill-blue-darkest dark:fill-white'
     >
       <textPath xlink:href='#curve'>
         Ooooh this is gonna be fun!!
@@ -60,10 +60,10 @@
 </section>
 
 <section
-  class='w-full bg-green-dark dark:bg-green-darkest text-center text-white py-24 px-8 md:p-24'
+  class='w-full bg-gradient-to-b from-green-bright to-green-light dark:from-green-darkest dark:to-green-darker text-center text-gray-800 dark:text-white py-24 px-8 md:p-24'
 >
   <div class='mx-auto max-w-sm'>
-    <h2 class='text-3xl font-bold pb-4 relative mx-auto mx-16'>
+    <h2 class='text-3xl font-bold pb-4 relative mx-auto w-48'>
       Welcome to Fun Forecast
       <svg
         aria-hidden='true'
@@ -75,7 +75,7 @@
       >
         <g>
           <rect
-            class='fill-yellow-bright'
+            class='fill-yellow-lighter dark:fill-yellow-bright'
             x='37'
             y='77'
             width='50'
@@ -83,7 +83,7 @@
             rx='5'
           />
           <rect
-            class='fill-yellow-bright'
+            class='fill-yellow-lighter dark:fill-yellow-bright'
             y='50'
             width='50'
             height='10'
@@ -91,7 +91,7 @@
             transform='rotate(-90 0 50)'
           />
           <rect
-            class='fill-yellow-bright'
+            class='fill-yellow-lighter dark:fill-yellow-bright'
             x='17'
             y='52.3013'
             width='50'
@@ -100,7 +100,7 @@
             transform='rotate(-60 17 52.3013)'
           />
           <rect
-            class='fill-yellow-bright'
+            class='fill-yellow-lighter dark:fill-yellow-bright'
             x='30'
             y='62'
             width='50'
@@ -111,37 +111,38 @@
         </g>
       </svg>
     </h2>
-    <p class='text-xl'>Where outdoor enthusiasts find out the best time to do
+    <p class='text-xl mb-4'>Where outdoor enthusiasts find out the best time to do
       the things they love.</p>
     <div class='md:flex text-center justify-around'>
       <LinkTo
         @route='example'
-        class='text-green-darkest dark:text-green-light hover:text-white transition font-bold underline underline-offset-4 p-4 block'
+        class='text-green-darkest dark:text-green-lightest border-4 border-dotted border-transparent hover:border-green-darkest dark:hover:border-green-lightest transition font-bold underline underline-offset-4 p-2 block'
       >
         👀 Take a peek
       </LinkTo>
       <LinkTo
         @route='where'
-        class='text-green-darkest dark:text-green-light hover:text-white transition font-bold underline underline-offset-4 p-4 block'
+        class='text-green-darkest dark:text-green-lightest border-4 border-dotted border-transparent hover:border-green-darkest dark:hover:border-green-lightest transition font-bold underline underline-offset-4 p-2 block'
       >
         🗝 Beta Tester Access
       </LinkTo>
     </div>
   </div>
+  <div class="h-12"></div>
 </section>
 
 <div
-  class='fixed bottom-0 left-0 right-0 p-2 bg-yellow-bright dark:bg-yellow-darkest md:tracking-widest font-bold text-white text-center flex justify-around'
+  class='fixed bottom-2 left-2 right-2 p-2 bg-yellow-lighter dark:bg-yellow-darkest md:tracking-widest text-yellow-darkest dark:text-yellow-lightest text-center flex justify-around border-2 border-yellow-dark'
 >
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span>We don't use cookies</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
-  <span class="motion-safe:animate-spin-slow duration-1000">🍪</span>
+  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
+  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
+  <span class="motion-safe:animate-spin-slow">🍪</span>
+  <span class="motion-safe:animate-spin-slow">🍪</span>
+  <span class="motion-safe:animate-spin-slow">🍪</span>
+  <span>We don't use cookies.</span>
+  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
+  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
+  <span class="motion-safe:animate-spin-slow">🍪</span>
+  <span class="motion-safe:animate-spin-slow">🍪</span>
+  <span class="motion-safe:animate-spin-slow">🍪</span>
 </div>
