@@ -29,7 +29,7 @@ export default class ApiService extends Service {
     throw new Error(response.statusText);
   }
 
-  singleActivity(verb, location, when) {
+  async singleActivity(verb, location, when) {
     if (!allowedVerbs().includes(verb)) {
       throw new Error(`No activity schema for "${verb}"`);
     }
@@ -40,7 +40,11 @@ export default class ApiService extends Service {
       if (when) {
         path += `?when=${when}`;
       }
-      return this.fetch(path);
+      const results = await this.fetch(path);
+      return {
+        forecast: results.evaluated_hours,
+        ...results,
+      }
     }
     return this.generateForecast(verb, location);
   }
