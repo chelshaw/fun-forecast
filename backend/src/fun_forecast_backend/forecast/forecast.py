@@ -1,4 +1,3 @@
-import math
 import statistics
 from typing import List
 
@@ -24,6 +23,9 @@ def calculate_forecast(schema: ActivitySchema, hours: List[HourData]) -> Forecas
 
 
 def evaluate_hour_v0(schema: ActivitySchema, hour: HourData) -> float:
+    if not is_wind_acceptable(schema, hour.wind):
+        return -1.0
+
     if not is_weather_acceptable(schema, hour.weatherCode):
         return -1.0
 
@@ -41,6 +43,13 @@ def is_weather_acceptable(schema: ActivitySchema, weather_condition: WeatherCond
     unacceptable_weather_conditions = [x.lower() for x in schema.weather_conditions.never]
     if weather_condition not in unacceptable_weather_conditions:
         logger.debug(f'Weather condition is acceptable: \'{weather_condition}\' not in {unacceptable_weather_conditions}')
+        return True
+    return False
+
+
+def is_wind_acceptable(schema: ActivitySchema, wind: int) -> bool:
+    if int(schema.wind.max) > wind > int(schema.wind.min):
+        logger.debug(f'Wind is acceptable: {wind}, min: {schema.wind.min}, max: {schema.wind.max}')
         return True
     return False
 

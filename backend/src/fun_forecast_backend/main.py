@@ -2,7 +2,9 @@ from dataclasses import asdict
 from typing import Any, Dict, List
 
 from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import JSONResponse
 
 from fun_forecast_backend.activity_schema.activity import get_activity_schema_by_key
 from fun_forecast_backend.activity_schema.dataclasses import ActivitySchema
@@ -45,7 +47,7 @@ async def search_location_by_keyword(keyword: str) -> GeocodeResponse:
 
 
 @app.get("/api/v0/go/{verb}/{lat},{long}")
-async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str, Any]:
+async def get_activity_forecast(verb: str, lat: float, long: float) -> JSONResponse:
     logger.debug(f"Processing get_activity_forecast request, inputs verb={verb}, lat={lat}, long={long}")
     try:
         # fetch activity schema
@@ -58,8 +60,9 @@ async def get_activity_forecast(verb: str, lat: float, long: float) -> Dict[str,
         forecast: Forecast = calculate_forecast(schema, hours)
 
         logger.debug(f'Successfully processed get_activity_forecast, inputs verb={verb}, lat={lat}, long={long}')
-        return asdict(forecast)
-    except:
-        logger.error(f"get_activity_forecast failed, inputs verb={verb}, lat={lat}, long={long}")
+        json_compatible_item_data = jsonable_encoder(forecast)
+        return JSONResponse(content=json_compatible_item_data)
+    except Exception as e:
+        logger.error(f"Failed get_activity_forecast, inputs verb={verb}, lat={lat}, long={long}: {e}")
         empty_return = Forecast(verb=verb)
         return asdict(empty_return)

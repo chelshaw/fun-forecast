@@ -49,7 +49,6 @@ def weather_from_point(p: WeatherApiPoint) -> WeatherData:
     if r.status_code != 200:
         logger.error(f"Error in weather_from_point request, status code {r.status_code}")
 
-    print(r.json())
     try:
         weather_data = dacite.from_dict(WeatherData, r.json())
     except Exception as e:
@@ -64,17 +63,15 @@ def period_to_hour_data(d: Period) -> HourData:
     # datetime.strptime("Tue May 08 15:14:45 +0800 2012","%a %b %d %H:%M:%S %z %Y")
     # layout = "2006-01-02T15:04:05-07:00" "01/02"
     layout = "%Y-%m-%dT%H:%M:%S%z"
-    start = datetime.strptime(d.startTime, layout)
-    end = datetime.strptime(d.endTime, layout)
 
     # TODO: Does the timezone come back based on location or requester?
     try:
         h = HourData(
             temp=d.temperature,
             wind=int(d.windSpeed.split(" ")[0]),
-            timezone=start.tzinfo,
-            start=start,
-            end=end,
+            # timezone=start.tzinfo,
+            start=datetime.strptime(d.startTime, layout),
+            end=datetime.strptime(d.endTime, layout),
             isDaytime=d.isDaytime,
             weatherStr=d.shortForecast.lower(),
             weatherCode=assign_weather_code(d.shortForecast.lower()),

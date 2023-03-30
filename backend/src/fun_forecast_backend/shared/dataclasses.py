@@ -25,7 +25,7 @@ class WeatherCondition(Enum):
 class HourData:
     temp: int
     wind: int
-    timezone: Optional[datetime.timezone]
+    # timezone: Optional[datetime.timezone]
     start: datetime.datetime
     end: datetime.datetime
     isDaytime: bool
