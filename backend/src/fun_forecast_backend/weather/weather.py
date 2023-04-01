@@ -3,7 +3,7 @@ from typing import List
 
 import requests
 from requests import Response
-from decimal import *
+from decimal import Decimal
 
 import dacite
 
