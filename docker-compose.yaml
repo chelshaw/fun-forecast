@@ -5,6 +5,8 @@ services:
     image: ff-backend:latest
     ports:
       - 5001:5001
+    env_file:
+      - backend/secrets.env
     environment:
       HOST: 0.0.0.0
       PORT: 5001
