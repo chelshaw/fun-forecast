@@ -18,6 +18,8 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
+    "deploy:staging": "ember deploy staging",
+    "deploy:prod": "ember deploy production",
     "start": "ember serve --proxy=http://localhost:5000 --port=4200",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test"

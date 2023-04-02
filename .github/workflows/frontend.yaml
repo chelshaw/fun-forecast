@@ -1,0 +1,42 @@
+# Evolved from https://www.kaliber5.de/en/blog/preview-deployments_en
+---
+name: Deploy UI
+
+on:
+  push:
+    paths:
+    - frontend/**
+    branches: [ main ]
+  workflow_dispatch: {}
+  
+jobs:
+  staging:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup node v16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: 'frontend'
+
+      - name: Deploy to prod
+        run: |
+          cd frontend
+          yarn deploy:prod
+        env:
+          FF_BETACODE: ${{ env.FF_BETACODE }}
+          AWS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-east-1"
+          PROD_BUCKET: "myfunforecast"
+          PROD_DISTRIBUTION: ${{ env.AWS_DISTRIBUTION }}
+
