@@ -46,6 +46,7 @@ export default class ApiService extends Service {
         ...results,
       }
     }
+    console.debug(`Generating single activity forecast for ${verb} in ${location.name}`)
     return this.generateForecast(verb, location);
   }
 
