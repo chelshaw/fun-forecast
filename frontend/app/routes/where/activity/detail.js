@@ -17,7 +17,7 @@ export default class WhereActivityDetailRoute extends Route {
 
   beforeModel() {
     const { loc_ref } = this.paramsFor('where.activity');
-    const location = this.location.getById(loc_ref);
+    const location = this.location.getByCoords(loc_ref);
     if (!location) {
       return this.router.transitionTo('where.choose');
     }
@@ -47,7 +47,8 @@ export default class WhereActivityDetailRoute extends Route {
   async model(params, transition) {
     const { verb } = params;
     const { loc_ref } = this.paramsFor('where.activity');
-    const location = this.getLocationDetails(loc_ref);
+    // If location doesn't exist we redirect before we get here
+    const location = this.location.getByCoords(loc_ref);
     const whenDate = this.calcWhen(transition.to.queryParams.when);
     const when = this.relativeWhen(whenDate);
     const data = await this.api.singleActivity(
@@ -62,13 +63,5 @@ export default class WhereActivityDetailRoute extends Route {
       dayParam: transition.to.queryParams.when || 0,
       maxDay: MAX_DATE,
     };
-  }
-
-  getLocationDetails(locId) {
-    const location = this.location.getById(locId);
-    if (undefined === location) {
-      throw new Error('No location found');
-    }
-    return location;
   }
 }

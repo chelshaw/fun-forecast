@@ -18,7 +18,9 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
       betacode: process.env.FF_BETACODE,
-      USE_MOCK: true,
+      USE_MOCK: false,
+      // TODO: replace with real
+      apiBase: 'http://localhost:4200/api/v0',
     },
 
     metricsAdapters: [
@@ -40,11 +42,12 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.APP.USE_MOCK = true;
+    ENV.APP.USE_MOCK = false;
     ENV.contentSecurityPolicy = {
       // ... other stuff here
-      'connect-src': "'self' http://localhost:5000",
+      'connect-src': "'self' http://localhost:5001",
     };
+    ENV.APP.apiBase = 'http://localhost:4200/api/v0';
   }
 
   if (environment === 'test') {

@@ -9,11 +9,11 @@ function getRandomInt(max) {
 }
 
 export default class ApiService extends Service {
-  baseUrl = 'http://localhost:4200/api/v0';
+  baseUrl = ENV.APP.apiBase;
 
   get headers() {
     var headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
+    // headers.append('Access-Control-Allow-Origin', '*');
     return {
       method: 'GET',
       headers,
@@ -29,7 +29,7 @@ export default class ApiService extends Service {
     throw new Error(response.statusText);
   }
 
-  singleActivity(verb, location, when) {
+  async singleActivity(verb, location, when) {
     if (!allowedVerbs().includes(verb)) {
       throw new Error(`No activity schema for "${verb}"`);
     }
@@ -40,8 +40,13 @@ export default class ApiService extends Service {
       if (when) {
         path += `?when=${when}`;
       }
-      return this.fetch(path);
+      const results = await this.fetch(path);
+      return {
+        forecast: results.evaluated_hours,
+        ...results,
+      }
     }
+    console.debug(`Generating single activity forecast for ${verb} in ${location.name}`)
     return this.generateForecast(verb, location);
   }
 
@@ -74,6 +79,7 @@ export default class ApiService extends Service {
 
   searchLocation(keywords) {
     if (ENV.APP.USE_MOCK) {
+      console.log('using mock suggestions')
       return locationSuggestions;
     }
     const headers = new Headers();

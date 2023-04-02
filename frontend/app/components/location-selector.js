@@ -6,11 +6,13 @@ import { inject as service } from '@ember/service';
 export default class LocationSelectorComponent extends Component {
   @service router;
   @service api;
+  @service location;
 
   @tracked error = '';
-  @tracked searchText = '';
   @tracked suggestions = [];
-
+  @tracked searchText = '';
+  @tracked showRecents = true;
+  
   constructor() {
     super(...arguments);
 
@@ -53,8 +55,15 @@ export default class LocationSelectorComponent extends Component {
       lat: loc.center[1],
       lng: loc.center[0],
       name: loc.text,
+      full_name: loc.place_name,
       search: this.searchText,
     };
     this.args.onSelect(locData);
+  }
+
+  @action clearLocations() {
+    this.location.clear();
+    // Workaround for locations list not updating on display after clear
+    this.showRecents = false;
   }
 }
