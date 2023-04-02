@@ -46,7 +46,7 @@ async def search_location_by_keyword(keyword: str) -> GeocodeResponse:
     return get_location_suggestions(keyword)
 
 
-@app.get("/api/v0/go/{verb}/{lat},{long}")
+@app.get("/api/v0/get-forecast/{verb}/{lat},{long}")
 async def get_activity_forecast(verb: str, lat: float, long: float) -> JSONResponse:
     logger.debug(f"Processing get_activity_forecast request, inputs verb={verb}, lat={lat}, long={long}")
     try:
