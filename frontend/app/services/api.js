@@ -7,6 +7,11 @@ import allowedVerbs from 'fun-forecast-frontend/utils/verbs';
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
+// function getRandomCondition() {
+//   const conditions = ['cloudy', 'windy', 'rainy', 'cold', 'hot'];
+//   const idx = getRandomInt(conditions.length);
+//   return [conditions[idx]];
+// }
 
 export default class ApiService extends Service {
   baseUrl = ENV.APP.apiBase;
@@ -72,14 +77,12 @@ export default class ApiService extends Service {
     // Mock what we get back from the API
     const now = DateTime.now();
     const today = now.startOf('day');
-    // const currentHour = now.hour;
-    // console.log({ currentHour })
     // const sunrise = today.set({ hour: 6, minute: 45 });
     // const sunset = today.set({ hour: 17, minute: 57 });
     const forecast = [];
     for (let hour = now.hour; hour < 24; hour++) {
       const time = today.set({ hour, minute: 0 });
-      const score = hour < 5 ? 2 : getRandomInt(3);
+      const score = Math.random(); // hour < 5 ? 2 : getRandomInt(3);
       forecast.push({
         start: time.toISO(),
         end: time.plus({ hours: 1 }).toISO(),
