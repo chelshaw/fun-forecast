@@ -4,18 +4,11 @@
       {{#let
         (scale-linear domain=(array this.pad 105) range=(array 0 width))
         (scale-time
+          domain=this.timeDomain
           range=(array this.pad (add this.pad (mult 25 this.hourHeight)))
         )
         (scale-linear domain=(array this.pad 105) range=(array 0 width))
-        (scale-ordinal
-          range=(array
-            'fill-blue-bright dark:fill-blue-bright'
-            'fill-blue-light dark:fill-blue-darkest'
-            'fill-gray-200 dark:fill-gray-900'
-          )
-          domain=(array 0 1 2)
-          unknown='fill-gray-200 dark:fill-gray-800'
-        )
+        (scale-diverging domain=(array 0 0.5 1) range=(color-interpolator))
         as |xScale yScale heightScale colors|
       }}
         {{#if (and xScale.isValid yScale.isValid)}}
@@ -37,7 +30,6 @@
                   dy={{15}}
                   text-anchor='start'
                 >{{tick.label}}</text>
-
               {{/each}}
             </g>
           {{/let}}
@@ -49,14 +41,10 @@
                 height={{this.hourHeight}}
                 x={{this.pad}}
                 y={{scale-fn-compute yScale hour.startTime}}
-                class='stroke-2
-                  {{scale-fn-compute colors hour.score}}
-                  {{if
-                    (eq hour.startTime this.highlighted.startTime)
-                    "stroke-black"
-                  }}'
+                class='stroke-2'
                 {{on 'mouseenter' (fn this.highlightHour hour)}}
                 {{on 'click' (fn (mut this.sticky) (not this.sticky))}}
+                {{style fill=(scale-fn-compute colors hour.score)}}
               />
               <text
                 class='fill-gray-100 dark:fill-gray-900 font-bold'
@@ -66,7 +54,24 @@
                 dy={{20}}
                 text-anchor='start'
               >{{hour.conditionIcon}}</text>
+
             {{/each}}
+          </g>
+          <g id='now'>
+            <rect
+                  width={{scale-fn-compute xScale 45}}
+                  height='2'
+                  x={{this.pad}}
+                  y={{scale-fn-compute yScale this.now}}
+                  class='fill-magenta-bright'
+                />
+                <text
+                  class='fill-magenta-bright font-bold'
+                  x={{add this.pad (scale-fn-compute xScale 45)}}
+                  y={{scale-fn-compute yScale this.now}}
+                  dy={{7}}
+                  text-anchor='start'
+                >Now</text>
           </g>
           <Lineal::Axis
             @scale={{yScale}}
@@ -92,28 +97,29 @@
       {{/let}}
     </svg>
     <div
-      class='absolute top-5 right-0 w-3/5 bg-white text-black drop-shadow p-2'
+      class='absolute top-5 right-0 w-3/5 bg-white text-black drop-shadow p-4'
     >
       {{#if this.highlighted}}
-        <div class='flex justify-between'>
-          <h2 class='font-bold text-center'>{{this.highlighted.title}}</h2>
-          <p class='font-bold text-xl'>{{this.highlighted.temperature}}°</p>
-        </div>
+        <h2 class='font-bold text-center text-xl'>{{this.highlighted.timing}}</h2>
         <p
-          class='italic text-gray-500 text-center text-sm'
+          class='italic text-gray-500 text-center text-sm py-2'
         >{{this.highlighted.verdict}}
           {{@verb}}
           in
           {{@location.name}}</p>
-        <ul>
+        <div class='flex justify-between'>
+          <p class='font-bold'>{{this.highlighted.temperature}}°{{this.highlighted.unit}}</p>
+          <p class='font-bold'>{{this.highlighted.wind}} MPH winds</p>
+        </div>
+        {{!-- <ul>
           {{#each this.highlighted.conditions as |cond|}}
             <li>{{cond}}</li>
           {{/each}}
-        </ul>
-        <p>[ gear list ]</p>
-        <div
+        </ul> --}}
+        {{!-- <div
           class='w-full h-32 bg-gray-700 text-center text-gray-500 font-bold'
-        >Suggested gear</div>
+        >Suggested gear</div> --}}
+        <p><code class="text-xs text-center text-gray-400">Score: {{this.highlighted.score}}</code></p>
       {{else}}
         <h2 class='text-center'>Choose a time to see details</h2>
       {{/if}}

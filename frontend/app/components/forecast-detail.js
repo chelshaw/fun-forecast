@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 
 /**
  * @verb string, lowercase
- * @location Location obj (id, name, lat, lng)
+ * @location Location obj (id, name, lat, lng, full_name)
  * @forecast array of forecast data { start, end, score }
  * @sunrise ISO timestamp
  * @sunset ISO timestamp
@@ -14,6 +14,7 @@ export default class ForecastDetailComponent extends Component {
   hourHeight = 30;
   pad = 10;
   dayInfoSpace = 60;
+  now = DateTime.now().toJSDate();
 
   @tracked highlighted;
   @tracked sticky = false;
@@ -55,6 +56,8 @@ export default class ForecastDetailComponent extends Component {
         return '⛈';
       case 'dark':
         return '🌚';
+      case 'windy':
+        return '💨';
       default:
         return '🤷🏽‍♀️';
     }
@@ -75,8 +78,9 @@ export default class ForecastDetailComponent extends Component {
   }
 
   get timeDomain() {
-    const minIso = this.hours[0].startTime;
-    const maxIso = this.hours[this.hours.length - 1].endTime;
+    const date = DateTime.fromISO(this.hours[0].start, {setZone: true });
+    const minIso = date.startOf('day').toJSDate();
+    const maxIso = date.endOf('day').toJSDate();
     return [minIso, maxIso];
   }
 
@@ -88,20 +92,22 @@ export default class ForecastDetailComponent extends Component {
       return;
     }
     const time = DateTime.fromJSDate(hour.startTime);
-    let verdict = 'not a great time to';
-    if (hour.score === 1) {
-      verdict = 'a decent time to';
-    } else if (hour.score === 0) {
-      verdict = 'a great time to';
+    let verdict = '❌ not a great time to';
+    if (hour.score > 0.7) {
+      verdict = '✅ a great time to';
+    } else if (hour.score > 0.36) {
+      verdict = '🆗 a decent time to';
     }
     this.highlighted = {
       startTime: hour.startTime,
-      title: `${time.toLocaleString({ hour: 'numeric' })} to ${time
+      timing: `${time.toLocaleString({ hour: 'numeric' })} to ${time
         .plus({ hours: 1 })
         .toLocaleString({ hour: 'numeric' })}`,
       verdict,
-      // conditions: [],
-      temperature: hour.temperature,
+      temperature: hour.temp,
+      unit: hour.unit,
+      wind: hour.wind,
+      score: hour.score,
     };
   }
 }
