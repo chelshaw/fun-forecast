@@ -1,0 +1,32 @@
+{
+  "verb": "kayak",
+  "wind": {
+    "min": 0,
+    "ideal": 5,
+    "max": 20,
+    "units": "mph"
+  },
+  "temp": {
+    "min": 60,
+    "ideal": 70,
+    "max": 90,
+    "units": "F"
+  },
+  "weather_conditions": {
+    "acceptable": {
+      "sunny": -2,
+      "foggy": 5
+    },
+    "never": [
+      "STORM",
+      "RAIN",
+      "HAIL",
+      "SLEET",
+      "ICE"
+    ]
+  },
+  "light_conditions": {
+    "daytime": true,
+    "nighttime": false
+  }
+}
