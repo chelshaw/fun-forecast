@@ -18,8 +18,6 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
       betacode: process.env.FF_BETACODE,
-      USE_MOCK: false,
-      // TODO: replace with real
       apiBase: 'http://localhost:4200/api/v0',
     },
 
@@ -42,10 +40,10 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.APP.USE_MOCK = false;
+    ENV.APP.USE_MOCK = true;
     ENV.contentSecurityPolicy = {
       // ... other stuff here
-      'connect-src': "'self' http://localhost:5001",
+      'connect-src': "'self' http://localhost:5001 http://api.myfunforecast.com http://load-balancer-for-ff-backend-1719466983.us-east-1.elb.amazonaws.com",
     };
     ENV.APP.apiBase = 'http://localhost:4200/api/v0';
   }
@@ -63,8 +61,10 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-    // here you can enable a production-specific feature
-    ENV.APP.USE_MOCK = true;
+    ENV.APP.apiBase = 'https://api.myfunforecast.com/api/v0';
+    ENV.contentSecurityPolicy = {
+      'connect-src': "'self' https://api.myfunforecast.com",
+    };
   }
 
   return ENV;
