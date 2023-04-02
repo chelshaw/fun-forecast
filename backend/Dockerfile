@@ -34,5 +34,5 @@ RUN poetry install
 
 COPY . .
 
-WORKDIR /app/service/src/fun_forecast_backend
-CMD ["gunicorn", "--config", "gunicorn.conf.py", "main:app", "-k", "uvicorn.workers.UvicornWorker"]
+WORKDIR /app/service/src
+CMD ["gunicorn", "--config", "fun_forecast_backend/gunicorn.conf.py", "fun_forecast_backend.main:app"]

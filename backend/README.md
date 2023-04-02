@@ -56,6 +56,7 @@ poetry run pytest  # run at backend root level, runs all unit tests
 # Build and run image
 docker build . -t ff-backend
 docker run -d -p 5001:5001 ff-backend:latest
+docker logs <container_id>
 
 # Use docker compose
 docker compose up -d

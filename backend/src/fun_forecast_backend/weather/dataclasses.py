@@ -1,5 +1,4 @@
-from typing import Bool, List
-from enum import Enum
+from typing import List
 from dataclasses import dataclass
 
 
@@ -42,11 +41,11 @@ class WeatherApiPoint:
 class Period:
     startTime: str
     endTime:	str
-    isDaytime: Bool
+    isDaytime: bool
     temperature: int
     temperatureUnit: str
     windSpeed: str
-    shortforecast: str
+    shortForecast: str
 
 
 @dataclass

@@ -178,6 +178,7 @@ notes.md
 
 .venv
 
+secrets.env
 
 ############################ UI - EMBER
 # compiled output
