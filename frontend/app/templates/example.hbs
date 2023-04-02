@@ -17,9 +17,9 @@
 
   <ForecastDetail
     @verb={{this.model.data.verb}}
-    @loc={{this.model.data.location.ref}}
+    @location={{this.model.location}}
     @forecast={{this.model.data.forecast}}
-    @sunrise={{this.model.data.location.sunrise}}
-    @sunset={{this.model.data.location.sunset}}
+    @sunrise={{this.model.location.sunrise}}
+    @sunset={{this.model.location.sunset}}
   />
 </div>
