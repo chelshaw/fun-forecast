@@ -9,9 +9,10 @@ export default class LocationSelectorComponent extends Component {
   @service location;
 
   @tracked error = '';
-  @tracked searchText = '';
   @tracked suggestions = [];
-
+  @tracked searchText = '';
+  @tracked showRecents = true;
+  
   constructor() {
     super(...arguments);
 
@@ -62,5 +63,7 @@ export default class LocationSelectorComponent extends Component {
 
   @action clearLocations() {
     this.location.clear();
+    // Workaround for locations list not updating on display after clear
+    this.showRecents = false;
   }
 }

@@ -79,6 +79,7 @@ export default class ApiService extends Service {
 
   searchLocation(keywords) {
     if (ENV.APP.USE_MOCK) {
+      console.log('using mock suggestions')
       return locationSuggestions;
     }
     const headers = new Headers();

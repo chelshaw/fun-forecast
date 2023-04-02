@@ -47,7 +47,7 @@
           type='reset'
         >Reset</button>
       </div>
-    {{else if this.location.locations}}
+    {{else if (and this.showRecents this.location.locations)}}
       <div class='py-4'>
         <h2 class='text-center font-bold text-xl'>Recent searches</h2>
         {{#each this.location.locations as |recent|}}

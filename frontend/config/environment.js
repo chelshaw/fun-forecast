@@ -18,7 +18,7 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
       betacode: process.env.FF_BETACODE,
-      USE_MOCK: true,
+      USE_MOCK: false,
       // TODO: replace with real
       apiBase: 'http://localhost:4200/api/v0',
     },
