@@ -95,7 +95,7 @@ export default class ForecastDetailComponent extends Component {
     let verdict = '❌ not a great time to';
     if (hour.score > 0.7) {
       verdict = '✅ a great time to';
-    } else if (hour.score > 0.36) {
+    } else if (hour.score > 0) {
       verdict = '🆗 a decent time to';
     }
     this.highlighted = {
@@ -107,7 +107,8 @@ export default class ForecastDetailComponent extends Component {
       temperature: hour.temp,
       unit: hour.unit,
       wind: hour.wind,
-      score: hour.score,
+      score: hour.score.toFixed(2),
+      condition: hour.weatherStr,
     };
   }
 }

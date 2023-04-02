@@ -73,14 +73,15 @@ export default class ApiService extends Service {
     return this.generateForecast(verb);
   }
 
-  generateForecast(verb = 'hike') {
+  generateForecast(verb = 'hike', startNow = true) {
     // Mock what we get back from the API
     const now = DateTime.now();
     const today = now.startOf('day');
     // const sunrise = today.set({ hour: 6, minute: 45 });
     // const sunset = today.set({ hour: 17, minute: 57 });
     const forecast = [];
-    for (let hour = now.hour; hour < 24; hour++) {
+    const start = startNow ? now.hour : 0;
+    for (let hour = start; hour < 24; hour++) {
       const time = today.set({ hour, minute: 0 });
       const score = Math.random(); // hour < 5 ? 2 : getRandomInt(3);
       forecast.push({

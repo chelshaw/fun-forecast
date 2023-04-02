@@ -111,15 +111,11 @@
           <p class='font-bold'>{{this.highlighted.temperature}}°{{this.highlighted.unit}}</p>
           <p class='font-bold'>{{this.highlighted.wind}} MPH winds</p>
         </div>
-        {{!-- <ul>
-          {{#each this.highlighted.conditions as |cond|}}
-            <li>{{cond}}</li>
-          {{/each}}
-        </ul> --}}
+        <p class="font-bold text-xs text-center">{{this.highlighted.condition}}</p>
         {{!-- <div
           class='w-full h-32 bg-gray-700 text-center text-gray-500 font-bold'
         >Suggested gear</div> --}}
-        <p><code class="text-xs text-center text-gray-400">Score: {{this.highlighted.score}}</code></p>
+        <p><code class="bg-gray-100 p-1 text-xs text-center text-gray-400">score: {{this.highlighted.score}}</code></p>
       {{else}}
         <h2 class='text-center'>Choose a time to see details</h2>
       {{/if}}
