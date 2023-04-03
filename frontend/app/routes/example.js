@@ -14,12 +14,12 @@ export default class ExampleRoute extends Route {
         forecast: evaluated_hours,
       },
       verb,
-      where: 'Austin, TX',
+      where: 'Santa Fe, NM',
       when: 'today',
       location: {
         lat: 30.2711,
         lng: -97.7437,
-        name: 'Austin',
+        name: 'Santa Fe',
       }
     };
   }
