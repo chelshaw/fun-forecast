@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { DateTime } from 'luxon';
 
 /**
@@ -26,7 +25,7 @@ export default class ForecastBarComponent extends Component {
         jsDate: DateTime.fromISO(h.start),
       }))
       .filter((h) => {
-        if (this.allHours) return true;
+        if (this.args.allHours) return true;
         return h.jsDate.hour > 5 && h.jsDate.hour < 20;
       })
       .map((h) => ({
