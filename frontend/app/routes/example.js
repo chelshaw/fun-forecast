@@ -1,19 +1,26 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { DateTime } from 'luxon';
+import exampleForecastResponse from 'fun-forecast-frontend/utils/example-forecast-response';
 
 export default class ExampleRoute extends Route {
   @service api;
 
   async model() {
-    const loc_ref = '78704';
     const verb = 'hike';
-    const data = await this.api.generateForecast(verb, loc_ref);
+    const {evaluated_hours} = exampleForecastResponse;
     return {
-      data,
+      data: {
+        verb,
+        forecast: evaluated_hours,
+      },
       verb,
-      where: 'Austin, TX',
+      where: 'Santa Fe, NM',
       when: 'today',
+      location: {
+        lat: 30.2711,
+        lng: -97.7437,
+        name: 'Santa Fe',
+      }
     };
   }
 }

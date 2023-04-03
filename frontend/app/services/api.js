@@ -7,13 +7,18 @@ import allowedVerbs from 'fun-forecast-frontend/utils/verbs';
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
+// function getRandomCondition() {
+//   const conditions = ['cloudy', 'windy', 'rainy', 'cold', 'hot'];
+//   const idx = getRandomInt(conditions.length);
+//   return [conditions[idx]];
+// }
 
 export default class ApiService extends Service {
-  baseUrl = 'http://localhost:4200/api/v0';
+  baseUrl = ENV.APP.apiBase;
 
   get headers() {
     var headers = new Headers();
-    headers.append('Access-Control-Allow-Origin', '*');
+    // headers.append('Access-Control-Allow-Origin', '*');
     return {
       method: 'GET',
       headers,
@@ -29,51 +34,77 @@ export default class ApiService extends Service {
     throw new Error(response.statusText);
   }
 
-  singleActivity(verb, location, when) {
+  /**
+   * 
+   * @param {*} verb 
+   * @param {LocationObject} location id, lat, lng, name, full_name, search
+   * @param {*} when 
+   * @returns {
+      end: "2023-04-02T12:00:00-06:00",
+      isDaytime: true,
+      score: 0.5818181818181818,
+      start: "2023-04-02T11:00:00-06:00",
+      temp: 46,
+      unit: "F",
+      weatherCode: 0,
+      weatherStr: "sunny",
+      wind: 10,
+    }
+   */
+  async singleActivity(verb, location, when) {
     if (!allowedVerbs().includes(verb)) {
       throw new Error(`No activity schema for "${verb}"`);
     }
-    if (!ENV.APP.USE_MOCK && ENV.APP.API_READY) {
-      let path = `go/${encodeURIComponent(verb)}/${location.lat},${
+    if (!ENV.APP.USE_MOCK) {
+      let path = `get-forecast/${encodeURIComponent(verb)}/${location.lat},${
         location.lng
       }`;
       if (when) {
         path += `?when=${when}`;
       }
-      return this.fetch(path);
+      const results = await this.fetch(path);
+      const forecast = results.evaluated_hours.filter(h => h.start.startsWith(when))
+      return {
+        forecast,
+        ...results,
+      }
     }
-    return this.generateForecast(verb, location);
+    console.debug(`Generating single activity forecast for ${verb}`)
+    return this.generateForecast(verb);
   }
 
-  generateForecast(verb = 'hike', location) {
+  generateForecast(verb = 'hike', startNow = true) {
     // Mock what we get back from the API
-    const today = DateTime.now().startOf('day');
-    const sunrise = today.set({ hour: 6, minute: 45 });
-    const sunset = today.set({ hour: 17, minute: 57 });
+    const now = DateTime.now();
+    const today = now.startOf('day');
+    // const sunrise = today.set({ hour: 6, minute: 45 });
+    // const sunset = today.set({ hour: 17, minute: 57 });
     const forecast = [];
-    for (let hour = 0; hour < 24; hour++) {
+    const start = startNow ? now.hour : 0;
+    for (let hour = start; hour < 24; hour++) {
       const time = today.set({ hour, minute: 0 });
-      const score = hour < 5 ? 2 : getRandomInt(3);
+      const score = Math.random(); // hour < 5 ? 2 : getRandomInt(3);
       forecast.push({
         start: time.toISO(),
         end: time.plus({ hours: 1 }).toISO(),
+        isDaytime: hour > 7 && hour < 18,
         score,
-        conditions: score > 0 ? ['cloudy'] : [],
+        temp: getRandomInt(103),
+        unit: "F",
+        weatherCode: 0,
+        weatherStr: "sunny",
+        wind: 10,
       });
     }
     return {
       verb,
-      location: {
-        ...location,
-        sunrise: sunrise.toISO(),
-        sunset: sunset.toISO(),
-      },
       forecast,
     };
   }
 
   searchLocation(keywords) {
     if (ENV.APP.USE_MOCK) {
+      console.log('using mock suggestions')
       return locationSuggestions;
     }
     const headers = new Headers();

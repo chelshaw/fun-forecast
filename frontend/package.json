@@ -20,7 +20,7 @@
     "lint:js:fix": "eslint . --fix",
     "deploy:staging": "ember deploy staging",
     "deploy:prod": "ember deploy production",
-    "start": "ember serve --proxy=http://localhost:5000 --port=4200",
+    "start": "ember serve --proxy=http://localhost:5001 --port=4200",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test"
   },
@@ -34,6 +34,8 @@
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^7.6.0",
+    "d3-interpolate": "^3.0.1",
+    "d3-scale-chromatic": "^3.0.0",
     "ember-auto-import": "^2.5.0",
     "ember-cli": "~4.9.2",
     "ember-cli-app-version": "^5.0.0",

@@ -22,7 +22,7 @@ app = FastAPI(title="Fun Forecast Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://myfunforecast.com", "http://beta.myfunforecast.com"],
+    allow_origins=["http://myfunforecast.com", "http://beta.myfunforecast.com", "https://beta.myfunforecast.com"],
     allow_credentials=True,
     allow_methods=["GET"],
     allow_headers=["*"],
