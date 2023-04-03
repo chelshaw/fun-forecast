@@ -32,64 +32,43 @@
         x='0'
         y='0'
         width={{width}}
-        height={{this.frameHeight}}
+        height='30px'
         fill="url('#skyGradient')"
         class='opacity-75'
       ></rect>
     {{/if}}
     {{#let
-      (scale-linear range=(array 0 width) domain='0..24')
+      (scale-linear range=(array 0 width) domain=this.widthDomain)
       (scale-time range=(array 0 width) domain=this.timeDomain)
-      (scale-ordinal
-        range=(array
-          'fill-gray-400 hover:fill-gray-500'
-          'fill-gray-200 hover:fill-gray-300'
-        )
-        domain=(array true false)
-      )
+      (scale-diverging domain=(array 0 0.5 1) range=(color-interpolator))
       as |hourScale timeScale colors|
     }}
       {{#if (and timeScale.isValid hourScale.isValid)}}
         <g id='hours'>
-          {{#each @hours as |hour|}}
+          {{#each this.hours as |hour|}}
             <rect
               width={{round (add (scale-fn-compute hourScale 1) 1)}}
               height={{this.chartHeight}}
               x={{scale-fn-compute timeScale hour.jsDate}}
               y={{this.pointOffset}}
               clip-path='url(#outline)'
-              class='stroke-2 {{scale-fn-compute colors hour.good}}'
-              {{on 'click' (fn this.highlightHour hour)}}
+              {{style fill=(scale-fn-compute colors hour.score)}}
             />
           {{/each}}
-
         </g>
         <Lineal::Axis
-          @orientation='bottom'
           @scale={{timeScale}}
+          @orientation='bottom'
           @tickValues={{this.ticks}}
           @includeDomain={{false}}
-          @tickPadding={{0}}
-          transform='translate({{scale-fn-compute hourScale -1}}, {{add
-            this.pointOffset
-            this.chartHeight
-          }})'
+          @tickPadding={{10}}
+          @tickFormat={{this.formatTick}}
+          @offset={{0}}
+          transform='translate(0,{{add this.chartHeight this.pointOffset}})'
+          fill='transparent'
           aria-hidden='true'
-          class='text-gray-500'
-          as |tick|
-        >
-          <line stroke='currentColor' y2={{tick.size}}></line>
-          {{#if tick.label}}
-            <text
-              class='text-xs'
-              fill='currentColor'
-              y={{20}}
-              dy={{0}}
-              x={{0}}
-              text-anchor='middle'
-            >{{format-date tick.value hour='numeric'}}</text>
-          {{/if}}
-        </Lineal::Axis>
+          class='text-gray-500 text-xs'
+        />
 
         {{#if this.highlighted}}
           <rect
@@ -118,7 +97,7 @@
 
 {{#if this.highlighted}}
   <div class='border-2 border-gray-800 rounded'>
-    <Typography @level='h2'>{{if this.highlighted.good '😎' '⛔️'}}
+    <Typography @level='h2'>{{this.highlighted.score}}
       {{this.highlighted.description}}</Typography>
     <Typography @level='h3'>{{this.highlighted.reason}}</Typography>
     <Typography>{{this.highlighted.overview}}</Typography>

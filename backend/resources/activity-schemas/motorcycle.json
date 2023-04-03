@@ -1,28 +1,28 @@
 {
-  "verb": "swim",
+  "verb": "motorcycle",
   "wind": {
     "min": 0,
-    "ideal": 0,
-    "max": 20,
+    "ideal": 5,
+    "max": 30,
     "units": "mph"
   },
   "temp": {
-    "min": 65,
-    "ideal": 75,
-    "max": 110,
+    "min": 60,
+    "ideal": 80,
+    "max": 97,
     "units": "F"
   },
   "weather_conditions": {
     "acceptable": {
-      "cloudy": 5
+      "sunny": -2
     },
     "never": [
       "STORM",
       "RAIN",
-      "SNOW",
       "HAIL",
       "SLEET",
-      "ICE"
+      "ICE",
+      "FOG"
     ]
   },
   "light_conditions": {

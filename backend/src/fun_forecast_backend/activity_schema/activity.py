@@ -10,17 +10,18 @@ from fun_forecast_backend.core.standard_logger import get_logger
 logger = get_logger()
 
 activity_map: Dict[str, str] = {
-    "MOTORCYCLE": "motorbike",
-    "HIKE": "hike",
     "BICYCLE": "bicycle",
+    "CLIMB": "climb",
     "GOLF": "golf",
+    "HIKE": "hike",
     "KAYAK": "kayak",
+    "MOTORCYCLE": "motorbike",
     "PICKLEBALL": "pickleball",
-    "TENNIS": "tennis",
     "PICNIC": "picnic",
     "RUN": "run",
     "SKATEBOARD": "skateboard",
     "SWIM": "swim",
+    "TENNIS": "tennis",
     "WALK": "walk",
 }
 
