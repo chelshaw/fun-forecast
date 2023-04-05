@@ -58,8 +58,9 @@ docker build . -t ff-backend
 docker run -d -p 5001:5001 ff-backend:latest
 docker logs <container_id>
 
-# Test API via localhost (example)
+# Test API via localhost (examples)
 http://localhost:5001/api/v0/get-forecast/walk/36.8637,-78.5324
+http://localhost:5001/api/v0/location-search/austin
 
 # Use docker compose
 docker compose up -d
