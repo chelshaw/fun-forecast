@@ -7,6 +7,7 @@ export default class LocationSelectorComponent extends Component {
   @service router;
   @service api;
   @service location;
+  @service metrics;
 
   @tracked error = '';
   @tracked suggestions = [];
@@ -23,9 +24,18 @@ export default class LocationSelectorComponent extends Component {
     }
   }
 
+  trackEvent(name, opts = {}) {
+    try {
+      this.metrics.trackEvent(name, opts)
+    } catch(e) {
+      // swallow error and continue
+    }
+  }
+
   async fetchLocationSuggestions(searchText) {
     this.suggestions = [];
     if (!searchText) return;
+    
     try {
       const { features } = await this.api.searchLocation(searchText);
       this.suggestions = features;
@@ -39,6 +49,7 @@ export default class LocationSelectorComponent extends Component {
   @action resetForm() {
     this.searchText = '';
     this.suggestions = [];
+    this.trackEvent('location_search_reset');
   }
 
   // TODO: concurrency for loading state
@@ -46,6 +57,9 @@ export default class LocationSelectorComponent extends Component {
   searchForLocations(evt) {
     evt.preventDefault();
     const searchText = this.searchText;
+    this.trackEvent('location_search', {
+      keyword: encodeURIComponent(searchText)
+    });
     this.fetchLocationSuggestions(searchText);
   }
 
@@ -58,6 +72,11 @@ export default class LocationSelectorComponent extends Component {
       full_name: loc.place_name,
       search: this.searchText,
     };
+    this.trackEvent('location_search_selected', {
+      keyword: encodeURIComponent(this.searchText),
+      name: locData.name,
+      place: locData.full_name,
+    });
     this.args.onSelect(locData);
   }
 
@@ -65,5 +84,6 @@ export default class LocationSelectorComponent extends Component {
     this.location.clear();
     // Workaround for locations list not updating on display after clear
     this.showRecents = false;
+    this.trackEvent('location_clear_cache');
   }
 }
