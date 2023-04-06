@@ -42,9 +42,16 @@ async def health_check():
 
 
 @app.get("/api/v0/location-search/{keyword}")
-async def search_location_by_keyword(keyword: str) -> GeocodeResponse:
-    return get_location_suggestions(keyword)
-
+async def search_location_by_keyword(keyword: str) -> JSONResponse:
+    logger.debug(f"Processing search_location_by_keyword request, inputs keyword={keyword}")
+    try:
+        suggestions: GeocodeResponse = get_location_suggestions(keyword)
+        logger.debug(f"Successfully processed search_location_by_keyword request, inputs keyword={keyword}")
+        json_compatible_item_data = jsonable_encoder(suggestions)
+        return JSONResponse(content=json_compatible_item_data)
+    except Exception as e:
+        logger.error(f"Failed search_location_by_keyword request, inputs keyword={keyword}")
+        raise e
 
 @app.get("/api/v0/get-forecast/{verb}/{lat},{long}")
 async def get_activity_forecast(verb: str, lat: float, long: float) -> JSONResponse:
