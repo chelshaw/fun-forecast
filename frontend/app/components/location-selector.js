@@ -64,10 +64,11 @@ export default class LocationSelectorComponent extends Component {
   }
 
   @action selectLocation(loc) {
+    const [lng, lat] = loc.center;
     const locData = {
-      id: loc.id,
-      lat: loc.center[1],
-      lng: loc.center[0],
+      id: `${lat},${lng}`,
+      lat,
+      lng,
       name: loc.text,
       full_name: loc.place_name,
       search: this.searchText,
