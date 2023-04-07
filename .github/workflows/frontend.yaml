@@ -6,13 +6,24 @@ on:
   push:
     paths:
     - frontend/**
-    branches: [ main ]
-  workflow_dispatch: {}
+    branches: [ release/* ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
   
 jobs:
   staging:
     name: Deploy to production
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,10 +44,10 @@ jobs:
           cd frontend
           yarn deploy:prod
         env:
-          FF_BETACODE: ${{ env.FF_BETACODE }}
+          FF_BETACODE: ${{ vars.FF_BETACODE }}
           AWS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
-          PROD_BUCKET: "myfunforecast"
-          PROD_DISTRIBUTION: ${{ env.AWS_DISTRIBUTION }}
+          AWS_BUCKET: "myfunforecast"
+          AWS_DISTRIBUTION: ${{ vars.AWS_DISTRIBUTION }}
 
