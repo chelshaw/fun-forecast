@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Taken from https://github.com/antonputra/lesson-086
+
 VERSION=""
 
 # get parameters
@@ -13,12 +15,6 @@ done
 # get highest tag number, and add v0.1.0 if doesn't exist
 git fetch --prune --unshallow 2>/dev/null
 CURRENT_VERSION=`git describe --abbrev=0 --tags 2>/dev/null`
-
-echo "Can't believe I'm debugging like this"
-echo $CURRENT_VERSION
-DEBUG_1=`git describe`
-echo $DEBUG_1
-
 
 if [[ $CURRENT_VERSION == '' ]]
 then
