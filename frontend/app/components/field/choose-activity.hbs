@@ -1,30 +1,28 @@
 <Typography @level='h2'>{{@title}}</Typography>
 <div class='grid grid-cols-2 gap-2 mb-8'>
-  {{#let (concat @location.lat ',' @location.lng) as |coords|}}
-    {{#each this.activities as |activity|}}
-      <LinkTo
-        @route='where.activity.detail'
-        @models={{array coords activity.verb}}
-        class='p-3 text-center min-h-24 bg-blue-light dark:bg-blue-darkest cursor-pointer hover:bg-green-light focus:bg-green-light dark:hover:bg-green-darker dark:focus:bg-green-darker hover:font-bold focus:font-bold'
+  {{#each this.activities as |activity|}}
+    <LinkTo
+      @route='where.activity.detail'
+      @models={{array @location.id activity.verb}}
+      class='p-3 text-center min-h-24 bg-blue-light dark:bg-blue-darkest cursor-pointer hover:bg-green-light focus:bg-green-light dark:hover:bg-green-darker dark:focus:bg-green-darker hover:font-bold focus:font-bold'
+    >
+      <div
+        class='rounded rounded-full bg-blue-lighter inline-block mx-auto w-12 h-12 flex justify-center items-center'
       >
-        <div
-          class='rounded rounded-full bg-blue-lighter inline-block mx-auto w-12 h-12 flex justify-center items-center'
-        >
-          <p class='text-3xl'>{{activity.icon}}</p>
-        </div>
-        <Typography>{{activity.verb}}</Typography>
-      </LinkTo>
-    {{/each}}
-    {{!-- <LinkTo
-        @route='suggest-activity'
-        class='col-span-2 p-3 text-center min-h-24 bg-blue-light dark:bg-blue-darkest cursor-pointer hover:bg-green-light focus:bg-green-light dark:hover:bg-green-darker dark:focus:bg-green-darker hover:font-bold focus:font-bold'
+        <p class='text-3xl'>{{activity.icon}}</p>
+      </div>
+      <Typography>{{activity.verb}}</Typography>
+    </LinkTo>
+  {{/each}}
+  {{!-- <LinkTo
+      @route='suggest-activity'
+      class='col-span-2 p-3 text-center min-h-24 bg-blue-light dark:bg-blue-darkest cursor-pointer hover:bg-green-light focus:bg-green-light dark:hover:bg-green-darker dark:focus:bg-green-darker hover:font-bold focus:font-bold'
+    >
+      <div
+        class='rounded rounded-full bg-blue-lighter inline-block mx-auto w-12 h-12 flex justify-center items-center'
       >
-        <div
-          class='rounded rounded-full bg-blue-lighter inline-block mx-auto w-12 h-12 flex justify-center items-center'
-        >
-          <p class='text-3xl'>➕</p>
-        </div>
-        <Typography>Not listed</Typography>
-      </LinkTo> --}}
-  {{/let}}
+        <p class='text-3xl'>➕</p>
+      </div>
+      <Typography>Not listed</Typography>
+    </LinkTo> --}}
 </div>

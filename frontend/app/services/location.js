@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 import { TrackedArray } from 'tracked-built-ins';
 
-const LOCALSTORAGE_KEY = 'FF_locations';
+const LOCALSTORAGE_KEY = 'FF0_locations';
 
 /**
  * This should probably be a database/API one day. Ember-data candidate?
