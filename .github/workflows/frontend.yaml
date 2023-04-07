@@ -37,6 +37,6 @@ jobs:
           AWS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
-          PROD_BUCKET: "myfunforecast"
-          PROD_DISTRIBUTION: ${{ env.AWS_DISTRIBUTION }}
+          AWS_BUCKET: "myfunforecast"
+          AWS_DISTRIBUTION: ${{ env.AWS_DISTRIBUTION }}
 
