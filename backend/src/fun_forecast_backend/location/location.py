@@ -1,7 +1,6 @@
 import os
 import requests
 from requests import Response
-from typing import Dict, Any
 
 import dacite
 from fastapi import HTTPException
@@ -15,6 +14,8 @@ logger = get_logger()
 mapbox_api_key: str = ''
 if 'MAPBOX_API_KEY' in os.environ:
     mapbox_api_key = os.environ['MAPBOX_API_KEY']
+    logger.debug('MAPBOX_API_KEY env variable set')
+    logger.debug('here:', mapbox_api_key)
 else:
     logger.warning('MAPBOX_API_KEY env variable not set, location search endpoint will not work')
 
