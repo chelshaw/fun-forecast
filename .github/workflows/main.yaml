@@ -6,7 +6,18 @@ on:
     paths-ignore:
     - frontend/**
     branches: [ release/* ]
-  workflow_dispatch: {}
+  workflow_dispatch: 
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+  
 jobs:
   build-and-push:
     name: Build and Push to ECR
