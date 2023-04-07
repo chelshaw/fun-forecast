@@ -2,8 +2,8 @@
 name: Build and Push Backend Image to AWS ECR
 on:
   push:
-    paths:
-    - backend/**
+    paths-ignore:
+    - frontend/**
     branches: [ main ]
 jobs:
   build-and-push:
