@@ -6,7 +6,7 @@ on:
   push:
     paths:
     - frontend/**
-    branches: [ main ]
+    branches: [ release/* ]
   workflow_dispatch: {}
   
 jobs:

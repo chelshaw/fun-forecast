@@ -5,7 +5,8 @@ on:
   push:
     paths-ignore:
     - frontend/**
-    branches: [ main ]
+    branches: [ release/* ]
+  workflow_dispatch: {}
 jobs:
   build-and-push:
     name: Build and Push to ECR
