@@ -11,3 +11,4 @@ This webapp tells you when is the best time to do the things you love to do outs
 - Open a PR against the `development` branch
 - Once approved and smoke tested, **squash** merge the PR
 - When we're ready to release a set of changes from development, we will open a PR from `development` to `main` and **merge** it (not squash). This will automatically kick off deployment to AWS for backend and frontend. 
+ 
