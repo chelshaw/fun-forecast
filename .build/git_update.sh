@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Evolved from https://github.com/antonputra/lesson-086/blob/main/build/git_update.sh
+
 VERSION=""
 
 # get parameters
