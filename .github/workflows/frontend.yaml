@@ -18,15 +18,12 @@ on:
           - info
           - warning
           - debug
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
   
 jobs:
   staging:
     name: Deploy to production
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
