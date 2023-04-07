@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Taken from https://github.com/antonputra/lesson-086
+# Evolved from https://github.com/antonputra/lesson-086/blob/main/build/git_update.sh
 
 VERSION=""
 
