@@ -8,7 +8,7 @@ module.exports = function (env) {
   console.log('FE environment:', env)
   return {
     // Only enable env file for development
-    enabled: false,
+    enabled: 'development' === env,
     clientAllowedKeys: ['FF_BETACODE'],
     fastbootAllowedKeys: [],
     failOnMissingKey: true,
