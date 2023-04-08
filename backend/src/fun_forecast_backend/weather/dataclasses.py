@@ -63,4 +63,4 @@ class LatLongResponse:
     lat: float
     long: float
     name: str
-    full_name: str
+    fullName: str

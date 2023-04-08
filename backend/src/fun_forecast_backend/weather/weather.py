@@ -23,7 +23,7 @@ def get_location_by_lat_and_long(lat: float, long: float) -> LatLongResponse:
             lat=lat,
             long=long,
             name=city,
-            full_name=f'{city}, {state}'
+            fullName=f'{city}, {state}'
         )
         logger.debug(f'Returning response for lat/long data: {response}')
         return response
