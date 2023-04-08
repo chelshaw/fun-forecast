@@ -56,3 +56,11 @@ class WeatherDataProperties:
 @dataclass
 class WeatherData:
     properties: WeatherDataProperties
+
+
+@dataclass
+class LatLongResponse:
+    lat: float
+    long: float
+    name: str
+    full_name: str
