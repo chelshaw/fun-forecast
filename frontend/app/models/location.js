@@ -6,4 +6,5 @@ export default class LocationModel extends Model {
   @attr('string') name;
   @attr('string') fullName;
   @attr('string') searchTerm;
+  @attr('boolean') saved;
 }
