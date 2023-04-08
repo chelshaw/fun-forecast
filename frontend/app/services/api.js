@@ -63,13 +63,15 @@ export default class ApiService extends Service {
         path += `?when=${when}`;
       }
       const results = await this.fetch(path);
-      const forecast = results.evaluated_hours.filter(h => h.start.startsWith(when))
+      const forecast = results.evaluated_hours.filter((h) =>
+        h.start.startsWith(when)
+      );
       return {
         forecast,
         ...results,
-      }
+      };
     }
-    console.debug(`Generating single activity forecast for ${verb}`)
+    console.debug(`Generating single activity forecast for ${verb}`);
     return this.generateForecast(verb);
   }
 
@@ -90,9 +92,9 @@ export default class ApiService extends Service {
         isDaytime: hour > 7 && hour < 18,
         score,
         temp: getRandomInt(103),
-        unit: "F",
+        unit: 'F',
         weatherCode: 0,
-        weatherStr: "sunny",
+        weatherStr: 'sunny',
         wind: 10,
       });
     }
@@ -102,9 +104,9 @@ export default class ApiService extends Service {
     };
   }
 
-  searchLocation(keywords) {
+  searchLocation(keyword) {
     if (ENV.APP.USE_MOCK) {
-      console.log('using mock suggestions')
+      console.log('using mock suggestions');
       return locationSuggestions;
     }
     const headers = new Headers();
@@ -113,7 +115,7 @@ export default class ApiService extends Service {
       headers,
     };
     return this.fetch(
-      `location-search/${encodeURIComponent(keywords)}`,
+      `location-search/${encodeURIComponent(keyword)}`,
       requestOptions
     );
   }

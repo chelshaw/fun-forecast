@@ -78,7 +78,7 @@ export default class ForecastDetailComponent extends Component {
   }
 
   get timeDomain() {
-    const date = DateTime.fromISO(this.hours[0].start, {setZone: true });
+    const date = DateTime.fromISO(this.hours[0].start, { setZone: true });
     const minIso = date.startOf('day').toJSDate();
     const maxIso = date.endOf('day').toJSDate();
     return [minIso, maxIso];
