@@ -9,7 +9,7 @@ export default class WhereRoute extends Route {
   @service router;
 
   compareStrings(stringA = '', stringB = '') {
-    return stringA.toLowerCase() === stringB.toLowerCase();
+    return stringA?.toLowerCase() === stringB?.toLowerCase();
   }
 
   async beforeModel() {
