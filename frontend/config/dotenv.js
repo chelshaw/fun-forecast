@@ -9,11 +9,8 @@ const path = require('path');
 module.exports = function () {
   // We only want to use dotenv in local envs, so we will export
   // FF_LOCAL_DEPLOY=1 which will set enabled to true
-  console.log('FE environment:', process.env.FF_LOCAL_DEPLOY)
-  
   const localDeploy = process.env.FF_LOCAL_DEPLOY === 1;
 
-  
   return {
     // Only enable env file for development
     enabled: localDeploy,
