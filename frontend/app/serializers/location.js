@@ -2,7 +2,7 @@ import JSONAPISerializer from '@ember-data/serializer/json-api';
 import { decamelize } from '@ember/string';
 
 export default class LocationSerializer extends JSONAPISerializer {
-  keyForAttribute(key, method) {
+  keyForAttribute(key) {
     return decamelize(key);
   }
 
