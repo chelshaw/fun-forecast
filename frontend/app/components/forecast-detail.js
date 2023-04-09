@@ -67,10 +67,6 @@ export default class ForecastDetailComponent extends Component {
     return this.args.forecast.map((f) => {
       return {
         ...f,
-        // conditionIcon: f.conditions
-        //   .map((c) => this.conditionIcon(c))
-        //   .filter((c) => !!c)
-        //   .join(''),
         startTime: DateTime.fromISO(f.start, { setZone: true }).toJSDate(),
         endTime: DateTime.fromISO(f.end, { setZone: true }).toJSDate(),
       };

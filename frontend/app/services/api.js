@@ -51,21 +51,15 @@ export default class ApiService extends Service {
       wind: 10,
     }
    */
-  async singleActivity(verb, loc_ref, when) {
+  async singleActivity(verb, loc_ref) {
     if (!allowedVerbs().includes(verb)) {
       throw new Error(`No activity schema for "${verb}"`);
     }
     if (!ENV.APP.USE_MOCK) {
       let path = `get-forecast/${encodeURIComponent(verb)}/${loc_ref}`;
-      if (when) {
-        path += `?when=${when}`;
-      }
       const results = await this.fetch(path);
-      const forecast = results.evaluated_hours.filter((h) =>
-        h.start.startsWith(when)
-      );
       return {
-        forecast,
+        forecast: results.evaluated_hours,
         ...results,
       };
     }

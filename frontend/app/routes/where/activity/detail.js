@@ -10,23 +10,7 @@ export default class WhereActivityDetailRoute extends Route {
   @service router;
   @service store;
 
-  queryParams = {
-    when: {
-      refreshModel: true,
-    },
-  };
 
-  async maybeGetLocation(locRef) {
-    try {
-      const foundLocation = await this.store.peekRecord('location', locRef);
-      if (!foundLocation) {
-        throw new Error('location not found');
-      }
-      return foundLocation;
-    } catch (e) {
-      return this.store.findRecord('location', locRef);
-    }
-  }
 
   calcWhen(whenParam) {
     // TODO: some people have access to more dates?
@@ -52,21 +36,16 @@ export default class WhereActivityDetailRoute extends Route {
   async model(params, transition) {
     const { verb } = params;
     const { loc_ref } = this.paramsFor('where.activity');
-    // If location doesn't exist we redirect before we get here
-    const location = await this.maybeGetLocation(loc_ref); 
-    const whenDate = this.calcWhen(transition.to.queryParams.when);
-    const when = this.relativeWhen(whenDate);
-    const data = await this.api.singleActivity(
+
+    const location = await this.store.findRecord('location', loc_ref);
+    const { forecast } = await this.api.singleActivity(
       verb,
       loc_ref,
-      whenDate.toFormat(DATE_FORMAT)
     );
     return {
+      verb,
       location,
-      when,
-      data,
-      dayParam: transition.to.queryParams.when || 0,
-      maxDay: MAX_DATE,
+      forecast,
     };
   }
 }

@@ -46,7 +46,7 @@ module.exports = function (environment) {
       'connect-src':
         "'self' http://localhost:5001 http://api.myfunforecast.com http://load-balancer-for-ff-backend-1719466983.us-east-1.elb.amazonaws.com",
     };
-    ENV.APP.apiBase = 'http://localhost:5001',
+    ENV.APP.apiBase = 'http://localhost:5001';
   }
 
   if (environment === 'test') {
