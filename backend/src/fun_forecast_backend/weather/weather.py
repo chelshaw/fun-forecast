@@ -9,9 +9,28 @@ import dacite
 
 from fun_forecast_backend.core.standard_logger import get_logger
 from fun_forecast_backend.shared.dataclasses import WeatherCondition, HourData
-from fun_forecast_backend.weather.dataclasses import WeatherApiPoint, WeatherData, Period
+from fun_forecast_backend.weather.dataclasses import WeatherApiPoint, WeatherData, Period, LatLongResponse
 
 logger = get_logger()
+
+
+def get_location_by_lat_and_long(lat: float, long: float) -> LatLongResponse:
+    try:
+        point = point_from_coords(lat, long)
+        city = point.properties.relativeLocation.properties.city.strip()
+        state = point.properties.relativeLocation.properties.state.strip()
+        response = LatLongResponse(
+            lat=lat,
+            long=long,
+            name=city,
+            fullName=f'{city}, {state}'
+        )
+        logger.debug(f'Returning response for lat/long data: {response}')
+        return response
+
+    except Exception as e:
+        logger.error(f'Unable to get location data based on lat/long: {e}')
+        raise e
 
 
 def hourly_forecast_for_coords(lat: float, long: float) -> List[HourData]:
