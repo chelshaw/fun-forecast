@@ -65,7 +65,7 @@ export default class LocationSelectorComponent extends Component {
     this.fetchLocationSuggestions(searchText);
   }
 
-  selectionSideEffects(model) {
+  maybeSaveModel(model) {
     const id = `${model.lat},${model.lng}`;
     const existing = this.store.peekRecord('location', id);
     // record exists already, skip save
@@ -96,7 +96,7 @@ export default class LocationSelectorComponent extends Component {
       name: model.name,
       fullName: model.fullName,
     });
-    const chosen = this.selectionSideEffects(model);
+    const chosen = this.maybeSaveModel(model);
     this.args.onSelect(chosen.id);
   }
 

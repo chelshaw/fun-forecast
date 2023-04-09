@@ -33,10 +33,10 @@ export default class WhereActivityDetailRoute extends Route {
     return `${dt.toRelativeCalendar()} (${dt.toFormat('EEE')})`;
   }
 
-  async model(params, transition) {
+  async model(params) {
     const { verb } = params;
     const { loc_ref } = this.paramsFor('where.activity');
-
+    // TODO: get model from parent route?
     const location = await this.store.findRecord('location', loc_ref);
     const { forecast } = await this.api.singleActivity(
       verb,

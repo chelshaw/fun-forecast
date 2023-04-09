@@ -11,8 +11,8 @@ export default class LocationAdapter extends JSONAPIAdapter {
     return `${baseUrl}/location-search/${encodeURIComponent(keyword)}`;
   }
 
-  urlForFindRecord(id) {
+  urlForFindRecord(coords) {
     let baseUrl = this.buildURL();
-    return `${baseUrl}/location-by-coords/${id}`;
+    return `${baseUrl}/location-by-coords/${coords}`;
   }
 }
