@@ -14,7 +14,7 @@ function getRandomInt(max) {
 // }
 
 export default class ApiService extends Service {
-  baseUrl = ENV.APP.apiBase;
+  baseUrl = `${ENV.APP.apiBase}/api/v0`;
 
   get headers() {
     var headers = new Headers();

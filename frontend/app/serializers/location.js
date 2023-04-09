@@ -10,7 +10,7 @@ export default class LocationSerializer extends JSONAPISerializer {
     const { modelName } = primaryModelClass;
     if (requestType === 'query') {
       const data = payload.data.map((raw, idx) => {
-        const [lat, lng] = raw.center;
+        const [lng, lat] = raw.center;
         return {
           type: modelName,
           id: `${lat},${lng}-${idx}`,
@@ -27,6 +27,25 @@ export default class LocationSerializer extends JSONAPISerializer {
         store,
         primaryModelClass,
         { data },
+        id,
+        requestType
+      );
+    } else if (requestType === 'findRecord') {
+      const { data } = payload;
+      return super.normalizeResponse(
+        store,
+        primaryModelClass,
+        {
+          data: {
+            type: primaryModelClass.modelName,
+            id: `${data.lat},${data.long}`,
+            attributes: {
+              ...data,
+              lng: data.long,
+              full_name: data.fullName
+            }
+          }
+        },
         id,
         requestType
       );

@@ -1,7 +1,8 @@
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
+import ENV from 'fun-forecast-frontend/config/environment';
 
 export default class LocationAdapter extends JSONAPIAdapter {
-  host = 'http://localhost:4200';
+  host = ENV.APP.apiBase;
   namespace = 'api/v0';
 
   urlForQuery(query) {
@@ -12,6 +13,6 @@ export default class LocationAdapter extends JSONAPIAdapter {
 
   urlForFindRecord(id) {
     let baseUrl = this.buildURL();
-    return `${baseUrl}/location/${id}`;
+    return `${baseUrl}/location-by-coords/${id}`;
   }
 }
