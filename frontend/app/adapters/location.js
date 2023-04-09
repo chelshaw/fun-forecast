@@ -1,7 +1,5 @@
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
 
-
-
 export default class LocationAdapter extends JSONAPIAdapter {
   host = 'http://localhost:4200';
   namespace = 'api/v0';

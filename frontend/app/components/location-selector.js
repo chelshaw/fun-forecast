@@ -23,7 +23,7 @@ export default class LocationSelectorComponent extends Component {
   }
 
   get recentLocations() {
-    return this.store.peekAll('location').filter(loc => !!loc.saved)
+    return this.store.peekAll('location').filter((loc) => !!loc.saved);
   }
 
   trackEvent(name, opts = {}) {
@@ -37,9 +37,9 @@ export default class LocationSelectorComponent extends Component {
   async fetchLocationSuggestions(searchText) {
     this.suggestions = [];
     if (!searchText) return;
-    
+
     try {
-      const locs = await this.store.query('location', { keyword: searchText })
+      const locs = await this.store.query('location', { keyword: searchText });
       this.suggestions = locs;
     } catch (e) {
       this.error =
@@ -66,14 +66,17 @@ export default class LocationSelectorComponent extends Component {
   }
 
   selectionSideEffects(model) {
-    const existing = this.store.peekRecord('location', `${model.lat},${model.lng}`);
+    const id = `${model.lat},${model.lng}`;
+    const existing = this.store.peekRecord('location', id);
+    // record exists already, skip save
     if (existing) {
-      return; // record exists already, skip save
+      return existing;
     }
+
     // TODO: save to localStorage?
     this.store.pushPayload('location', {
       data: {
-        id: `${model.lat},${model.lng}`,
+        id,
         type: 'location',
         attributes: {
           lat: model.lat,
@@ -81,9 +84,10 @@ export default class LocationSelectorComponent extends Component {
           name: model.name,
           full_name: model.fullName,
           saved: true,
-        }
-      }
-    })
+        },
+      },
+    });
+    return this.store.peekRecord('location', id);
   }
 
   @action selectLocation(model) {
@@ -91,9 +95,9 @@ export default class LocationSelectorComponent extends Component {
       keyword: encodeURIComponent(this.searchText),
       name: model.name,
       fullName: model.fullName,
-    }); 
-    this.selectionSideEffects(model)
-    this.args.onSelect(model.id);
+    });
+    const chosen = this.selectionSideEffects(model);
+    this.args.onSelect(chosen.id);
   }
 
   @action clearLocations() {

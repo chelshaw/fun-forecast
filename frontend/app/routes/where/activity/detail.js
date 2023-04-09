@@ -8,6 +8,7 @@ export default class WhereActivityDetailRoute extends Route {
   @service api;
   @service location;
   @service router;
+  @service store;
 
   queryParams = {
     when: {
@@ -15,11 +16,15 @@ export default class WhereActivityDetailRoute extends Route {
     },
   };
 
-  beforeModel() {
-    const { loc_ref } = this.paramsFor('where.activity');
-    const location = this.location.getByCoords(loc_ref);
-    if (!location) {
-      return this.router.transitionTo('where.choose');
+  async maybeGetLocation(locRef) {
+    try {
+      const foundLocation = await this.store.peekRecord('location', locRef);
+      if (!foundLocation) {
+        throw new Error('location not found');
+      }
+      return foundLocation;
+    } catch (e) {
+      return this.store.findRecord('location', locRef);
     }
   }
 
@@ -48,12 +53,12 @@ export default class WhereActivityDetailRoute extends Route {
     const { verb } = params;
     const { loc_ref } = this.paramsFor('where.activity');
     // If location doesn't exist we redirect before we get here
-    const location = this.location.getByCoords(loc_ref);
+    const location = await this.maybeGetLocation(loc_ref); 
     const whenDate = this.calcWhen(transition.to.queryParams.when);
     const when = this.relativeWhen(whenDate);
     const data = await this.api.singleActivity(
       verb,
-      location,
+      loc_ref,
       whenDate.toFormat(DATE_FORMAT)
     );
     return {

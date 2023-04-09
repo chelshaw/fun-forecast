@@ -51,14 +51,12 @@ export default class ApiService extends Service {
       wind: 10,
     }
    */
-  async singleActivity(verb, location, when) {
+  async singleActivity(verb, loc_ref, when) {
     if (!allowedVerbs().includes(verb)) {
       throw new Error(`No activity schema for "${verb}"`);
     }
     if (!ENV.APP.USE_MOCK) {
-      let path = `get-forecast/${encodeURIComponent(verb)}/${location.lat},${
-        location.lng
-      }`;
+      let path = `get-forecast/${encodeURIComponent(verb)}/${loc_ref}`;
       if (when) {
         path += `?when=${when}`;
       }

@@ -1,9 +1,10 @@
 {{page-title 'Choose Activity'}}
+
 <Portal @target='onboard-title'>
   <WhereToTitle @location={{this.model}} />
 </Portal>
 
 <div class='mx-auto max-w-md'>
-  <Field::ChooseActivity @location={{this.model}} />
+  <Field::ChooseActivity @location={{this.model}} @onSelect={{this.handleActivitySelect}} />
 </div>
 {{outlet}}

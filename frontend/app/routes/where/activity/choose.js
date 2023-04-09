@@ -8,7 +8,7 @@ export default class WhereActivityChooseRoute extends Route {
     try {
       const foundLocation = await this.store.peekRecord('location', locRef);
       if (!foundLocation) {
-        throw new Error('location not found')
+        throw new Error('location not found');
       }
       return foundLocation;
     } catch (e) {
@@ -17,6 +17,6 @@ export default class WhereActivityChooseRoute extends Route {
   }
   model() {
     const { loc_ref } = this.paramsFor('where.activity');
-    return this.maybeGetLocation(loc_ref)
+    return this.maybeGetLocation(loc_ref);
   }
 }
