@@ -14,7 +14,7 @@ module('Integration | Component | activity-overview', function (hooks) {
       .dom('[data-test-forecast-bar]')
       .doesNotExist('Forecast bar not rendered');
     assert
-      .dom('[data-test-activity-overview-empty')
+      .dom('[data-test-activity-overview-empty]')
       .hasText('No hours available');
   });
 
@@ -30,7 +30,7 @@ module('Integration | Component | activity-overview', function (hooks) {
     assert.dom('[data-test-activity-overview-icon]').hasText('🥾');
     assert.dom('[data-test-forecast-bar]').exists('Forecast bar is rendered');
     assert
-      .dom('[data-test-activity-overview-empty')
+      .dom('[data-test-activity-overview-empty]')
       .doesNotExist('Empty state not rendered');
   });
 });
