@@ -1,17 +1,23 @@
 <div class='text-center mx-auto py-8 relative'>
   <WhereToTitle />
 </div>
-
-<div class='mx-auto max-w-md'>
-  <Alert @level='danger' class='mb-4'>
-    <h1 class='font-bold'>Whoops something went wrong</h1>
-
-    <p class='mb-4'>Sorry for the inconvenience. We're tracking this and will
-      update soon!</p>
-    <code class='text-xs mt-4'>{{this.model}}</code>
+<div class='text-center my-16 mx-auto max-w-md'>
+  <Alert @level='danger'>
+    <div class='flex items-center gap-x-4'>
+      <div class='text-5xl shrink'>🙃</div>
+      <div>
+        <h1 class='font-bold text-lg'>Whoops something went wrong</h1>
+        <p class='mb-4'>Sorry for the inconvenience. We're tracking this and
+          will update soon!</p>
+        <code class='text-xs mt-4'>{{this.model}}</code>
+      </div>
+      <div class='text-5xl shrink'>🙃</div>
+    </div>
   </Alert>
-  <div class='mt-8'>
-    <LinkTo class='p-2 bg-blue-bright text-black' @route='where.choose'>Start
-      over</LinkTo>
-  </div>
+  <p class='my-8'>
+    <LinkTo
+      class='text-green-darkest dark:text-green-lightest border-2 border-transparent hover:border-green-darkest dark:hover:border-green-lightest transition font-bold underline underline-offset-4 p-2 block'
+      @route='where.choose'
+    >Start over</LinkTo>
+  </p>
 </div>
