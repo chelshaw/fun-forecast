@@ -5,8 +5,9 @@ import { inject as service } from '@ember/service';
 
 export default class LocationSelectorComponent extends Component {
   @service router;
-  @service store;
   @service metrics;
+  @service storage;
+  @service store;
 
   @tracked error = '';
   @tracked suggestions = [];
@@ -72,21 +73,29 @@ export default class LocationSelectorComponent extends Component {
     if (existing) {
       return existing;
     }
-
-    // TODO: save to localStorage?
-    this.store.pushPayload('location', {
-      data: {
-        id,
-        type: 'location',
-        attributes: {
-          lat: model.lat,
-          lng: model.lng,
-          name: model.name,
-          full_name: model.fullName,
-          saved: true,
-        },
+    const payload = {
+      id,
+      type: 'location',
+      attributes: {
+        lat: model.lat,
+        lng: model.lng,
+        name: model.name,
+        full_name: model.fullName,
+        saved: true,
       },
+    };
+
+    // try to store browser
+    try {
+      this.storage.addLocation(payload);
+    } catch (e) {
+      console.debug('unable to store location', e);
+    }
+
+    this.store.pushPayload('location', {
+      data: payload,
     });
+    // return the record we just pushed
     return this.store.peekRecord('location', id);
   }
 
@@ -102,6 +111,7 @@ export default class LocationSelectorComponent extends Component {
 
   @action clearLocations() {
     this.store.unloadAll('location');
+    this.storage.clearLocations();
     this.trackEvent('location_clear_cache');
   }
 }

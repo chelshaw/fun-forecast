@@ -6,9 +6,12 @@ import SimpleAnalytics from 'ember-metrics-simple-analytics';
 export default class ApplicationRoute extends Route {
   @service metrics;
   @service router;
+  @service storage;
 
   constructor() {
     super(...arguments);
+
+    this.storage.loadFromLocal();
 
     getOwner(this).register(
       'metrics-adapter:simple-analytics',
