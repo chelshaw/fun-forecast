@@ -2,25 +2,26 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'fun-forecast-frontend/tests/helpers';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import exampleForecastResponse from 'fun-forecast-frontend/utils/example-forecast-response';
 
 module('Integration | Component | forecast-bar', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  hooks.beforeEach(function () {
+    this.hours = exampleForecastResponse.evaluated_hours;
+  });
 
-    await render(hbs`<ForecastBar />`);
+  test('it renders all hours when this.allHours = true', async function (assert) {
+    await render(
+      hbs`<ForecastBar @verb={{this.verb}} @hours={{this.hours}} @allHours={{true}} />`
+    );
+    assert.dom('#hours rect').exists({ count: 24 });
+  });
 
-    assert.dom(this.element).hasText('');
-
-    // Template block usage:
-    await render(hbs`
-      <ForecastBar>
-        template block text
-      </ForecastBar>
-    `);
-
-    assert.dom(this.element).hasText('template block text');
+  test('it renders a subset of hours when this.allHours = false', async function (assert) {
+    await render(
+      hbs`<ForecastBar @verb={{this.verb}} @hours={{this.hours}} />`
+    );
+    assert.dom('#hours rect').exists({ count: 14 });
   });
 });
