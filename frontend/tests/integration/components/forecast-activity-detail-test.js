@@ -10,7 +10,6 @@ module('Integration | Component | forecast-activity-detail', function (hooks) {
   skip('it renders', async function (assert) {
     this.set('hours', exampleForecastResponse.evaluated_hours);
     await render(hbs`<ForecastActivityDetail @hours={{this.hours}} />`);
-    await this.pauseTest();
     assert.dom(this.element).hasText('');
   });
 });

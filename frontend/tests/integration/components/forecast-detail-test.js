@@ -23,7 +23,6 @@ module('Integration | Component | forecast-detail', function (hooks) {
     await render(
       hbs`<ForecastDetail @verb={{this.verb}} @forecast={{this.forecast}} @location={{this.location}} />`
     );
-    await this.pauseTest();
     assert.dom('#hours rect').exists({ count: 24 }, 'Shows all 24 hours');
   });
 });
