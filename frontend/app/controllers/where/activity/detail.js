@@ -25,8 +25,8 @@ export default class WhereActivityDetailController extends Controller {
     let whenParam = this.when;
     let model = this.model;
 
-    const date = this.calcWhen(whenParam)
-    const whenDate = date.toFormat(DATE_FORMAT)
-    return model.forecast.filter(h => h.start.startsWith(whenDate));
+    const date = this.calcWhen(whenParam);
+    const whenDate = date.toFormat(DATE_FORMAT);
+    return model.forecast.filter((h) => h.start.startsWith(whenDate));
   }
 }

@@ -42,9 +42,9 @@ export default class LocationSerializer extends JSONAPISerializer {
             attributes: {
               ...data,
               lng: data.long,
-              full_name: data.fullName
-            }
-          }
+              full_name: data.fullName,
+            },
+          },
         },
         id,
         requestType
