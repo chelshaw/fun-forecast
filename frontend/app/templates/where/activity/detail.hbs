@@ -3,18 +3,18 @@
 <Portal @target='onboard-title'>
   <WhereToTitle
     @location={{this.model.location}}
-    @verb={{this.model.data.verb}}
+    @verb={{this.model.verb}}
   />
 </Portal>
 
-<DateScroller @maxDay={{this.model.maxDay}} @param={{this.model.dayParam}} />
+<DateScroller @maxDay={{this.maxDates}} @param={{this.when}} />
 
 <div class='mx-auto max-w-md'>
   <ForecastDetail
-    @verb={{this.model.data.verb}}
+    @verb={{this.model.verb}}
     @location={{this.model.location}}
-    @forecast={{this.model.data.forecast}}
-    @sunrise={{this.model.data.location.sunrise}}
-    @sunset={{this.model.data.location.sunset}}
+    @forecast={{this.filteredHours}}
+    {{!-- @sunrise={{this.model.data.location.sunrise}}
+    @sunset={{this.model.data.location.sunset}} --}}
   />
 </div>

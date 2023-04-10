@@ -37,8 +37,8 @@
             type='button'
             {{on 'click' (fn this.selectLocation sugg)}}
           >
-            <p class='font-bold'>{{sugg.text}}</p>
-            <p class='text-xs italic'>{{sugg.place_name}}</p>
+            <p class='font-bold'>{{sugg.name}}</p>
+            <p class='text-xs italic'>{{sugg.fullName}}</p>
           </button>
         {{/each}}
         <button
@@ -47,17 +47,17 @@
           type='reset'
         >Reset</button>
       </div>
-    {{else if (and this.showRecents this.location.locations)}}
+    {{else if this.recentLocations}}
       <div class='py-4'>
         <h2 class='text-center font-bold text-xl'>Recent searches</h2>
-        {{#each this.location.locations as |recent|}}
+        {{#each this.recentLocations as |recent|}}
           <button
             class='border-y block w-full p-2 bg-white dark:bg-gray-900 hover:bg-green-lighter dark:hover:bg-green-darkest text-left'
             type='button'
-            {{on 'click' (fn @onSelect recent)}}
+            {{on 'click' (fn this.selectLocation recent)}}
           >
             <p class='font-bold'>{{recent.name}}</p>
-            <p class='text-xs italic'>{{recent.full_name}}</p>
+            <p class='text-xs italic'>{{recent.fullName}}</p>
           </button>
         {{/each}}
         <button {{on 'click' this.clearLocations}} type='button' class='block p-2 bg-red-bright dark:bg-red-darker text-white text-sm my-2'>Clear Recents</button>

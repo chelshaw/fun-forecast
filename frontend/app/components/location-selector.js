@@ -5,15 +5,13 @@ import { inject as service } from '@ember/service';
 
 export default class LocationSelectorComponent extends Component {
   @service router;
-  @service api;
-  @service location;
+  @service store;
   @service metrics;
 
   @tracked error = '';
   @tracked suggestions = [];
   @tracked searchText = '';
-  @tracked showRecents = true;
-  
+
   constructor() {
     super(...arguments);
 
@@ -24,10 +22,14 @@ export default class LocationSelectorComponent extends Component {
     }
   }
 
+  get recentLocations() {
+    return this.store.peekAll('location').filter((loc) => !!loc.saved);
+  }
+
   trackEvent(name, opts = {}) {
     try {
-      this.metrics.trackEvent(name, opts)
-    } catch(e) {
+      this.metrics.trackEvent(name, opts);
+    } catch (e) {
       // swallow error and continue
     }
   }
@@ -35,10 +37,10 @@ export default class LocationSelectorComponent extends Component {
   async fetchLocationSuggestions(searchText) {
     this.suggestions = [];
     if (!searchText) return;
-    
+
     try {
-      const { features } = await this.api.searchLocation(searchText);
-      this.suggestions = features;
+      const locs = await this.store.query('location', { keyword: searchText });
+      this.suggestions = locs;
     } catch (e) {
       this.error =
         e.message ||
@@ -58,33 +60,48 @@ export default class LocationSelectorComponent extends Component {
     evt.preventDefault();
     const searchText = this.searchText;
     this.trackEvent('location_search', {
-      keyword: encodeURIComponent(searchText)
+      keyword: encodeURIComponent(searchText),
     });
     this.fetchLocationSuggestions(searchText);
   }
 
-  @action selectLocation(loc) {
-    const [lng, lat] = loc.center;
-    const locData = {
-      id: `${lat},${lng}`,
-      lat,
-      lng,
-      name: loc.text,
-      full_name: loc.place_name,
-      search: this.searchText,
-    };
+  maybeSaveModel(model) {
+    const id = `${model.lat},${model.lng}`;
+    const existing = this.store.peekRecord('location', id);
+    // record exists already, skip save
+    if (existing) {
+      return existing;
+    }
+
+    // TODO: save to localStorage?
+    this.store.pushPayload('location', {
+      data: {
+        id,
+        type: 'location',
+        attributes: {
+          lat: model.lat,
+          lng: model.lng,
+          name: model.name,
+          full_name: model.fullName,
+          saved: true,
+        },
+      },
+    });
+    return this.store.peekRecord('location', id);
+  }
+
+  @action selectLocation(model) {
     this.trackEvent('location_search_selected', {
       keyword: encodeURIComponent(this.searchText),
-      name: locData.name,
-      place: locData.full_name,
+      name: model.name,
+      fullName: model.fullName,
     });
-    this.args.onSelect(locData);
+    const chosen = this.maybeSaveModel(model);
+    this.args.onSelect(chosen.id);
   }
 
   @action clearLocations() {
-    this.location.clear();
-    // Workaround for locations list not updating on display after clear
-    this.showRecents = false;
+    this.store.unloadAll('location');
     this.trackEvent('location_clear_cache');
   }
 }

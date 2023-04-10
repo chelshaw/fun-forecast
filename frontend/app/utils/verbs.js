@@ -15,9 +15,9 @@ export const allActivities = [
 ];
 
 export function getVerbIcon(verb) {
-  return allActivities.findBy(v => v.verb === verb)?.icon || '';
+  return allActivities.findBy((v) => v.verb === verb)?.icon || '';
 }
 
 export default function allowedVerbs() {
-  return allActivities.filter(v => v.active).map(v => v.verb)
+  return allActivities.filter((v) => v.active).map((v) => v.verb);
 }
