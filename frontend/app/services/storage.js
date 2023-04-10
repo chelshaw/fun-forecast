@@ -1,9 +1,11 @@
-import Service, { service } from '@ember/service';
-import ENV from 'fun-forecast-frontend/config/environment';
+import Service, { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 export const KEYS = {
   locations: 'FFv0_locations',
   betaAccess: 'FFv0_beta_access',
+  theme: 'FFv0_theme',
 };
 const OLD_KEYS = [
   'FF_locations',
@@ -15,6 +17,8 @@ const OLD_KEYS = [
 
 export default class StorageService extends Service {
   @service store;
+
+  @tracked currentMode = 'LIGHT';
 
   constructor() {
     super(...arguments);
@@ -53,6 +57,35 @@ export default class StorageService extends Service {
 
   clearLocations() {
     return this._remove(KEYS.locations);
+  }
+
+  /** Dark mode related helpers */
+  loadDarkMode() {
+    try {
+      const themeMode = this._get(KEYS.theme);
+      if (
+        themeMode === 'DARK' ||
+        (!themeMode &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        this.setTheme('DARK');
+      } else {
+        this.setTheme('LIGHT');
+      }
+    } catch (e) {
+      console.debug('Problem loading dark mode:', e);
+    }
+  }
+
+  @action
+  setTheme(mode) {
+    if (mode.toUpperCase() === 'DARK') {
+      this.currentMode = 'DARK';
+      this._set(KEYS.theme, 'DARK');
+    } else {
+      this.currentMode = 'LIGHT';
+      this._set(KEYS.theme, 'LIGHT');
+    }
   }
 
   /** Methods for internal use only */

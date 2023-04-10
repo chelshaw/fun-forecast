@@ -12,6 +12,7 @@ export default class ApplicationRoute extends Route {
     super(...arguments);
 
     this.storage.loadFromLocal();
+    this.storage.loadDarkMode();
 
     getOwner(this).register(
       'metrics-adapter:simple-analytics',
