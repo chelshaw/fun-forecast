@@ -6,21 +6,17 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | navbar', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
+  test('it renders heading by default', async function (assert) {
     await render(hbs`<Navbar />`);
 
-    assert.dom(this.element).hasText('');
+    assert.dom(this.element).hasText('🌞 🌚 Fun Forecast');
 
-    // Template block usage:
     await render(hbs`
       <Navbar>
         template block text
       </Navbar>
     `);
 
-    assert.dom(this.element).hasText('template block text');
+    assert.dom(this.element).includesText('template block text');
   });
 });

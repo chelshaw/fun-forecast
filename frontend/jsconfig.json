@@ -3,7 +3,8 @@
         "baseUrl": ".",
         "experimentalDecorators": true,
         "paths": {
-            "fun-forecast-frontend/*": ["./*"]
+            "fun-forecast-frontend/tests/*": ["./tests/*"],
+            "fun-forecast-frontend/*": ["./app/*"]
         }
     },
     "exclude": ["node_modules", "tmp", "temp"]

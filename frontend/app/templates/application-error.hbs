@@ -1,15 +1,15 @@
 <Navbar />
 <div class='text-center my-16 mx-auto max-w-md'>
   <Alert @level='danger'>
-    <div class='flex'>
-      <div class='text-5xl shrink'>😭</div>
+    <div class='flex items-center gap-x-4'>
+      <div class='text-5xl shrink'>🙃</div>
       <div>
-        <h1 class='font-bold text-lg text-red-300'>Whoops something went wrong</h1>
+        <h1 class='font-bold text-lg'>Whoops something went wrong</h1>
         <p class='mb-4'>Sorry for the inconvenience. We're tracking this and
           will update soon!</p>
         <code class='text-xs mt-4'>{{this.model}}</code>
       </div>
-      <div class='text-5xl shrink'>😭</div>
+      <div class='text-5xl shrink'>🙃</div>
     </div>
   </Alert>
   <p class='my-8'>
@@ -19,5 +19,3 @@
     >Go home</LinkTo>
   </p>
 </div>
-{{! template-lint-disable no-log }}
-{{log this.model}}

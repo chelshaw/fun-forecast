@@ -15,7 +15,8 @@ export const allActivities = [
 ];
 
 export function getVerbIcon(verb) {
-  return allActivities.findBy((v) => v.verb === verb)?.icon || '';
+  if (!verb) return '🟣';
+  return allActivities.find((v) => v.verb === verb)?.icon || '🟣';
 }
 
 export default function allowedVerbs() {

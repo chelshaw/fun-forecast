@@ -9,8 +9,6 @@ export default class WhereActivityDetailRoute extends Route {
   @service router;
   @service store;
 
-
-
   calcWhen(whenParam) {
     // TODO: some people have access to more dates?
     const errorOnDatesExceed = MAX_DATE;
@@ -37,10 +35,7 @@ export default class WhereActivityDetailRoute extends Route {
     const { loc_ref } = this.paramsFor('where.activity');
     // TODO: get model from parent route?
     const location = await this.store.findRecord('location', loc_ref);
-    const { forecast } = await this.api.singleActivity(
-      verb,
-      loc_ref,
-    );
+    const { forecast } = await this.api.singleActivity(verb, loc_ref);
     return {
       verb,
       location,

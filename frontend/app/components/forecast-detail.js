@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 
 /**
  * @verb string, lowercase
- * @location Location obj (id, name, lat, lng, full_name)
+ * @location Location obj (id, name, lat, lng, fullName)
  * @forecast array of forecast data { start, end, score }
  * @sunrise ISO timestamp
  * @sunset ISO timestamp

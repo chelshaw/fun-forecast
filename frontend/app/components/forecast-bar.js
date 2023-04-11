@@ -5,8 +5,6 @@ import { DateTime } from 'luxon';
 /**
  * module ForecastBar renders a horizontal bar for a single day of hours
  * @param {array} hours - Array of hours for a single day
- * @param {string} verb - Verb (lowercase) for display purposes
- * @param {string} loc - Location
  * @param {boolean} interactive - When true, displays details on click
  * @param {boolean} showSky - When true, displays sky gradient
  * @param {boolean} allHours - when true, display will not leave out the first and last 5 hours of the day.
@@ -26,6 +24,7 @@ export default class ForecastBarComponent extends Component {
       }))
       .filter((h) => {
         if (this.args.allHours) return true;
+        // TODO: filter based on sunrise/sunset
         return h.jsDate.hour > 5 && h.jsDate.hour < 20;
       })
       .map((h) => ({
