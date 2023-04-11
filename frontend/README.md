@@ -46,11 +46,14 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-Make sure .env has the appropriate keys. Copy the env file and fill in the missing values.
+Deployment should happen automatically when a merge happens to `release/*` branches. However, in the case that you need to perform a deploy from a local machine take the following steps: 
+
+- Make sure .env has the appropriate keys. Copy the example env file and fill in the missing values.
 `cp .example-env .env`
 
-- `ember deploy production`
-- `ember deploy staging`
+- Set env variable so the deploy pipeline knows to use the .env file `export FF_LOCAL_DEPLOY=1`
+- `yarn deploy:prod` 
+- Done!
 
 ## Further Reading / Useful Links
 
@@ -59,18 +62,6 @@ Make sure .env has the appropriate keys. Copy the env file and fill in the missi
 - Development Browser Extensions
   - [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   - [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-
-# Project
-
-## Jobs to be done
-
-### Core
-
-- [v] Sign up
-- [v] Log in/out
-- [v] Add activities
-- [ ] View overall forecast for a day
-- [ ] View detailed forecast for an activity/day
 
 ### Later
 

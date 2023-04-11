@@ -7,7 +7,7 @@ export default class ExampleRoute extends Route {
 
   async model() {
     const verb = 'hike';
-    const {evaluated_hours} = exampleForecastResponse;
+    const { evaluated_hours } = exampleForecastResponse;
     return {
       data: {
         verb,
@@ -20,7 +20,7 @@ export default class ExampleRoute extends Route {
         lat: 30.2711,
         lng: -97.7437,
         name: 'Santa Fe',
-      }
+      },
     };
   }
 }

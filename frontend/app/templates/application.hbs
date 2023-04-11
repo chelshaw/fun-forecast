@@ -1,7 +1,9 @@
 {{page-title 'Fun Forecast'}}
-<div class='bg-white dark:bg-gray-800 dark:text-white'>
-  <Navbar />
-  <div class='mx-auto min-h-screen relative'>
-    {{outlet}}
+<div class={{if this.isDarkMode 'dark'}}>
+  <div class='bg-white dark:bg-gray-800 dark:text-white'>
+    <Navbar />
+    <div class='mx-auto min-h-screen relative'>
+      {{outlet}}
+    </div>
   </div>
 </div>

@@ -1,14 +1,12 @@
 import os
 import requests
 from requests import Response
-from typing import Dict, Any
 
 import dacite
 from fastapi import HTTPException
 
 from fun_forecast_backend.core.standard_logger import get_logger
 from .dataclasses import GeocodeResponse
-
 
 logger = get_logger()
 

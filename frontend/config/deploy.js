@@ -26,9 +26,9 @@ module.exports = function (deployTarget) {
   if (deployTarget === 'staging') {
     // We don't actually use staging at the moment
     // Values will need to be updated when we do
-    ENV.pipeline.activateOnDeploy = false
+    ENV.pipeline.activateOnDeploy = false;
     ENV.build.environment = 'development';
-    ENV.s3.bucket = 'none'; 
+    ENV.s3.bucket = 'none';
     ENV.s3.region = 'none';
     ENV.cloudfront.distribution = 'none';
   }

@@ -20,7 +20,7 @@
     "lint:js:fix": "eslint . --fix",
     "deploy:staging": "ember deploy staging",
     "deploy:prod": "ember deploy production --verbose",
-    "start": "ember serve --proxy=http://localhost:5001 --port=4200",
+    "start": "export FF_LOCAL_DEPLOY=1; ember serve --proxy=http://localhost:5001 --port=4200",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test"
   },

@@ -4,10 +4,10 @@ import { action } from '@ember/object';
 
 export default class WhereChooseController extends Controller {
   @service router;
-  @service location;
 
-  @action onLocationSelect(locData) {
-    this.location.add(locData);
-    this.router.transitionTo('where.activity.choose', { loc_ref: `${locData.lat},${locData.lng}` });
+  @action onLocationSelect(loc_ref) {
+    this.router.transitionTo('where.activity.choose', {
+      loc_ref,
+    });
   }
 }
