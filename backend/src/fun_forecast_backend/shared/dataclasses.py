@@ -1,5 +1,5 @@
 import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional, Any
 
@@ -36,4 +36,6 @@ class HourData:
     weatherStr: str
     weatherCode: WeatherCondition
     score: Optional[int] = None
+    score_reasons: Optional[list] = field(default_factory=list)
+    score_reasons_prohibited: Optional[list] = field(default_factory=list)
     unit: str = None
