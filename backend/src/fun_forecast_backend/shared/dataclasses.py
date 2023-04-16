@@ -36,6 +36,6 @@ class HourData:
     weatherStr: str
     weatherCode: WeatherCondition
     score: Optional[int] = None
-    score_reasons: Optional[list] = field(default_factory=list)
-    score_reasons_prohibited: Optional[list] = field(default_factory=list)
+    scoreReasons: Optional[list] = field(default_factory=list)
+    scoreReasonsProhibited: Optional[list] = field(default_factory=list)
     unit: str = None
