@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = function (environment) {
+  console.log('config env:', environment);
   const ENV = {
     modulePrefix: 'fun-forecast-frontend',
     environment,
@@ -19,6 +20,9 @@ module.exports = function (environment) {
       // when it is created
       betacode: process.env.FF_BETACODE,
       apiBase: 'http://localhost:4200',
+      contentSecurityPolicy: {
+        'connect-src': "'self' https://api.myfunforecast.com",
+      },
     },
 
     metricsAdapters: [
