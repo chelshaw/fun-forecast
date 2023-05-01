@@ -29,6 +29,7 @@ class WeatherApiPointProperties:
     gridY: int
     relativeLocation: WeatherApiRelativeLocation
     timeZone: str
+    forecastHourly: str
 
 
 @dataclass

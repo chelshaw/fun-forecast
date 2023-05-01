@@ -40,7 +40,9 @@
     {{#let
       (scale-linear range=(array 0 width) domain=this.widthDomain)
       (scale-time range=(array 0 width) domain=this.timeDomain)
-      (scale-diverging domain=(array 0 0.5 1) range=(color-interpolator))
+      (scale-diverging
+        domain=(array 0 this.midpoint 1) range=(color-interpolator)
+      )
       as |hourScale timeScale colors|
     }}
       {{#if (and timeScale.isValid hourScale.isValid)}}
