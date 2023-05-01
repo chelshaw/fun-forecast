@@ -67,6 +67,18 @@ export default class ApiService extends Service {
     return this.generateForecast(verb);
   }
 
+  async getMultipleActivities(verbs, location) {
+    if (!ENV.APP.USE_MOCK) {
+      let path = `get-forecasts/${location.lat},${location.lng}/${verbs
+        .map((v) => encodeURIComponent(v))
+        .join(',')}`;
+      const results = await this.fetch(path);
+      return [...results];
+    }
+    console.debug(`Generating forecasts for ${verbs.join(', ')}`);
+    return Promise.all(verbs.map((verb) => this.generateForecast(verb)));
+  }
+
   generateForecast(verb = 'hike', startNow = true) {
     // Mock what we get back from the API
     const now = DateTime.now();
@@ -75,9 +87,10 @@ export default class ApiService extends Service {
     // const sunset = today.set({ hour: 17, minute: 57 });
     const forecast = [];
     const start = startNow ? now.hour : 0;
-    for (let hour = start; hour < 24; hour++) {
+    let score = Math.random();
+    for (let hour = start; hour < start + 48; hour++) {
       const time = today.set({ hour, minute: 0 });
-      const score = Math.random(); // hour < 5 ? 2 : getRandomInt(3);
+      // const score = Math.random(); // hour < 5 ? 2 : getRandomInt(3);
       forecast.push({
         start: time.toISO(),
         end: time.plus({ hours: 1 }).toISO(),
@@ -89,10 +102,19 @@ export default class ApiService extends Service {
         weatherStr: 'sunny',
         wind: 10,
       });
+      const charge = Math.random() > 0.49 ? 0.5 : -0.5;
+      const delta = Math.random() * charge;
+      score = score + delta;
+      if (score < -1) {
+        score = -1;
+      } else if (score > 1) {
+        score = 1;
+      }
     }
     return {
       verb,
       forecast,
+      evaluated_hours: forecast,
     };
   }
 

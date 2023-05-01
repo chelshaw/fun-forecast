@@ -16,6 +16,10 @@ export default class ForecastBarComponent extends Component {
   chartWidthPct = 30;
   @tracked highlighted = null;
 
+  get midpoint() {
+    return this.args.midpoint || 0.5;
+  }
+
   get hours() {
     return this.args.hours
       .map((h) => ({
