@@ -87,4 +87,4 @@ Read (this tutorial)[https://twissmueller.medium.com/resolving-the-problem-of-po
 
 ## AWS Architecture & Resources
 CICD/ECR reference: https://www.youtube.com/watch?v=Hv5UcBYseus&feature=youtu.be
-ECS tutorial: https://www.youtube.com/watch?v=esISkPlnxL0
+ECS tutorial: https://www.youtube.com/watch?v=esISkPlnxL0 
