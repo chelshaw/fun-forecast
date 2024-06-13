@@ -70,7 +70,7 @@ def point_from_coords(lat: float, long: float) -> WeatherApiPoint:
 
 
 def weather_from_point(p: WeatherApiPoint) -> WeatherData:
-    url = f"https://api.weather.gov/gridpoints/{p.properties.gridId}/{p.properties.gridX},{p.properties.gridY}/forecast/hourly?units=us"
+    url = p.properties.forecastHourly
     logger.debug(f"Fetching data from: {url}")
 
     r: Response = requests.get(url)

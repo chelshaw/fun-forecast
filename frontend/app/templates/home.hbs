@@ -111,8 +111,8 @@
         </g>
       </svg>
     </h2>
-    <p class='text-xl mb-4'>Where outdoor enthusiasts find out the best time to do
-      the things they love.</p>
+    <p class='text-xl mb-4'>Where outdoor enthusiasts find out the best time to
+      do the things they love.</p>
     <div class='md:flex text-center justify-around'>
       <LinkTo
         @route='example'
@@ -128,21 +128,27 @@
       </LinkTo>
     </div>
   </div>
-  <div class="h-12"></div>
+  <div class='h-12'></div>
 </section>
+
+{{#if this.model}}
+  <section class='m-16 pb-16'>
+    <ActivitiesComparison @activities={{this.model}} />
+  </section>
+{{/if}}
 
 <div
   class='fixed bottom-2 left-2 right-2 p-2 bg-yellow-lighter dark:bg-yellow-darkest md:tracking-widest text-yellow-darkest dark:text-yellow-lightest text-center flex justify-around border-2 border-yellow-dark'
 >
-  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
-  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
-  <span class="motion-safe:animate-spin-slow">🍪</span>
-  <span class="motion-safe:animate-spin-slow">🍪</span>
-  <span class="motion-safe:animate-spin-slow">🍪</span>
+  <span class='motion-safe:animate-spin-slow hidden md:block'>🍪</span>
+  <span class='motion-safe:animate-spin-slow hidden md:block'>🍪</span>
+  <span class='motion-safe:animate-spin-slow'>🍪</span>
+  <span class='motion-safe:animate-spin-slow'>🍪</span>
+  <span class='motion-safe:animate-spin-slow'>🍪</span>
   <span>We don't use cookies.</span>
-  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
-  <span class="motion-safe:animate-spin-slow hidden md:block">🍪</span>
-  <span class="motion-safe:animate-spin-slow">🍪</span>
-  <span class="motion-safe:animate-spin-slow">🍪</span>
-  <span class="motion-safe:animate-spin-slow">🍪</span>
+  <span class='motion-safe:animate-spin-slow hidden md:block'>🍪</span>
+  <span class='motion-safe:animate-spin-slow hidden md:block'>🍪</span>
+  <span class='motion-safe:animate-spin-slow'>🍪</span>
+  <span class='motion-safe:animate-spin-slow'>🍪</span>
+  <span class='motion-safe:animate-spin-slow'>🍪</span>
 </div>

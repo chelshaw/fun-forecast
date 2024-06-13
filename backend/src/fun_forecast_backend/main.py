@@ -91,3 +91,26 @@ async def get_activity_forecast(verb: str, lat: float, long: float) -> JSONRespo
         logger.error(f"Failed get_activity_forecast, inputs verb={verb}, lat={lat}, long={long}: {e}")
         empty_return = Forecast(verb=verb)
         return asdict(empty_return)
+
+@app.get("/api/v0/get-forecasts/{lat},{long}/{verbs}")
+async def get_activity_forecasts(lat: float, long: float, verbs: str) -> JSONResponse:
+    logger.debug(f"Processing get_activity_forecast request, inputs verbs={verbs}, lat={lat}, long={long}")
+    verbList = verbs.split(',')
+    try:
+        # get weather data for coordinates
+        hours: List[HourData] = hourly_forecast_for_coords(lat=lat, long=long)
+
+        # fetch activity schemas
+        schemas: List[ActivitySchema] = [get_activity_schema_by_key(v) for v in verbList]
+
+        logger.debug(schemas)
+        # predict activity viability
+        forecasts: List[Forecast] = [calculate_forecast(schema, hours) for schema in schemas]
+
+        logger.debug(f'Successfully processed get_activity_forecast, inputs verb={verbs}, lat={lat}, long={long}')
+        json_compatible_item_data = jsonable_encoder(forecasts)
+        return JSONResponse(content=json_compatible_item_data)
+    except Exception as e:
+        logger.error(f"Failed get_activity_forecast, inputs verb={verbs}, lat={lat}, long={long}: {e}")
+        empty_return = Forecast(verb=verbs)
+        return asdict(empty_return)
