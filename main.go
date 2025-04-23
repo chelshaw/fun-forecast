@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/honeycombio/otel-config-go/otelconfig"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 func rolldice(w http.ResponseWriter, r *http.Request) {
@@ -22,13 +24,22 @@ func rolldice(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// use otelconfig to setup OpenTelemetry SDK
+	otelShutdown, err := otelconfig.ConfigureOpenTelemetry()
+	if err != nil {
+		log.Fatalf("error setting up OTel SDK - %e", err)
+	}
+	defer otelShutdown()
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// an example API handler
 		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
 	}).Methods("GET")
 
-	r.HandleFunc("/rolldice", rolldice).Methods("GET")
+	handler := http.HandlerFunc(rolldice)
+	wrappedHandler := otelhttp.NewHandler(handler, "rolldice")
+	r.HandleFunc("/rolldice", wrappedHandler.ServeHTTP).Methods("GET")
 
 	srv := &http.Server{
 		Handler: r,
