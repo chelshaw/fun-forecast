@@ -1,6 +1,7 @@
 package weather
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -57,9 +58,9 @@ type HourData struct {
 	WindRange   []int64 `json:"wind"` // eg "5 to 10 mph" => [5, 10]
 	Start       string  `json:"start"`
 	End         string  `json:"end"`
-	IsDaytime   bool    `json:"isDaytime"`
-	WeatherStr  string  `json:"weatherStr"`
-	WeatherCode string  `json:"weatherCode"`
+	IsDaytime   bool    `json:"daytime"`
+	WeatherStr  string  `json:"forecast"`
+	WeatherCode string  `json:"weather_code"`
 	Unit        string  `json:"unit"`
 }
 
@@ -79,21 +80,22 @@ func parseWind(ws string) []int64 {
 }
 
 // Function to parse the API response and save it into a struct
-// func parseWeatherApiResponse(apiResponse *WeatherApiResponse) (*[]HourData, error) {
-// 	var d []HourData
-// 	for i, v := range apiResponse.Properties.Periods {
-// 		fmt.Println(i, v)
-// 		h := HourData{
-// 			Temperature: v.Temperature,
-// 			WindRange:   parseWind(v.WindSpeed),
-// 			Start:       v.StartTime,
-// 			End:         v.EndTime,
-// 			IsDaytime:   v.IsDaytime,
-// 			WeatherStr:  v.ShortForecast,
-// 			WeatherCode: v.Icon,
-// 			Unit:        v.TemperatureUnit,
-// 		}
-// 		d[i] = h
-// 	}
-// 	return &d, nil
-// }
+func parseWeatherApiResponse(apiResponse *WeatherApiResponse) (*[]HourData, error) {
+	var d []HourData
+	for i, v := range apiResponse.Properties.Periods {
+		fmt.Println(i, v)
+		h := HourData{
+			Temperature: v.Temperature,
+			WindRange:   parseWind(v.WindSpeed),
+			Start:       v.StartTime,
+			End:         v.EndTime,
+			IsDaytime:   v.IsDaytime,
+			WeatherStr:  v.ShortForecast,
+			WeatherCode: v.Icon,
+			Unit:        v.TemperatureUnit,
+		}
+		d = append(d, h)
+		log.Printf("Parsed weather data: %v", h)
+	}
+	return &d, nil
+}

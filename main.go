@@ -2,9 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io"
 	"log"
-	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
@@ -15,13 +13,49 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
-func rolldice(w http.ResponseWriter, r *http.Request) {
-	roll := 1 + rand.Intn(6)
+func weatherHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
-	resp := strconv.Itoa(roll) + "\n"
-	if _, err := io.WriteString(w, resp); err != nil {
-		log.Printf("Write failed: %v\n", err)
+	// get valid lat/lon from URL
+	vars := mux.Vars(r)
+	latStr, latExists := vars["lat"]
+	if !latExists || latStr == "" {
+		// span.SetStatus(codes.Error, "Missing or invalid latitude")
+		http.Error(w, "Missing or invalid latitude", http.StatusBadRequest)
+		return
 	}
+
+	lonStr, lonExists := vars["lon"]
+	if !lonExists || lonStr == "" {
+		// span.SetStatus(codes.Error, "Missing or invalid longitude")
+		http.Error(w, "Missing or invalid longitude", http.StatusBadRequest)
+		return
+	}
+	lat, err := strconv.ParseFloat(latStr, 64)
+	if err != nil {
+		// span.RecordError(err)
+		// span.SetStatus(codes.Error, err.Error())
+		http.Error(w, "Invalid latitude", http.StatusBadRequest)
+		return
+	}
+	lon, err := strconv.ParseFloat(lonStr, 64)
+	if err != nil {
+		// span.RecordError(err)
+		// span.SetStatus(codes.Error, err.Error())
+		http.Error(w, "Invalid longitude", http.StatusBadRequest)
+		return
+	}
+
+	h, err := weather.GetWeather(ctx, lat, lon)
+	if err != nil {
+		// span.RecordError(err)
+		// span.SetStatus(codes.Error, err.Error())
+		http.Error(w, "Error getting weather", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(h)
 }
 
 func main() {
@@ -34,10 +68,10 @@ func main() {
 	instantiateApp()
 }
 
-// func instrHandler(n string, h func(w http.ResponseWriter, r *http.Request)) http.Handler {
-// 	handler := http.HandlerFunc(h)
-// 	return otelhttp.NewHandler(handler, n)
-// }
+func instrHandler(n string, h func(w http.ResponseWriter, r *http.Request)) http.Handler {
+	handler := http.HandlerFunc(h)
+	return otelhttp.NewHandler(handler, n)
+}
 
 func instantiateApp() {
 	r := mux.NewRouter()
@@ -45,13 +79,7 @@ func instantiateApp() {
 		// an example API handler
 		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
 	}).Methods("GET")
-
-	handler := http.HandlerFunc(rolldice)
-	diceHandler := otelhttp.NewHandler(handler, "rolldice")
-	r.HandleFunc("/rolldice", diceHandler.ServeHTTP).Methods("GET")
-	// weatherHandler := instrHandler("getWeather", weather.GetWeather)
-	wHandler := http.HandlerFunc(weather.GetWeather)
-	weatherHandler := otelhttp.NewHandler(wHandler, "getWeather")
+	weatherHandler := instrHandler("getWeather", weatherHandler)
 	r.HandleFunc("/weather/{lat}/{lon}", weatherHandler.ServeHTTP).Methods("GET")
 
 	srv := &http.Server{

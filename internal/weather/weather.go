@@ -1,59 +1,57 @@
 package weather
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
-	"github.com/gorilla/mux"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
 )
 
-func GetWeather(w http.ResponseWriter, r *http.Request) {
-	log.Println("getWeather called")
-	vars := mux.Vars(r)
-	latStr, latExists := vars["lat"]
-	if !latExists || latStr == "" {
-		http.Error(w, "Missing or invalid latitude", http.StatusBadRequest)
-		return
+// Top-level handlers go here
+
+var tracer trace.Tracer
+
+func GetWeather(ctx context.Context, lat float64, lon float64) (*[]HourData, error) {
+	tracer = otel.Tracer("funforecast.weather") // if not already in scope
+	ctx, span := tracer.Start(ctx, "GetWeather")
+	defer span.End()
+
+	span.SetAttributes(attribute.Float64("weather.req.lat", lat))
+	span.SetAttributes(attribute.Float64("weather.req.lon", lon))
+
+	// get point from lat/lon
+	p, err := pointFromCoords(ctx, lat, lon)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		return nil, err
+	}
+	span.SetAttributes(attribute.String("weather.point.city", p.City))
+	span.SetAttributes(attribute.String("weather.point.state", p.State))
+
+	// get weather for point
+	f, err := weatherForPoint(ctx, p)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		return nil, err
 	}
 
-	lonStr, lonExists := vars["lon"]
-	if !lonExists || lonStr == "" {
-		http.Error(w, "Missing or invalid longitude", http.StatusBadRequest)
-		return
-	}
-	lat, err := strconv.ParseFloat(latStr, 64)
+	// parse the weather response
+	h, err := parseWeatherApiResponse(f)
 	if err != nil {
-		http.Error(w, "Invalid latitude", http.StatusBadRequest)
-		return
-	}
-	lon, err := strconv.ParseFloat(lonStr, 64)
-	if err != nil {
-		http.Error(w, "Invalid longitude", http.StatusBadRequest)
-		return
-	}
-	log.Printf("URL params lat: %f, lon: %f", lat, lon)
-	p, err := pointFromCoords(lat, lon)
-	if err != nil {
-		log.Printf("Error getting point from coordinates: %v", err)
-		http.Error(w, "Failed getting point", http.StatusBadRequest)
-		return
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		return nil, err
 	}
 
-	f, err := weatherForPoint(p)
-	if err != nil {
-		http.Error(w, "Error getting weather", http.StatusInternalServerError)
-		return
-	}
-	// w := ParseWeatherApiResponse(f)
-
-	// http.Error(w, "Done", http.StatusOK)
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
-	// json.NewEncoder(w).Encode(map[string]float64{"lat": lat, "lon": lon})
-	json.NewEncoder(w).Encode(f)
+	return h, nil
 }
 
 // func forecastForLatLon(lat float64, lon float64) (*WeatherApiResponse, error) {
@@ -71,7 +69,14 @@ func GetWeather(w http.ResponseWriter, r *http.Request) {
 // 	return w, nil
 // }
 
-func weatherForPoint(p *Point) (*WeatherApiResponse, error) {
+func weatherForPoint(ctx context.Context, p *Point) (*WeatherApiResponse, error) {
+	_, span := tracer.Start(ctx, "weatherForPoint")
+	defer span.End()
+	span.SetAttributes(
+		attribute.String("weather.point.grid.id", p.GridId),
+		attribute.Int("weather.point.grid.x", p.GridX),
+		attribute.Int("weather.point.grid.y", p.GridY),
+	)
 	url := fmt.Sprintf("https://api.weather.gov/gridpoints/%s/%d,%d/forecast/hourly?units=us", p.GridId, p.GridX, p.GridY)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -90,11 +95,14 @@ func weatherForPoint(p *Point) (*WeatherApiResponse, error) {
 	defer resp.Body.Close()
 
 	var apiResponse WeatherApiResponse
+	// var apiResponse map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&apiResponse)
 	if err != nil {
 		log.Printf("Error decoding API response: %v", err)
 		return nil, err
 	}
+
+	// TODO: This is broken
 	// h, err := parseWeatherApiResponse(&apiResponse)
 	// if err != nil {
 	// 	log.Printf("Error parsing API response: %v", err)
