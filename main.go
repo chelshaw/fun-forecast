@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/chelshaw/fun-forecast/internal/weather"
 	"github.com/gorilla/mux"
 	"github.com/honeycombio/otel-config-go/otelconfig"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
@@ -30,7 +31,15 @@ func main() {
 		log.Fatalf("error setting up OTel SDK - %e", err)
 	}
 	defer otelShutdown()
+	instantiateApp()
+}
 
+// func instrHandler(n string, h func(w http.ResponseWriter, r *http.Request)) http.Handler {
+// 	handler := http.HandlerFunc(h)
+// 	return otelhttp.NewHandler(handler, n)
+// }
+
+func instantiateApp() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// an example API handler
@@ -38,8 +47,12 @@ func main() {
 	}).Methods("GET")
 
 	handler := http.HandlerFunc(rolldice)
-	wrappedHandler := otelhttp.NewHandler(handler, "rolldice")
-	r.HandleFunc("/rolldice", wrappedHandler.ServeHTTP).Methods("GET")
+	diceHandler := otelhttp.NewHandler(handler, "rolldice")
+	r.HandleFunc("/rolldice", diceHandler.ServeHTTP).Methods("GET")
+	// weatherHandler := instrHandler("getWeather", weather.GetWeather)
+	wHandler := http.HandlerFunc(weather.GetWeather)
+	weatherHandler := otelhttp.NewHandler(wHandler, "getWeather")
+	r.HandleFunc("/weather/{lat}/{lon}", weatherHandler.ServeHTTP).Methods("GET")
 
 	srv := &http.Server{
 		Handler: r,
