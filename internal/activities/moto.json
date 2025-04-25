@@ -1,0 +1,70 @@
+{
+    "verb": "motorcycle",
+    "wind": {
+      "min": 0,
+      "ideal": 5,
+      "max": 30,
+      "units": "mph"
+    },
+    "temp": {
+      "min": 60,
+      "ideal": 80,
+      "max": 97,
+      "units": "F"
+    },
+    "conditions": {
+        "sunny": {
+            "type": "fixed",
+            "score": 0.8
+        },
+        "cloudy": {
+            "type": "fixed",
+            "score": 1.0
+        },
+        "rain": {
+            "type": "fixed",
+            "score": 0.2
+        },
+        "snow": {
+            "type": "fixed",
+            "score": 0.0
+        },
+        "fog": {
+            "type": "fixed",
+            "score": 0.0
+        },
+        "storm": {
+            "type": "fixed",
+            "score": 0.0
+        },
+        "hail": {
+            "type": "fixed",
+            "score": 0.0
+        },
+        "sleet": {
+            "type": "fixed",
+            "score": 0.0
+        },
+        "ice": {
+            "type": "fixed",
+            "score": 0.0
+        }
+    },
+    "weather_conditions": {
+      "acceptable": {
+        "sunny": -2
+      },
+      "never": [
+        "STORM",
+        "RAIN",
+        "HAIL",
+        "SLEET",
+        "ICE",
+        "FOG"
+      ]
+    },
+    "light_conditions": {
+      "daytime": true,
+      "nighttime": true
+    }
+  }

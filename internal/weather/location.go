@@ -6,15 +6,17 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 
+	"github.com/chelshaw/fun-forecast/internal/tracehttp"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 )
 
-func addHeaders(req *http.Request) {
-	req.Header.Set("Accept", "application/geo+json")
-	req.Header.Add("User-Agent", "(funforecast.com, chelshaw.dev@gmail.com)")
+func weatherHeaders() *map[string]string {
+	return &map[string]string{
+		"Accept":     "application/geo+json",
+		"User-Agent": "(funforecast.com, chelshaw.dev@gmail.com)",
+	}
 }
 
 func getPreciseCoords(lat float64, lon float64) (string, string) {
@@ -24,30 +26,27 @@ func getPreciseCoords(lat float64, lon float64) (string, string) {
 }
 
 func pointFromCoords(ctx context.Context, lat float64, lon float64) (*Point, error) {
-	_, span := tracer.Start(ctx, "pointFromCoords")
+	ctx, span := tracer.Start(ctx, "pointFromCoords")
 	defer span.End()
 
 	latS, lonS := getPreciseCoords(lat, lon)
 	span.SetAttributes(
-		attribute.Float64("weather.req.lat", lat),
-		attribute.Float64("weather.req.lon", lon),
+		attribute.String("weather.req.lat_precise", latS),
+		attribute.String("weather.req.lon_precise", lonS),
 	)
+
+	client := tracehttp.NewTracingClient()
 	url := fmt.Sprint("https://api.weather.gov/points/", latS, ",", lonS)
-	req, err := http.NewRequest("GET", url, nil)
+	resp, err := client.Get(ctx, url, *weatherHeaders())
+	// map[string]string{
+	// 	"Accept":     "application/geo+json",
+	// 	"User-Agent": "(funforecast.com, chelshaw.dev@gmail.com)",
+	// }
 	if err != nil {
 		span.RecordError(err)
 		span.SetStatus(codes.Error, err.Error())
 		return nil, err
 	}
-
-	addHeaders(req)
-	resp, err := http.Get(url)
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, err.Error())
-		return nil, err
-	}
-
 	if resp.StatusCode != 200 {
 		body, _ := io.ReadAll(resp.Body)
 		span.RecordError(fmt.Errorf("API Error: %s", string(body)))

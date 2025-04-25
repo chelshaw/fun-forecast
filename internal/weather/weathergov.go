@@ -1,10 +1,13 @@
 package weather
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
+
+	"go.opentelemetry.io/otel/attribute"
 )
 
 // Struct definitions to match the JSON structure
@@ -79,8 +82,53 @@ func parseWind(ws string) []int64 {
 	return wr
 }
 
+var weatherCodes = map[string]string{
+	"clear":         "CLEAR",
+	"mostly_clear":  "MOSTLY_CLEAR",
+	"partly_cloudy": "PARTLY_CLOUDY",
+	"cloud":         "CLOUDY",
+	"storm":         "STORM",
+	"rain":          "RAINY",
+	"snow":          "SNOW",
+	"fog":           "FOG",
+	"unknown":       "UNKNOWN",
+}
+
+func getWeatherCode(ctx context.Context, shortForecast string) string {
+	_, span := tracer.Start(ctx, "getWeatherCode")
+	defer span.End()
+	span.SetAttributes(attribute.String("weather.req.short_forecast", shortForecast))
+	f := strings.ToLower(shortForecast)
+	c := weatherCodes["unknown"]
+
+	if f == "mostly sunny" || f == "mostly clear" {
+		c = weatherCodes["clear"]
+	} else if f == "partly sunny" || f == "partly cloudy" {
+		c = weatherCodes["partly_cloudy"]
+	} else if strings.Contains(f, "storm") {
+		// TODO: storm intensity?
+		c = weatherCodes["storm"]
+	} else if strings.Contains(f, "rain") || strings.Contains(f, "shower") {
+		c = weatherCodes["rain"]
+	} else if strings.Contains(f, "snow") {
+		c = weatherCodes["snow"]
+	} else if strings.Contains(f, "sun") || strings.Contains(f, "clear") {
+		c = weatherCodes["clear"]
+	} else if strings.Contains(f, "cloud") {
+		c = weatherCodes["cloud"]
+	} else if strings.Contains(f, "fog") {
+		c = weatherCodes["fog"]
+	} else if strings.Contains(f, "wind") {
+		c = weatherCodes["wind"]
+	}
+	span.SetAttributes(attribute.String("weather.req.weather_code", c))
+	return c
+}
+
 // Function to parse the API response and save it into a struct
-func parseWeatherApiResponse(apiResponse *WeatherApiResponse) (*[]HourData, error) {
+func parseWeatherApiResponse(ctx context.Context, apiResponse *WeatherApiResponse) (*[]HourData, error) {
+	ctx, span := tracer.Start(ctx, "parseWeatherApiResponse")
+	defer span.End()
 	var d []HourData
 	for i, v := range apiResponse.Properties.Periods {
 		fmt.Println(i, v)
@@ -90,7 +138,7 @@ func parseWeatherApiResponse(apiResponse *WeatherApiResponse) (*[]HourData, erro
 			Start:       v.StartTime,
 			End:         v.EndTime,
 			IsDaytime:   v.IsDaytime,
-			WeatherStr:  v.ShortForecast,
+			WeatherStr:  getWeatherCode(ctx, v.ShortForecast),
 			WeatherCode: v.Icon,
 			Unit:        v.TemperatureUnit,
 		}

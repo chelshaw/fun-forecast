@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
-	"net/http"
 
+	"github.com/chelshaw/fun-forecast/internal/tracehttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
@@ -44,7 +45,7 @@ func GetWeather(ctx context.Context, lat float64, lon float64) (*[]HourData, err
 	}
 
 	// parse the weather response
-	h, err := parseWeatherApiResponse(f)
+	h, err := parseWeatherApiResponse(ctx, f)
 	if err != nil {
 		span.RecordError(err)
 		span.SetStatus(codes.Error, err.Error())
@@ -70,7 +71,7 @@ func GetWeather(ctx context.Context, lat float64, lon float64) (*[]HourData, err
 // }
 
 func weatherForPoint(ctx context.Context, p *Point) (*WeatherApiResponse, error) {
-	_, span := tracer.Start(ctx, "weatherForPoint")
+	ctx, span := tracer.Start(ctx, "weatherForPoint")
 	defer span.End()
 	span.SetAttributes(
 		attribute.String("weather.point.grid.id", p.GridId),
@@ -78,35 +79,30 @@ func weatherForPoint(ctx context.Context, p *Point) (*WeatherApiResponse, error)
 		attribute.Int("weather.point.grid.y", p.GridY),
 	)
 	url := fmt.Sprintf("https://api.weather.gov/gridpoints/%s/%d,%d/forecast/hourly?units=us", p.GridId, p.GridX, p.GridY)
-	req, err := http.NewRequest("GET", url, nil)
+	client := tracehttp.NewTracingClient()
+	resp, err := client.Get(ctx, url, map[string]string{
+		"Accept":     "application/geo+json",
+		"User-Agent": "(funforecast.com,chelshaw.dev@gmail.com)",
+	})
 	if err != nil {
-		log.Printf("Error creating request: %v", err)
-		return nil, err
-	}
-	addHeaders(req)
-	resp, err := http.Get(url)
-
-	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
+		body, _ := io.ReadAll(resp.Body)
+		span.RecordError(fmt.Errorf("API Error: %s", string(body)))
+		span.SetStatus(codes.Error, resp.Status)
 		return nil, fmt.Errorf("error from API: %s", resp.Status)
 	}
 	defer resp.Body.Close()
 
 	var apiResponse WeatherApiResponse
-	// var apiResponse map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&apiResponse)
 	if err != nil {
 		log.Printf("Error decoding API response: %v", err)
 		return nil, err
 	}
 
-	// TODO: This is broken
-	// h, err := parseWeatherApiResponse(&apiResponse)
-	// if err != nil {
-	// 	log.Printf("Error parsing API response: %v", err)
-	// 	return nil, err
-	// }
 	return &apiResponse, nil
 }
