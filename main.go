@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/chelshaw/fun-forecast/internal/activities"
+	"github.com/chelshaw/fun-forecast/internal/forecast"
 	"github.com/chelshaw/fun-forecast/internal/weather"
 	"github.com/gorilla/mux"
 	"github.com/honeycombio/otel-config-go/otelconfig"
@@ -27,6 +28,26 @@ func requiredVars(v map[string]string, keys ...string) (map[string]string, error
 	return v, nil
 }
 
+func getForecast(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	d := weather.ExampleHourData()
+	a, _ := activities.GetMotoSchema(ctx)
+	f, _ := forecast.EvaluateHour(ctx, d, a)
+	// if err != nil {
+	// 	http.Error(w, "Error getting activity", http.StatusInternalServerError)
+	// 	return
+	// }
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"weather":  d,
+		"activity": a,
+		"forecast": f,
+	})
+}
+
 func weatherHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -36,18 +57,6 @@ func weatherHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	// latStr, latExists := vars["lat"]
-	// if !latExists || latStr == "" {
-	// 	// span.SetStatus(codes.Error, "Missing or invalid latitude")
-	// 	http.Error(w, "Missing or invalid latitude", http.StatusBadRequest)
-	// 	return
-	// }
-
-	// lonStr, lonExists := vars["lon"]
-	// if !lonExists || lonStr == "" {
-	// 	http.Error(w, "Missing or invalid longitude", http.StatusBadRequest)
-	// 	return
-	// }
 	lat, err := strconv.ParseFloat(vars["lat"], 64)
 	if err != nil {
 		http.Error(w, "Invalid latitude", http.StatusBadRequest)
@@ -75,24 +84,6 @@ func weatherHandler(w http.ResponseWriter, r *http.Request) {
 
 func motoHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
-	// get valid lat/lon from URL
-	// vars, err := requiredVars(mux.Vars(r), "activity")
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusBadRequest)
-	// 	return
-	// }
-
-	// lat, err := strconv.ParseFloat(vars["lat"], 64)
-	// if err != nil {
-	// 	http.Error(w, "Invalid latitude", http.StatusBadRequest)
-	// 	return
-	// }
-	// lon, err := strconv.ParseFloat(vars["lon"], 64)
-	// if err != nil {
-	// 	http.Error(w, "Invalid longitude", http.StatusBadRequest)
-	// 	return
-	// }
 
 	a, err := activities.GetMotoSchema(ctx)
 	if err != nil {
@@ -130,6 +121,8 @@ func instantiateApp() {
 	r.HandleFunc("/weather/{lat}/{lon}", weatherHandler.ServeHTTP).Methods("GET")
 	activityHandler := instrHandler("motoHandler", motoHandler)
 	r.HandleFunc("/activity/moto", activityHandler.ServeHTTP).Methods("GET")
+	forecastHandler := instrHandler("getForecast", getForecast)
+	r.HandleFunc("/forecast", forecastHandler.ServeHTTP).Methods("GET")
 
 	srv := &http.Server{
 		Handler: r,

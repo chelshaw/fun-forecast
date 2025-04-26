@@ -14,11 +14,15 @@
     },
     "conditions": {
         "sunny": {
-            "type": "fixed",
-            "score": 0.8
+                "type": "gaussian",
+                "ideal_temp": 60,
+                "sigma": 8,
+                "score": 1.0
         },
         "cloudy": {
-            "type": "fixed",
+            "type": "gaussian",
+            "ideal_temp": 75,
+            "sigma": 5,
             "score": 1.0
         },
         "rain": {

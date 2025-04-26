@@ -12,6 +12,17 @@ import (
 	"go.opentelemetry.io/otel/codes"
 )
 
+func (a *ActivitySchema) InstrKv() []attribute.KeyValue {
+	return []attribute.KeyValue{
+		attribute.Int("activity.temp.min", a.Temp.Min),
+		attribute.Int("activity.temp.ideal", a.Temp.Ideal),
+		attribute.Int("activity.temp.max", a.Temp.Max),
+		attribute.Int("activity.wind.min", a.Wind.Min),
+		attribute.Int("activity.wind.ideal", a.Wind.Ideal),
+		attribute.Int("activity.wind.max", a.Wind.Max),
+	}
+}
+
 type ActivitySchema struct {
 	Verb            string                   `json:"verb"`
 	Wind            Range                    `json:"wind"`

@@ -67,6 +67,43 @@ type HourData struct {
 	Unit        string  `json:"unit"`
 }
 
+func (h *HourData) InstrKv() []attribute.KeyValue {
+	kvs := []attribute.KeyValue{
+		attribute.Bool("weather.hour.is_daytime", h.IsDaytime),
+		attribute.Int("weather.hour.temp", h.Temperature),
+		attribute.Int64("weather.hour.wind", h.WindRange[0]),
+		attribute.String("weather.hour.condition", h.WeatherStr),
+	}
+	return kvs
+}
+
+func ExampleHourData() *HourData {
+	d := HourData{
+		Temperature: 84,
+		WindRange:   []int64{5, 10},
+		Start:       "2025-04-25T19:00:00-05:00",
+		End:         "2025-04-25T20:00:00-05:00",
+		IsDaytime:   false,
+		WeatherStr:  "sunny",
+		WeatherCode: "https://api.weather.gov/icons/land/night/sct?size=small",
+		Unit:        "F",
+	}
+	// d = append(d, HourData{
+
+	// })
+	// d = append(d, HourData{
+	// 	Temperature: 82,
+	// 	WindRange:   []int64{5},
+	// 	Start:       "2025-04-25T20:00:00-05:00",
+	// 	End:         "2025-04-25T21:00:00-05:00",
+	// 	IsDaytime:   true,
+	// 	WeatherStr:  "CLOUDY",
+	// 	WeatherCode: "https://api.weather.gov/icons/land/night/bkn?size=small",
+	// 	Unit:        "F",
+	// })
+	return &d
+}
+
 func parseWind(ws string) []int64 {
 	s := strings.Fields(ws)
 	var wr []int64
